@@ -1,0 +1,98 @@
+﻿<Project>
+  <Import Project="$(ProjectDir)VersionInfoGenerator.Config.props" Condition="Exists('$(ProjectDir)VersionInfoGenerator.Config.props')" />
+
+  <Target Name="GetGitBinary">
+    <Exec Command="git --version"
+      EchoOff="true"
+      StandardOutputImportance="low"
+      StandardErrorImportance="low"
+      IgnoreExitCode="true">
+      <Output TaskParameter="ExitCode" PropertyName="MSBuildLastExitCode" />
+    </Exec>
+
+    <!-- Use git from PATH if possible (cross-platform) -->
+    <PropertyGroup Condition="'$(MSBuildLastExitCode)' == '0'">
+      <GitBinary>git</GitBinary>
+    </PropertyGroup>
+
+    <!-- Windows-specific fallbacks -->
+    <PropertyGroup Condition="'$(GitBinary)' == '' And '$(OS)' == 'Windows_NT'">
+      <GitBinary Condition="'$(GitBinary)' == '' And Exists('C:\Program Files\Git\bin\git.exe')">"C:\Program Files\Git\bin\git.exe"</GitBinary>
+      <GitBinary Condition="'$(GitBinary)' == '' And Exists('C:\Program Files (x86)\Git\bin\git.exe')">"C:\Program Files (x86)\Git\bin\git.exe"</GitBinary>
+      <GitBinary Condition="'$(GitBinary)' == '' And Exists('C:\msysgit\bin\git.exe')">C:\msysgit\bin\git.exe</GitBinary>
+    </PropertyGroup>
+
+    <Error Condition="'$(GitBinary)' == ''" Text="Failed to locate the git binary." />
+  </Target>
+
+  <Target Name="GetGitInfo" DependsOnTargets="GetGitBinary">
+    <Exec
+      Command="$(GitBinary) describe --long --always --dirty --exclude=* --abbrev=7"
+      EchoOff="true"
+      StandardOutputImportance="low"
+      ConsoleToMSBuild="true">
+      <Output PropertyName="GitRevShort" TaskParameter="ConsoleOutput" />
+    </Exec>
+    <Exec
+      Command="$(GitBinary) describe --long --always --dirty --exclude=* --abbrev=9999"
+      EchoOff="true"
+      StandardOutputImportance="low"
+      ConsoleToMSBuild="true">
+      <Output PropertyName="GitRevLong" TaskParameter="ConsoleOutput" />
+    </Exec>
+    <Exec
+      Command="$(GitBinary) branch --show-current"
+      EchoOff="true"
+      StandardOutputImportance="low"
+      ConsoleToMSBuild="true">
+      <Output PropertyName="GitBranch" TaskParameter="ConsoleOutput" />
+    </Exec>
+  </Target>
+
+  <Target Name="VersionInfo" DependsOnTargets="GetGitInfo" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <SemVer>$(Version)</SemVer>
+      <SemVer Condition="'$(VersionPrerelease)' != ''">$(SemVer)-$(VersionPrerelease)</SemVer>
+    </PropertyGroup>
+
+    <PropertyGroup>
+      <Version>$(Version
+        .Replace('@@GitRevShort@@', '$(GitRevShort)')
+        .Replace('@@GitRevLong@@', '$(GitRevLong)')
+        .Replace('@@GitBranch@@', '$(GitBranch)'))</Version>
+      <VersionPrerelease>$(VersionPrerelease
+        .Replace('@@GitRevShort@@', '$(GitRevShort)')
+        .Replace('@@GitRevLong@@', '$(GitRevLong)')
+        .Replace('@@GitBranch@@', '$(GitBranch)'))</VersionPrerelease>
+      <VersionMetadata>$(VersionMetadata
+        .Replace('@@GitRevShort@@', '$(GitRevShort)')
+        .Replace('@@GitRevLong@@', '$(GitRevLong)')
+        .Replace('@@GitBranch@@', '$(GitBranch)'))</VersionMetadata>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(UseVersionMetadata)' != 'false'">
+      <SemVer Condition="'$(VersionMetadata)' != ''">$(SemVer)+$(VersionMetadata)</SemVer>
+      <SemVer Condition="'$(VersionMetadata)' == ''">$(SemVer)+git$(GitRevShort)-$(GitBranch)</SemVer>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(OverrideProjectVersion)' != 'false'">
+      <AssemblyVersion>$(Version)</AssemblyVersion>
+      <FileVersion>$(Version)</FileVersion>
+      <InformationalVersion>$(SemVer)</InformationalVersion>
+    </PropertyGroup>
+  </Target>
+
+  <ItemGroup>
+    <CompilerVisibleProperty Include="VersionInfoClassName" />
+    <CompilerVisibleProperty Include="GenerateVersionInfo" />
+    <CompilerVisibleProperty Include="VersionInfoClassAccessibilityModifier" />
+    <CompilerVisibleProperty Include="RootNamespace" />
+    <CompilerVisibleProperty Include="Version" />
+    <CompilerVisibleProperty Include="VersionPrerelease" />
+    <CompilerVisibleProperty Include="VersionMetadata" />
+    <CompilerVisibleProperty Include="SemVer" />
+    <CompilerVisibleProperty Include="GitRevShort" />
+    <CompilerVisibleProperty Include="GitRevLong" />
+    <CompilerVisibleProperty Include="GitBranch" />
+  </ItemGroup>
+</Project>
