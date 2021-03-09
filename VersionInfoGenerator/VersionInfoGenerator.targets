@@ -7,7 +7,7 @@
       StandardOutputImportance="low"
       StandardErrorImportance="low"
       IgnoreExitCode="true">
-      <Output TaskParameter="ExitCode" PropertyName="MSBuildLastExitCode" />
+      <Output PropertyName="MSBuildLastExitCode" TaskParameter="ExitCode" />
     </Exec>
 
     <!-- Use git from PATH if possible (cross-platform) -->
@@ -25,28 +25,54 @@
     <Error Condition="'$(GitBinary)' == ''" Text="Failed to locate the git binary." />
   </Target>
 
-  <Target Name="GetGitInfo" DependsOnTargets="GetGitBinary">
+  <Target Name="VerifyGitWorktree" DependsOnTargets="GetGitBinary">
     <Exec
+      Command="$(GitBinary) rev-parse --is-inside-work-tree"
+      EchoOff="true"
+      StandardOutputImportance="low"
+      ConsoleToMSBuild="true"
+      IgnoreExitCode="true">
+      <Output PropertyName="GitIsInWorktree" TaskParameter="ConsoleOutput" />
+      <Output PropertyName="MSBuildLastExitCode" TaskParameter="ExitCode" />
+    </Exec>
+  </Target>
+
+  <Target Name="GetGitInfo" DependsOnTargets="VerifyGitWorktree">
+    <Exec
+      Condition="'$(GitIsInWorktree)' == 'true'"
       Command="$(GitBinary) describe --long --always --dirty --exclude=* --abbrev=7"
       EchoOff="true"
       StandardOutputImportance="low"
-      ConsoleToMSBuild="true">
+      ConsoleToMSBuild="true"
+      IgnoreExitCode="true">
       <Output PropertyName="GitRevShort" TaskParameter="ConsoleOutput" />
+      <Output PropertyName="MSBuildLastExitCode" TaskParameter="ExitCode" />
     </Exec>
+    <Error Condition="'$(GitIsInWorktree)' == 'true' And '$(MSBuildLastExitCode)' != '0'" Text="Failed to parse GitRevShort." />
+
     <Exec
+      Condition="'$(GitIsInWorktree)' == 'true'"
       Command="$(GitBinary) describe --long --always --dirty --exclude=* --abbrev=9999"
       EchoOff="true"
       StandardOutputImportance="low"
-      ConsoleToMSBuild="true">
+      ConsoleToMSBuild="true"
+      IgnoreExitCode="true">
       <Output PropertyName="GitRevLong" TaskParameter="ConsoleOutput" />
+      <Output PropertyName="MSBuildLastExitCode" TaskParameter="ExitCode" />
     </Exec>
+    <Error Condition="'$(GitIsInWorktree)' == 'true' And '$(MSBuildLastExitCode)' != '0'" Text="Failed to parse GitRevLong." />
+
     <Exec
+      Condition="'$(GitIsInWorktree)' == 'true'"
       Command="$(GitBinary) branch --show-current"
       EchoOff="true"
       StandardOutputImportance="low"
-      ConsoleToMSBuild="true">
+      ConsoleToMSBuild="true"
+      IgnoreExitCode="true">
       <Output PropertyName="GitBranch" TaskParameter="ConsoleOutput" />
+      <Output PropertyName="MSBuildLastExitCode" TaskParameter="ExitCode" />
     </Exec>
+    <Error Condition="'$(GitIsInWorktree)' == 'true' And '$(MSBuildLastExitCode)' != '0'" Text="Failed to parse GitBranch." />
   </Target>
 
   <Target Name="VersionInfo" DependsOnTargets="GetGitInfo" BeforeTargets="PrepareForBuild">
@@ -55,7 +81,7 @@
       <SemVer Condition="'$(VersionPrerelease)' != ''">$(SemVer)-$(VersionPrerelease)</SemVer>
     </PropertyGroup>
 
-    <PropertyGroup>
+    <PropertyGroup Condition="$(GitIsInWorktree) == 'true'">
       <Version>$(Version
         .Replace('@@GitRevShort@@', '$(GitRevShort)')
         .Replace('@@GitRevLong@@', '$(GitRevLong)')
@@ -72,7 +98,7 @@
 
     <PropertyGroup Condition="'$(UseVersionMetadata)' != 'false'">
       <SemVer Condition="'$(VersionMetadata)' != ''">$(SemVer)+$(VersionMetadata)</SemVer>
-      <SemVer Condition="'$(VersionMetadata)' == ''">$(SemVer)+git$(GitRevShort)-$(GitBranch)</SemVer>
+      <SemVer Condition="'$(VersionMetadata)' == '' And '$(GitIsInWorktree)' == 'true'">$(SemVer)+git$(GitRevShort)-$(GitBranch)</SemVer>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(OverrideProjectVersion)' != 'false'">
