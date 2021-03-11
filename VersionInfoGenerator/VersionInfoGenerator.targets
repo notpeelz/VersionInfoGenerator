@@ -30,6 +30,7 @@
       Command="$(GitBinary) rev-parse --is-inside-work-tree"
       EchoOff="true"
       StandardOutputImportance="low"
+      StandardErrorImportance="low"
       ConsoleToMSBuild="true"
       IgnoreExitCode="true">
       <Output PropertyName="GitIsInWorktree" TaskParameter="ConsoleOutput" />
