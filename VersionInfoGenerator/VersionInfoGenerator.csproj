@@ -9,6 +9,9 @@
     <RootNamespace>VersionInfoGenerator</RootNamespace>
     <LangVersion>preview</LangVersion>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <PackageProjectUrl>https://github.com/notpeelz/VersionInfoGenerator</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/notpeelz/VersionInfoGenerator.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
     <BuildOutputTargetFolder>analyzers</BuildOutputTargetFolder>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
