@@ -1,0 +1,23 @@
+﻿<Project>
+  <Target Name="ILRepacker" AfterTargets="Build">
+    <ItemGroup>
+      <InputAssemblies Include="$(OutputPath)$(TargetName)$(TargetExt)" />
+      <InputAssemblies Include="@(EmbedAssemblies)" />
+    </ItemGroup>
+
+    <PropertyGroup>
+      <CreateDebugInfo Condition="'$(DebugType)' == 'none'">false</CreateDebugInfo>
+      <CreateDebugInfo Condition="'$(DebugType)' != 'none'">true</CreateDebugInfo>
+    </PropertyGroup>
+
+    <ILRepack
+      Parallel="true"
+      DebugInfo="$(CreateDebugInfo)"
+      AllowDuplicateResources="false"
+      InputAssemblies="@(InputAssemblies)"
+      TargetKind="SameAsPrimaryAssembly"
+      KeyFile="$(KeyFile)"
+      OutputFile="$(OutputPath)$(TargetName)$(TargetExt)"
+    />
+  </Target>
+</Project>

@@ -6,7 +6,7 @@
     <VersionMetadata>@@VersionMetadata@@-Test</VersionMetadata>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\VersionInfoGenerator\VersionInfoGenerator.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
+    <ProjectReference Include="..\VersionInfoGenerator.Generator\VersionInfoGenerator.Generator.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
   </ItemGroup>
   <Import Project="..\VersionInfoGenerator\VersionInfoGenerator.targets" />
 </Project>
