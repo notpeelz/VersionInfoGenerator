@@ -3,6 +3,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>preview</LangVersion>
     <OutputType>Exe</OutputType>
+    <VersionMetadata>@@VersionMetadata@@-Test</VersionMetadata>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\VersionInfoGenerator\VersionInfoGenerator.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />

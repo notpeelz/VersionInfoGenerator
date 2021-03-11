@@ -96,9 +96,14 @@
         .Replace('@@GitBranch@@', '$(GitBranch)'))</VersionMetadata>
     </PropertyGroup>
 
+    <PropertyGroup>
+      <_VersionMetadata>git$(GitRevShort)-$(GitBranch)</_VersionMetadata>
+      <VersionMetadata>$(VersionMetadata.Replace('@@VersionMetadata@@', '$(_VersionMetadata)'))</VersionMetadata>
+    </PropertyGroup>
+
     <PropertyGroup Condition="'$(UseVersionMetadata)' != 'false'">
       <SemVer Condition="'$(VersionMetadata)' != ''">$(SemVer)+$(VersionMetadata)</SemVer>
-      <SemVer Condition="'$(VersionMetadata)' == '' And '$(GitIsInWorktree)' == 'true'">$(SemVer)+git$(GitRevShort)-$(GitBranch)</SemVer>
+      <SemVer Condition="'$(VersionMetadata)' == '' And '$(GitIsInWorktree)' == 'true'">$(SemVer)+$(_VersionMetadata)</SemVer>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(OverrideProjectVersion)' != 'false'">
