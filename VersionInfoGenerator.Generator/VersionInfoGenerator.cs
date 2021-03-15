@@ -22,6 +22,7 @@ namespace VersionInfoGenerator.Generator
             "GitRevShort",
             "GitRevLong",
             "GitBranch",
+            "GitTag",
         };
 
         public void Execute(GeneratorExecutionContext context)

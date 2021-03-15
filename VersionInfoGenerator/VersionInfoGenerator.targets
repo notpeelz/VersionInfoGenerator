@@ -74,6 +74,17 @@
       <Output PropertyName="MSBuildLastExitCode" TaskParameter="ExitCode" />
     </Exec>
     <Error Condition="'$(GitIsInWorktree)' == 'true' And '$(MSBuildLastExitCode)' != '0'" Text="Failed to parse GitBranch." />
+
+    <Exec
+      Condition="'$(GitIsInWorktree)' == 'true'"
+      Command="$(GitBinary) describe --tags --abbrev=0"
+      EchoOff="true"
+      StandardOutputImportance="low"
+      StandardErrorImportance="low"
+      ConsoleToMSBuild="true"
+      IgnoreExitCode="true">
+      <Output PropertyName="GitTag" TaskParameter="ConsoleOutput" />
+    </Exec>
   </Target>
 
   <Target Name="VersionInfo" DependsOnTargets="GetGitInfo" BeforeTargets="PrepareForBuild">
@@ -86,14 +97,17 @@
       <Version>$(Version
         .Replace('@@GitRevShort@@', '$(GitRevShort)')
         .Replace('@@GitRevLong@@', '$(GitRevLong)')
+        .Replace('@@GitTag@@', '$(GitTag)')
         .Replace('@@GitBranch@@', '$(GitBranch)'))</Version>
       <VersionPrerelease>$(VersionPrerelease
         .Replace('@@GitRevShort@@', '$(GitRevShort)')
         .Replace('@@GitRevLong@@', '$(GitRevLong)')
+        .Replace('@@GitTag@@', '$(GitTag)')
         .Replace('@@GitBranch@@', '$(GitBranch)'))</VersionPrerelease>
       <VersionMetadata>$(VersionMetadata
         .Replace('@@GitRevShort@@', '$(GitRevShort)')
         .Replace('@@GitRevLong@@', '$(GitRevLong)')
+        .Replace('@@GitTag@@', '$(GitTag)')
         .Replace('@@GitBranch@@', '$(GitBranch)'))</VersionMetadata>
     </PropertyGroup>
 
@@ -127,5 +141,6 @@
     <CompilerVisibleProperty Include="GitRevShort" />
     <CompilerVisibleProperty Include="GitRevLong" />
     <CompilerVisibleProperty Include="GitBranch" />
+    <CompilerVisibleProperty Include="GitTag" />
   </ItemGroup>
 </Project>

@@ -14,6 +14,7 @@ namespace VersionInfoGenerator.TestProject
             Console.WriteLine("GitRevShort: " + VersionInfo.GitRevShort);
             Console.WriteLine("GitRevLong: " + VersionInfo.GitRevLong);
             Console.WriteLine("GitBranch: " + VersionInfo.GitBranch);
+            Console.WriteLine("GitTag: " + VersionInfo.GitTag);
         }
     }
 }
