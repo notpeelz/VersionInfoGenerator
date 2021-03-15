@@ -100,6 +100,7 @@
     <PropertyGroup>
       <_VersionMetadata Condition="'$(GitIsInWorktree)' == 'true'">git$(GitRevShort)-$(GitBranch)</_VersionMetadata>
       <_VersionMetadata Condition="'$(GitIsInWorktree)' != 'true'">untracked</_VersionMetadata>
+      <VersionMetadata Condition="'$(GitIsInWorktree)' == 'true' And '$(VersionMetadata)' == ''">@@VersionMetadata@@</VersionMetadata>
       <VersionMetadata>$(VersionMetadata.Replace('@@VersionMetadata@@', '$(_VersionMetadata)'))</VersionMetadata>
     </PropertyGroup>
 
