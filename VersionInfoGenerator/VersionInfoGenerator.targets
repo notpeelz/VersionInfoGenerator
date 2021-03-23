@@ -85,6 +85,10 @@
       IgnoreExitCode="true">
       <Output PropertyName="GitTag" TaskParameter="ConsoleOutput" />
     </Exec>
+
+    <PropertyGroup Condition="'$(GitIsInWorktree)' == 'true'">
+      <GitIsDirty>$(GitRevShort.Contains('-dirty'))</GitIsDirty>
+    </PropertyGroup>
   </Target>
 
   <Target Name="VersionInfo" DependsOnTargets="GetGitInfo" BeforeTargets="PrepareForBuild">
@@ -143,5 +147,6 @@
     <CompilerVisibleProperty Include="GitRevLong" />
     <CompilerVisibleProperty Include="GitBranch" />
     <CompilerVisibleProperty Include="GitTag" />
+    <CompilerVisibleProperty Include="GitIsDirty" />
   </ItemGroup>
 </Project>

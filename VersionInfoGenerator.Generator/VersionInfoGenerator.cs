@@ -83,6 +83,7 @@ namespace VersionInfoGenerator.Generator
             { "GitRevLong", StringExpression },
             { "GitBranch", StringExpression },
             { "GitTag", StringExpression },
+            { "GitIsDirty", BoolExpression },
         };
 
         public void Execute(GeneratorExecutionContext context)
