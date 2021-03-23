@@ -3,6 +3,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>preview</LangVersion>
     <OutputType>Exe</OutputType>
+    <VersionInfoClassModifiers>public</VersionInfoClassModifiers>
+    <VersionInfoClassName>VersionInfoTest</VersionInfoClassName>
+    <VersionInfoGenerateClass>true</VersionInfoGenerateClass>
     <VersionMetadata>@@VersionMetadata@@-Test</VersionMetadata>
   </PropertyGroup>
   <ItemGroup>

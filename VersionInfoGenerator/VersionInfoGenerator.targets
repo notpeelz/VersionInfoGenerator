@@ -130,10 +130,11 @@
   </Target>
 
   <ItemGroup>
-    <CompilerVisibleProperty Include="VersionInfoClassName" />
-    <CompilerVisibleProperty Include="GenerateVersionInfo" />
-    <CompilerVisibleProperty Include="VersionInfoClassAccessibilityModifier" />
     <CompilerVisibleProperty Include="RootNamespace" />
+    <CompilerVisibleProperty Include="VersionInfoGenerateClass" />
+    <CompilerVisibleProperty Include="VersionInfoNamespace" />
+    <CompilerVisibleProperty Include="VersionInfoClassName" />
+    <CompilerVisibleProperty Include="VersionInfoClassModifiers" />
     <CompilerVisibleProperty Include="Version" />
     <CompilerVisibleProperty Include="VersionPrerelease" />
     <CompilerVisibleProperty Include="VersionMetadata" />

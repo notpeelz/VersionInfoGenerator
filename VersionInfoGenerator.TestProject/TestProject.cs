@@ -6,15 +6,15 @@ namespace VersionInfoGenerator.TestProject
     {
         public static void Main()
         {
-            Console.WriteLine("RootNamespace: " + VersionInfo.RootNamespace);
-            Console.WriteLine("Version: " + VersionInfo.Version);
-            Console.WriteLine("VersionPrerelease: " + VersionInfo.VersionPrerelease);
-            Console.WriteLine("VersionMetadata: " + VersionInfo.VersionMetadata);
-            Console.WriteLine("SemVer: " + VersionInfo.SemVer);
-            Console.WriteLine("GitRevShort: " + VersionInfo.GitRevShort);
-            Console.WriteLine("GitRevLong: " + VersionInfo.GitRevLong);
-            Console.WriteLine("GitBranch: " + VersionInfo.GitBranch);
-            Console.WriteLine("GitTag: " + VersionInfo.GitTag);
+            Console.WriteLine("RootNamespace: " + VersionInfoTest.RootNamespace);
+            Console.WriteLine("Version: " + VersionInfoTest.Version);
+            Console.WriteLine("VersionPrerelease: " + VersionInfoTest.VersionPrerelease);
+            Console.WriteLine("VersionMetadata: " + VersionInfoTest.VersionMetadata);
+            Console.WriteLine("SemVer: " + VersionInfoTest.SemVer);
+            Console.WriteLine("GitRevShort: " + VersionInfoTest.GitRevShort);
+            Console.WriteLine("GitRevLong: " + VersionInfoTest.GitRevLong);
+            Console.WriteLine("GitBranch: " + VersionInfoTest.GitBranch);
+            Console.WriteLine("GitTag: " + VersionInfoTest.GitTag);
         }
     }
 }
