@@ -49,7 +49,7 @@ namespace VersionInfoGenerator.Generator
 
         private static readonly LiteralExpressionProperty BoolExpression = new(x => (
             expr: LiteralExpression(
-                (bool)Convert.ChangeType(x, TypeCode.Boolean)
+                (bool)Convert.ChangeType(x ?? "false", TypeCode.Boolean)
                     ? SyntaxKind.TrueLiteralExpression
                     : SyntaxKind.FalseLiteralExpression),
             type: PredefinedType(Token(SyntaxKind.BoolKeyword))));
