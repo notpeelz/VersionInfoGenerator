@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <PackageId>VersionInfoGenerator</PackageId>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <Authors>notpeelz</Authors>
     <Description>Access version information (including git state) from MSBuild and C#.</Description>
     <PackageTags>MSBuild Versioning Git GitInfo SemVer</PackageTags>
