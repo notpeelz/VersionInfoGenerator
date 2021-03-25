@@ -41,16 +41,11 @@ namespace VersionInfoGenerator.Generator
             public GetTokenFunc GetToken { get; }
         }
 
-        private static readonly LiteralExpressionProperty StringExpression = new(x =>
-        {
-            var value = (string)Convert.ChangeType(x, TypeCode.String);
-            return (
-                expr: value == null
-                    ? LiteralExpression(SyntaxKind.NullLiteralExpression)
-                    : LiteralExpression(SyntaxKind.StringLiteralExpression, Literal(value)),
-                type: PredefinedType(Token(SyntaxKind.StringKeyword))
-            );
-        });
+        private static readonly LiteralExpressionProperty StringExpression = new(x => (
+            expr: x == null
+                ? LiteralExpression(SyntaxKind.NullLiteralExpression)
+                : LiteralExpression(SyntaxKind.StringLiteralExpression, Literal(x)),
+            type: PredefinedType(Token(SyntaxKind.StringKeyword))));
 
         private static readonly LiteralExpressionProperty BoolExpression = new(x => (
             expr: LiteralExpression(
