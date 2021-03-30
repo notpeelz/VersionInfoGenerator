@@ -136,6 +136,7 @@
   <ItemGroup>
     <CompilerVisibleProperty Include="RootNamespace" />
     <CompilerVisibleProperty Include="VersionInfoGenerateClass" />
+    <CompilerVisibleProperty Include="VersionInfoSerializedProperties" />
     <CompilerVisibleProperty Include="VersionInfoNamespace" />
     <CompilerVisibleProperty Include="VersionInfoClassName" />
     <CompilerVisibleProperty Include="VersionInfoClassModifiers" />

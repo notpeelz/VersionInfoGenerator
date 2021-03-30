@@ -146,8 +146,12 @@ namespace VersionInfoGenerator.Generator
 
             IEnumerable<FieldDeclarationSyntax> GenerateFields()
             {
+                var props = GetMSBuildProperty("VersionInfoSerializedProperties")?.Split(';')
+                    .Select(x => x.Trim('\x20', '\n'));
                 foreach (var prop in SerializedProperties)
                 {
+                    if (props != null && !props.Contains(prop.Key)) continue;
+
                     if (prop.Value is not LiteralExpressionProperty literalProp)
                     {
                         throw new InvalidOperationException($"Unsupported property value type: {prop.Value?.GetType()}");
