@@ -89,6 +89,10 @@
     <PropertyGroup Condition="'$(GitIsInWorktree)' == 'true'">
       <GitIsDirty>$(GitRevShort.Contains('-dirty'))</GitIsDirty>
     </PropertyGroup>
+
+    <PropertyGroup Condition="'$(GitIsInWorktree)' == 'true' And '$(GitBranch)' == ''">
+      <GitBranch>DETACHED</GitBranch>
+    </PropertyGroup>
   </Target>
 
   <Target Name="VersionInfo" DependsOnTargets="GetGitInfo" BeforeTargets="PrepareForBuild">
