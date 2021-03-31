@@ -4,6 +4,7 @@
 
   <Target Name="GetGitBinary">
     <Exec Command="git --version"
+      Condition="'$(GitBinary)' == ''"
       EchoOff="true"
       StandardOutputImportance="low"
       StandardErrorImportance="low"
@@ -12,7 +13,7 @@
     </Exec>
 
     <!-- Use git from PATH if possible (cross-platform) -->
-    <PropertyGroup Condition="'$(MSBuildLastExitCode)' == '0'">
+    <PropertyGroup Condition="'$(GitBinary)' == '' And '$(MSBuildLastExitCode)' == '0'">
       <GitBinary>git</GitBinary>
     </PropertyGroup>
 
