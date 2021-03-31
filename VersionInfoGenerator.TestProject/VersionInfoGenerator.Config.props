@@ -1,0 +1,13 @@
+﻿<Project>
+  <PropertyGroup>
+    <!--
+    <GitBinary>/path/to/git</GitBinary>
+    -->
+  </PropertyGroup>
+
+  <Target Name="VersionInfoConfig" AfterTargets="GetGitInfo">
+    <PropertyGroup Condition="'$(GitBranch)' == 'master'">
+      <VersionMetadata>$(VersionMetadata)-RELEASE</VersionMetadata>
+    </PropertyGroup>
+  </Target>
+</Project>

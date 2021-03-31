@@ -1,5 +1,6 @@
 ﻿<Project>
-  <Import Project="$(ProjectDir)VersionInfoGenerator.Config.props" Condition="Exists('$(ProjectDir)VersionInfoGenerator.Config.props')" />
+  <Import Project="$(MSBuildProjectDirectory)/VersionInfoGenerator.Config.props"
+    Condition="Exists('$(MSBuildProjectDirectory)/VersionInfoGenerator.Config.props')" />
 
   <Target Name="GetGitBinary">
     <Exec Command="git --version"
