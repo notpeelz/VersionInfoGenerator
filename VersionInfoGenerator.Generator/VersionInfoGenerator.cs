@@ -147,7 +147,7 @@ namespace VersionInfoGenerator.Generator
             IEnumerable<FieldDeclarationSyntax> GenerateFields()
             {
                 var props = GetMSBuildProperty("VersionInfoSerializedProperties")?.Split(';')
-                    .Select(x => x.Trim('\x20', '\n'));
+                    .Select(x => x.Trim('\x20', '\r', '\n'));
                 foreach (var prop in SerializedProperties)
                 {
                     if (props != null && !props.Contains(prop.Key)) continue;
