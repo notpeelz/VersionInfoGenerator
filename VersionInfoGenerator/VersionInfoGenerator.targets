@@ -1,4 +1,4 @@
-﻿<Project>
+<Project>
   <Import Project="$(MSBuildProjectDirectory)/VersionInfoGenerator.Config.props"
     Condition="Exists('$(MSBuildProjectDirectory)/VersionInfoGenerator.Config.props')" />
 

@@ -5,17 +5,31 @@
 root = true
 # All files
 [*]
+end_of_line = lf
 indent_style = space
-# MSBuild files
-[*.{csproj,targets,props}]
+# Markdown files
+[*.md]
 indent_size = 2
 insert_final_newline = true
-charset = utf-8-bom
+trim_trailing_whitespace = true
+charset = utf-8
+# MSBuild files
+[*.{csproj,csproj.user,targets,props}]
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+charset = utf-8
+# Solution files
+[*.sln]
+charset = utf-8
+indent_style = tab
+indent_size = 2
 # Code files
 [*.{cs,csx,vb,vbx}]
 indent_size = 4
 insert_final_newline = true
-charset = utf-8-bom
+trim_trailing_whitespace = true
+charset = utf-8
 ###############################
 # .NET Coding Conventions     #
 ###############################
@@ -121,9 +135,3 @@ csharp_space_between_method_call_empty_parameter_list_parentheses = false
 # Wrapping preferences
 csharp_preserve_single_line_statements = true
 csharp_preserve_single_line_blocks = true
-###############################
-# VB Coding Conventions       #
-###############################
-[*.vb]
-# Modifier preferences
-visual_basic_preferred_modifier_order = Partial,Default,Private,Protected,Public,Friend,NotOverridable,Overridable,MustOverride,Overloads,Overrides,MustInherit,NotInheritable,Static,Shared,Shadows,ReadOnly,WriteOnly,Dim,Const,WithEvents,Widening,Narrowing,Custom,Async:suggestion
