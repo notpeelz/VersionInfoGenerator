@@ -1,7 +1,7 @@
 <Project>
   <Target Name="ILRepacker" AfterTargets="Build">
     <ItemGroup>
-      <InputAssemblies Include="$(OutputPath)$(TargetName)$(TargetExt)" />
+      <InputAssemblies Include="$(OutputPath)/$(TargetName)$(TargetExt)" />
       <InputAssemblies Include="@(EmbedAssemblies)" />
     </ItemGroup>
 

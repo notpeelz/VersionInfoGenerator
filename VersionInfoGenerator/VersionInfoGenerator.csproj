@@ -19,7 +19,7 @@
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
   </PropertyGroup>
   <ItemGroup>
-    <EmbedAssemblies Include="$(OutputPath)VersionInfoGenerator.Generator.dll" />
+    <EmbedAssemblies Include="$(OutputPath)/VersionInfoGenerator.Generator.dll" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ILRepack.Lib.MSBuild" Version="2.1.16.1" PrivateAssets="all" />
@@ -31,7 +31,7 @@
     <_PackageFiles Remove="ILRepack.targets" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\VersionInfoGenerator.Generator\VersionInfoGenerator.Generator.csproj" ReferenceOutputAssembly="true" OutputItemType="Analyzer" />
+    <ProjectReference Include="../VersionInfoGenerator.Generator/VersionInfoGenerator.Generator.csproj" ReferenceOutputAssembly="true" OutputItemType="Analyzer" />
   </ItemGroup>
   <Import Project="VersionInfoGenerator.targets" />
 </Project>
