@@ -90,7 +90,7 @@ namespace VersionInfoGenerator.Generator
             if (!shouldGenerate) return;
 
             var rootNamespace = GetMSBuildProperty("RootNamespace");
-            var classNamespace = GetMSBuildProperty("VersionInfoNamespace") ?? rootNamespace;
+            var classNamespace = GetMSBuildProperty("VersionInfoClassNamespace") ?? rootNamespace;
             var className = GetMSBuildProperty("VersionInfoClassName") ?? "VersionInfo";
             var modifiers = GetMSBuildProperty("VersionInfoClassModifiers") ?? "internal static";
 
@@ -146,7 +146,7 @@ namespace VersionInfoGenerator.Generator
 
             IEnumerable<FieldDeclarationSyntax> GenerateFields()
             {
-                var props = GetMSBuildProperty("VersionInfoSerializedProperties")?.Split(';')
+                var props = GetMSBuildProperty("VersionInfoClassSerializedProperties")?.Split(';')
                     .Select(x => x.Trim('\x20', '\r', '\n'));
                 foreach (var prop in SerializedProperties)
                 {

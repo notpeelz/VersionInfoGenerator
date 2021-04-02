@@ -56,13 +56,13 @@ internal static class VersionInfo
   <!-- The name of generated class (defaults to VersionInfo) -->
   <VersionInfoClassName></VersionInfoClassName>
   <!-- The namespace to use for the VersionInfo class -->
-  <VersionInfoNamespace></VersionInfoNamespace>
+  <VersionInfoClassNamespace></VersionInfoClassNamespace>
   <!-- The modifiers of the VersionInfo class -->
   <VersionInfoClassModifiers>internal static</VersionInfoClassModifiers>
   <!-- Controls whether to generate the VersionInfo class -->
   <VersionInfoGenerateClass>true</VersionInfoGenerateClass>
   <!-- Controls what properties to include in the VersionInfo class -->
-  <VersionInfoSerializedProperties>RootNamespace;Version;VersionPrerelease;VersionMetadata;SemVer;GitRevShort;GitRevLong;GitBranch;GitTag;GitIsDirty</VersionInfoSerializedProperties>
+  <VersionInfoClassSerializedProperties>RootNamespace;Version;VersionPrerelease;VersionMetadata;SemVer;GitRevShort;GitRevLong;GitBranch;GitTag;GitIsDirty</VersionInfoClassSerializedProperties>
   <!-- Controls whether to append VersionMetadata to the SemVer property -->
   <UseVersionMetadata>true</UseVersionMetadata>
   <!-- Controls whether to override AssemblyVersion, FileVersion and InformationalVersion -->
