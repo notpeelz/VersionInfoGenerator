@@ -5,6 +5,7 @@
     <OutputType>Exe</OutputType>
     <VersionInfoClassModifiers>public</VersionInfoClassModifiers>
     <VersionInfoClassName>VersionInfoTest</VersionInfoClassName>
+    <VersionInfoClassNamespaceGlobal>true</VersionInfoClassNamespaceGlobal>
     <VersionInfoGenerateClass>true</VersionInfoGenerateClass>
     <VersionMetadata>@@VersionMetadata@@-Test</VersionMetadata>
   </PropertyGroup>

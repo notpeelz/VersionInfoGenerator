@@ -83,14 +83,24 @@ namespace VersionInfoGenerator.Generator
 
         public void Execute(GeneratorExecutionContext context)
         {
-            if (!bool.TryParse(GetMSBuildProperty("VersionInfoGenerateClass"), out var shouldGenerate))
+            if (!bool.TryParse(GetMSBuildProperty("VersionInfoGenerateClass"), out var generate))
             {
-                shouldGenerate = true;
+                generate = true;
             }
-            if (!shouldGenerate) return;
+            if (!generate) return;
 
             var rootNamespace = GetMSBuildProperty("RootNamespace");
-            var classNamespace = GetMSBuildProperty("VersionInfoClassNamespace") ?? rootNamespace;
+            var classNamespace = GetMSBuildProperty("VersionInfoClassNamespace");
+            if (classNamespace == null)
+            {
+                if (!bool.TryParse(GetMSBuildProperty("VersionInfoClassNamespaceGlobal"), out var useGlobalNamespace))
+                {
+                    useGlobalNamespace = false;
+                }
+
+                if (!useGlobalNamespace) classNamespace = rootNamespace;
+            }
+
             var className = GetMSBuildProperty("VersionInfoClassName") ?? "VersionInfo";
             var modifiers = GetMSBuildProperty("VersionInfoClassModifiers") ?? "internal static";
 
@@ -141,7 +151,7 @@ namespace VersionInfoGenerator.Generator
                 .NormalizeWhitespace();
 
             context.AddSource(
-                hintName: rootNamespace == null ? className : $"{rootNamespace}.{className}",
+                hintName: classNamespace == null ? className : $"{classNamespace}.{className}",
                 sourceText: SourceText.From(src.ToFullString(), Encoding.UTF8));
 
             IEnumerable<FieldDeclarationSyntax> GenerateFields()

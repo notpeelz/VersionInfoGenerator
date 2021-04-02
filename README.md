@@ -57,6 +57,8 @@ internal static class VersionInfo
   <VersionInfoClassName></VersionInfoClassName>
   <!-- The namespace to use for the VersionInfo class -->
   <VersionInfoClassNamespace></VersionInfoClassNamespace>
+  <!-- Controls whether to use the global namespace for the VersionInfo class -->
+  <VersionInfoClassNamespaceGlobal>false</VersionInfoClassNamespaceGlobal>
   <!-- The modifiers of the VersionInfo class -->
   <VersionInfoClassModifiers>internal static</VersionInfoClassModifiers>
   <!-- Controls whether to generate the VersionInfo class -->

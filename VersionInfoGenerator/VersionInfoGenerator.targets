@@ -144,6 +144,7 @@
     <CompilerVisibleProperty Include="VersionInfoGenerateClass" />
     <CompilerVisibleProperty Include="VersionInfoClassSerializedProperties" />
     <CompilerVisibleProperty Include="VersionInfoClassNamespace" />
+    <CompilerVisibleProperty Include="VersionInfoClassNamespaceGlobal" />
     <CompilerVisibleProperty Include="VersionInfoClassName" />
     <CompilerVisibleProperty Include="VersionInfoClassModifiers" />
     <CompilerVisibleProperty Include="Version" />
