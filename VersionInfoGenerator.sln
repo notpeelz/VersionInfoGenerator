@@ -2,19 +2,19 @@
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31025.194
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VersionInfoGenerator", "VersionInfoGenerator\VersionInfoGenerator.csproj", "{F0D5D2CD-5C77-4050-918E-D32E1445B16B}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ED4853A4-23DF-4E72-B46E-1E303F8D94FC}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VersionInfoGenerator", "VersionInfoGenerator\VersionInfoGenerator.csproj", "{F0D5D2CD-5C77-4050-918E-D32E1445B16B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VersionInfoGenerator.TestProject", "VersionInfoGenerator.TestProject\VersionInfoGenerator.TestProject.csproj", "{15FF3651-7AAA-42D6-994E-BCA8A7AA7C72}"
 	ProjectSection(ProjectDependencies) = postProject
 		{F0D5D2CD-5C77-4050-918E-D32E1445B16B} = {F0D5D2CD-5C77-4050-918E-D32E1445B16B}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VersionInfoGenerator.Generator", "VersionInfoGenerator.Generator\VersionInfoGenerator.Generator.csproj", "{5C261623-46BC-4554-A149-FF9DA4BDED80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VersionInfoGenerator.Generator", "VersionInfoGenerator.Generator\VersionInfoGenerator.Generator.csproj", "{5C261623-46BC-4554-A149-FF9DA4BDED80}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
