@@ -49,13 +49,17 @@ internal static class VersionInfo
   <!-- Major.Minor.Patch -->
   <Version>1.0.0</Version>
   <!-- The SemVer prerelease tag -->
-  <VersionPrerelease>rc1</VersionPrerelease>
+  <VersionPrerelease></VersionPrerelease>
   <!-- If specified, it replaces the default SemVer metadata format -->
-  <!-- default: git$(GitRevShort)-$(GitBranch) -->
-  <VersionMetadata>@@GitRevShort@@</VersionMetadata>
-  <!-- The name of generated class (defaults to VersionInfo) -->
-  <VersionInfoClassName></VersionInfoClassName>
+  <VersionMetadata>git@@GitRevShort@@-@@GitBranch@@</VersionMetadata>
+  <!-- Controls whether to append VersionMetadata to the SemVer property -->
+  <UseVersionMetadata>true</UseVersionMetadata>
+  <!-- Controls whether to override AssemblyVersion, FileVersion and InformationalVersion -->
+  <OverrideProjectVersion>true</OverrideProjectVersion>
+  <!-- The name of generated class -->
+  <VersionInfoClassName>VersionInfo</VersionInfoClassName>
   <!-- The namespace to use for the VersionInfo class -->
+  <!-- (uses the value of <RootNamespace> as fallback) -->
   <VersionInfoClassNamespace></VersionInfoClassNamespace>
   <!-- Controls whether to use the global namespace for the VersionInfo class -->
   <VersionInfoClassNamespaceGlobal>false</VersionInfoClassNamespaceGlobal>
@@ -71,10 +75,6 @@ internal static class VersionInfo
   <VersionInfoJsonOutputPath>VersionInfo.json</VersionInfoJsonOutputPath>
   <!-- Controls what properties to include in the VersionInfo JSON file -->
   <VersionInfoJsonSerializedProperties>RootNamespace;Version;VersionPrerelease;VersionMetadata;SemVer;GitRevShort;GitRevLong;GitBranch;GitTag;GitIsDirty</VersionInfoClassJsonSerializedProperties>
-  <!-- Controls whether to append VersionMetadata to the SemVer property -->
-  <UseVersionMetadata>true</UseVersionMetadata>
-  <!-- Controls whether to override AssemblyVersion, FileVersion and InformationalVersion -->
-  <OverrideProjectVersion>true</OverrideProjectVersion>
 </PropertyGroup>
 ```
 
