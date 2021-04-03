@@ -11,7 +11,7 @@
     <PackageReference Include="System.Text.Json" Version="5.0.1" />
   </ItemGroup>
 
-  <Import Project="../VersionInfoGenerator/VersionInfoGenerator.targets" />
+  <Import Project="../VersionInfoGenerator/build/VersionInfoGenerator.targets" />
   <ItemGroup>
     <ProjectReference Include="../VersionInfoGenerator.Generator/VersionInfoGenerator.Generator.csproj" ReferenceOutputAssembly="true" OutputItemType="Analyzer" />
   </ItemGroup>

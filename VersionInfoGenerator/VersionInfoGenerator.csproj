@@ -26,8 +26,7 @@
     <PackageReference Include="ILRepack.Lib.MSBuild" Version="2.1.16.1" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
-    <_PackageFiles Include="VersionInfoGenerator.targets" PackagePath="build" />
-    <_PackageFiles Include="VersionInfoGenerator.JsonTask.targets" PackagePath="build" />
+    <_PackageFiles Include="build/*.targets" PackagePath="build" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,5 +38,5 @@
     <_VersionInfoGeneratorJsonTaskPath>$(MSBuildThisFileDirectory)/../VersionInfoGenerator.JsonTask/bin/$(Configuration)/netstandard2.0/VersionInfoGenerator.JsonTask.dll</_VersionInfoGeneratorJsonTaskPath>
   </PropertyGroup>
 
-  <Import Project="VersionInfoGenerator.targets" />
+  <Import Project="build/VersionInfoGenerator.targets" />
 </Project>

@@ -28,5 +28,5 @@
     <_VersionInfoGeneratorJsonTaskPath>$(MSBuildThisFileDirectory)/../VersionInfoGenerator.JsonTask/bin/$(Configuration)/netstandard2.0/VersionInfoGenerator.JsonTask.dll</_VersionInfoGeneratorJsonTaskPath>
   </PropertyGroup>
 
-  <Import Project="../VersionInfoGenerator/VersionInfoGenerator.targets" />
+  <Import Project="../VersionInfoGenerator/build/VersionInfoGenerator.targets" />
 </Project>
