@@ -156,11 +156,13 @@ namespace VersionInfoGenerator.Generator
 
             IEnumerable<FieldDeclarationSyntax> GenerateFields()
             {
-                var props = GetMSBuildProperty("VersionInfoClassSerializedProperties")?.Split(';')
-                    .Select(x => x.Trim('\x20', '\r', '\n'));
+                var props = GetMSBuildProperty("VersionInfoClassSerializedProperties")
+                    ?.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(x => x.Trim('\x20', '\r', '\n'))
+                    .ToArray();
                 foreach (var prop in SerializedProperties)
                 {
-                    if (props != null && !props.Contains(prop.Key)) continue;
+                    if (props != null && props.Length > 0 && !props.Contains(prop.Key)) continue;
 
                     if (prop.Value is not LiteralExpressionProperty literalProp)
                     {
