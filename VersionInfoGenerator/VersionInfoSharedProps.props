@@ -1,0 +1,16 @@
+<Project>
+  <PropertyGroup>
+    <Version>1.1.1</Version>
+    <Authors>notpeelz</Authors>
+    <Description>Access version information (including git state) from MSBuild and C#.</Description>
+    <PackageTags>MSBuild Versioning Git GitInfo SemVer</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/notpeelz/VersionInfoGenerator</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/notpeelz/VersionInfoGenerator.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <LangVersion>preview</LangVersion>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <IncludeSymbols>false</IncludeSymbols>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+</Project>

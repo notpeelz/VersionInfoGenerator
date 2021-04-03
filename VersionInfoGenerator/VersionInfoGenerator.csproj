@@ -1,17 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="VersionInfoSharedProps.props" />
   <PropertyGroup>
     <PackageId>VersionInfoGenerator</PackageId>
-    <Version>1.1.1</Version>
-    <Authors>notpeelz</Authors>
-    <Description>Access version information (including git state) from MSBuild and C#.</Description>
-    <PackageTags>MSBuild Versioning Git GitInfo SemVer</PackageTags>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RootNamespace>VersionInfoGenerator</RootNamespace>
-    <LangVersion>preview</LangVersion>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <PackageProjectUrl>https://github.com/notpeelz/VersionInfoGenerator</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/notpeelz/VersionInfoGenerator.git</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
     <BuildOutputTargetFolder>analyzers</BuildOutputTargetFolder>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -25,13 +16,12 @@
     <PackageReference Include="ILRepack.Lib.MSBuild" Version="2.1.16.1" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
-    <_PackageFiles Include="*.props" PackagePath="build" />
-    <_PackageFiles Include="*.targets" PackagePath="build" />
-    <_PackageFiles Remove="ILRepack.Config.props" />
-    <_PackageFiles Remove="ILRepack.targets" />
+    <_PackageFiles Include="VersionInfoGenerator.targets" PackagePath="build" />
   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="../VersionInfoGenerator.Generator/VersionInfoGenerator.Generator.csproj" ReferenceOutputAssembly="true" OutputItemType="Analyzer" />
   </ItemGroup>
+
   <Import Project="VersionInfoGenerator.targets" />
 </Project>
