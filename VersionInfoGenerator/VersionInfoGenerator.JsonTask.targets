@@ -1,0 +1,38 @@
+<Project>
+  <PropertyGroup>
+    <_VersionInfoGeneratorJsonTaskPath
+      Condition="'$(_VersionInfoGeneratorJsonTaskPath)' == ''">$(MSBuildThisFileDirectory)/../tools/netstandard2.0/VersionInfoGenerator.JsonTask.dll</_VersionInfoGeneratorJsonTaskPath>
+  </PropertyGroup>
+
+  <UsingTask
+    Condition="'$(VersionInfoGenerateJson)' == 'true'"
+    TaskName="VersionInfoGeneratorJsonTask"
+    AssemblyFile="$(_VersionInfoGeneratorJsonTaskPath)" />
+
+  <Target
+    Condition="'$(VersionInfoGenerateJson)' == 'true'"
+    Name="VersionInfoGeneratorJsonTask"
+    DependsOnTargets="GetGitInfo"
+    AfterTargets="BeforeCompile">
+    <VersionInfoGeneratorJsonTask
+      MSBuildOutputPath="$(OutputPath)"
+      OutputPath="$(VersionInfoJsonOutputPath)"
+      SerializedProperties="$(VersionInfoJsonSerializedProperties)"
+      RootNamespace="$(RootNamespace)"
+      Version="$(Version)"
+      VersionPrerelease="$(VersionPrerelease)"
+      VersionMetadata="$(VersionMetadata)"
+      SemVer="$(SemVer)"
+      GitRevShort="$(GitRevShort)"
+      GitRevLong="$(GitRevLong)"
+      GitBranch="$(GitBranch)"
+      GitTag="$(GitTag)"
+      GitIsDirty="$(GitIsDirty)">
+      <Output ItemName="Generated" TaskParameter="GeneratedFiles" />
+    </VersionInfoGeneratorJsonTask>
+    <ItemGroup>
+      <Content Include="@(Generated)" />
+      <FileWrites Include="@(Generated)" />
+    </ItemGroup>
+  </Target>
+</Project>

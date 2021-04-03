@@ -2,6 +2,8 @@
   <Import Project="$(MSBuildProjectDirectory)/VersionInfoGenerator.Config.props"
     Condition="Exists('$(MSBuildProjectDirectory)/VersionInfoGenerator.Config.props')" />
 
+  <Import Project="$(MSBuildThisFileDirectory)/VersionInfoGenerator.JsonTask.targets" />
+
   <Target Name="GetGitBinary">
     <Exec Command="git --version"
       Condition="'$(GitBinary)' == ''"

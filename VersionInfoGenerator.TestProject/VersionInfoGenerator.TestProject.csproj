@@ -7,12 +7,26 @@
     <VersionInfoClassName>VersionInfoTest</VersionInfoClassName>
     <VersionInfoClassNamespaceGlobal>true</VersionInfoClassNamespaceGlobal>
     <VersionInfoGenerateClass>true</VersionInfoGenerateClass>
+    <VersionInfoGenerateJson>true</VersionInfoGenerateJson>
+    <!--<VersionInfoJsonOutputPath>/test/blah/bleh</VersionInfoJsonOutputPath>-->
+    <!--<VersionInfoJsonOutputPath>/test/blah/bleh/</VersionInfoJsonOutputPath>-->
+    <!--<VersionInfoJsonOutputPath>blah/test.json</VersionInfoJsonOutputPath>-->
+    <!--<VersionInfoJsonOutputPath>/test.json</VersionInfoJsonOutputPath>-->
+    <!--<VersionInfoJsonOutputPath>../test.json</VersionInfoJsonOutputPath>-->
     <Version>1.0.0</Version>
     <VersionMetadata>@@VersionMetadata@@-Test</VersionMetadata>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="../VersionInfoGenerator.Generator/VersionInfoGenerator.Generator.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
+    <PackageReference Include="System.Text.Json" Version="5.0.1" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../VersionInfoGenerator.Generator/VersionInfoGenerator.Generator.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
+    <ProjectReference Include="../VersionInfoGenerator.JsonTask/VersionInfoGenerator.JsonTask.csproj" ReferenceOutputAssembly="false" OutputItemType="Task" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <_VersionInfoGeneratorJsonTaskPath>$(MSBuildThisFileDirectory)/../VersionInfoGenerator.JsonTask/bin/$(Configuration)/netstandard2.0/VersionInfoGenerator.JsonTask.dll</_VersionInfoGeneratorJsonTaskPath>
+  </PropertyGroup>
 
   <Import Project="../VersionInfoGenerator/VersionInfoGenerator.targets" />
 </Project>

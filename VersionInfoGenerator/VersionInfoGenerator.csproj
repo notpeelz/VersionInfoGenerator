@@ -8,7 +8,17 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);CopyTasksToPackage</TargetsForTfmSpecificContentInPackage>
   </PropertyGroup>
+
+  <Target Name="CopyTasksToPackage" DependsOnTargets="BuildOnlySettings;ResolveReferences">
+    <ItemGroup>
+      <TfmSpecificPackageFile Include="@(ReferenceCopyLocalPaths-&gt;WithMetadataValue('ReferenceSourceTarget', 'ProjectReference')-&gt;WithMetadataValue('OutputItemType', 'Task'))" Condition="'%(Extension)' == '.dll'">
+        <PackagePath>tools/$(TargetFramework)</PackagePath>
+      </TfmSpecificPackageFile>
+    </ItemGroup>
+  </Target>
+
   <ItemGroup>
     <EmbedAssemblies Include="$(OutputPath)/VersionInfoGenerator.Generator.dll" />
   </ItemGroup>
@@ -17,11 +27,17 @@
   </ItemGroup>
   <ItemGroup>
     <_PackageFiles Include="VersionInfoGenerator.targets" PackagePath="build" />
+    <_PackageFiles Include="VersionInfoGenerator.JsonTask.targets" PackagePath="build" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="../VersionInfoGenerator.Generator/VersionInfoGenerator.Generator.csproj" ReferenceOutputAssembly="true" OutputItemType="Analyzer" />
+    <ProjectReference Include="../VersionInfoGenerator.JsonTask/VersionInfoGenerator.JsonTask.csproj" ReferenceOutputAssembly="true" OutputItemType="Task" />
   </ItemGroup>
+
+  <PropertyGroup>
+    <_VersionInfoGeneratorJsonTaskPath>$(MSBuildThisFileDirectory)/../VersionInfoGenerator.JsonTask/bin/$(Configuration)/netstandard2.0/VersionInfoGenerator.JsonTask.dll</_VersionInfoGeneratorJsonTaskPath>
+  </PropertyGroup>
 
   <Import Project="VersionInfoGenerator.targets" />
 </Project>

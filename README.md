@@ -65,6 +65,12 @@ internal static class VersionInfo
   <VersionInfoGenerateClass>true</VersionInfoGenerateClass>
   <!-- Controls what properties to include in the VersionInfo class -->
   <VersionInfoClassSerializedProperties>RootNamespace;Version;VersionPrerelease;VersionMetadata;SemVer;GitRevShort;GitRevLong;GitBranch;GitTag;GitIsDirty</VersionInfoClassSerializedProperties>
+  <!-- Controls whether to generate a VersionInfo JSON file in the output folder -->
+  <VersionInfoGenerateJson>false</VersionInfoGenerateJson>
+  <!-- The name of the VersionInfo JSON file -->
+  <VersionInfoJsonOutputPath>VersionInfo.json</VersionInfoJsonOutputPath>
+  <!-- Controls what properties to include in the VersionInfo JSON file -->
+  <VersionInfoJsonSerializedProperties>RootNamespace;Version;VersionPrerelease;VersionMetadata;SemVer;GitRevShort;GitRevLong;GitBranch;GitTag;GitIsDirty</VersionInfoClassJsonSerializedProperties>
   <!-- Controls whether to append VersionMetadata to the SemVer property -->
   <UseVersionMetadata>true</UseVersionMetadata>
   <!-- Controls whether to override AssemblyVersion, FileVersion and InformationalVersion -->
@@ -86,6 +92,32 @@ A config file (named `VersionInfoGenerator.Config.props`) can be created to gain
     </PropertyGroup>
   </Target>
 </Project>
+```
+
+## VersionInfo.json
+
+A JSON file can be generated for version processing by external tools, e.g.:
+
+```xml
+<PropertyGroup>
+  <VersionInfoGenerateJson>true</VersionInfoGenerateJson>
+</PropertyGroup>
+```
+
+Output (`bin/Release/xxx/VersionInfo.json`):
+```json
+{
+  "RootNamespace": "VersionInfoGenerator.TestProject",
+  "Version": "1.0.0",
+  "VersionPrerelease": null,
+  "VersionMetadata": "git0378e47-master",
+  "SemVer": "1.0.0+git0378e47-master",
+  "GitRevShort": "0378e47",
+  "GitRevLong": "0378e47109d698eeceaf07ad75e48ea36143d2e3",
+  "GitBranch": "master",
+  "GitTag": "v1.0.0",
+  "GitIsDirty": false
+}
 ```
 
 ## Special variable substitution
