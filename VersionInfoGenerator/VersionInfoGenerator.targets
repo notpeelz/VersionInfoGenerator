@@ -4,7 +4,7 @@
 
   <Import Project="$(MSBuildThisFileDirectory)/VersionInfoGenerator.JsonTask.targets" />
 
-  <Target Name="GetGitBinary">
+  <Target Name="VersionInfoGenerator_GetGitBinary">
     <Exec Command="git --version"
       Condition="'$(GitBinary)' == ''"
       EchoOff="true"
@@ -29,7 +29,7 @@
     <Error Condition="'$(GitBinary)' == ''" Text="Failed to locate the git binary." />
   </Target>
 
-  <Target Name="VerifyGitWorktree" DependsOnTargets="GetGitBinary">
+  <Target Name="VersionInfoGenerator_VerifyGitWorktree" DependsOnTargets="VersionInfoGenerator_GetGitBinary">
     <Exec
       Command="$(GitBinary) rev-parse --is-inside-work-tree"
       EchoOff="true"
@@ -42,7 +42,7 @@
     </Exec>
   </Target>
 
-  <Target Name="GetGitInfo" DependsOnTargets="VerifyGitWorktree">
+  <Target Name="VersionInfoGenerator_GetGitInfo" DependsOnTargets="VersionInfoGenerator_VerifyGitWorktree">
     <Exec
       Condition="'$(GitIsInWorktree)' == 'true'"
       Command="$(GitBinary) describe --long --always --dirty --exclude=* --abbrev=7"
@@ -99,7 +99,7 @@
     </PropertyGroup>
   </Target>
 
-  <Target Name="VersionInfo" DependsOnTargets="GetGitInfo" BeforeTargets="PrepareForBuild">
+  <Target Name="VersionInfoGenerator_UpdateProperties" DependsOnTargets="VersionInfoGenerator_GetGitInfo" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <SemVer>$(Version)</SemVer>
       <SemVer Condition="'$(VersionPrerelease)' != ''">$(SemVer)-$(VersionPrerelease)</SemVer>

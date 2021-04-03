@@ -86,7 +86,7 @@ A config file (named `VersionInfoGenerator.Config.props`) can be created to gain
     <GitBinary>/path/to/git</GitBinary>
   </PropertyGroup>
 
-  <Target Name="VersionInfoConfig" AfterTargets="GetGitInfo">
+  <Target Name="VersionInfoConfig" AfterTargets="VersionInfoGenerator_GetGitInfo">
     <PropertyGroup Condition="'$(GitBranch)' == 'master'">
       <VersionMetadata>$(VersionMetadata)-RELEASE</VersionMetadata>
     </PropertyGroup>
