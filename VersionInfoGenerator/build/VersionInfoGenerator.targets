@@ -40,11 +40,26 @@
       <Output PropertyName="GitIsInWorktree" TaskParameter="ConsoleOutput" />
       <Output PropertyName="MSBuildLastExitCode" TaskParameter="ExitCode" />
     </Exec>
+    <Exec
+      Condition="'$(GitIsInWorktree)' == 'true'"
+      Command="$(GitBinary) rev-list -n 1 --all"
+      EchoOff="true"
+      StandardOutputImportance="low"
+      StandardErrorImportance="low"
+      ConsoleToMSBuild="true"
+      IgnoreExitCode="true">
+      <Output PropertyName="GitIsWorktreeValid" TaskParameter="ConsoleOutput" />
+      <Output PropertyName="MSBuildLastExitCode" TaskParameter="ExitCode" />
+    </Exec>
+    <PropertyGroup>
+      <GitIsWorktreeValid Condition="'$(GitIsWorktreeValid)' == '' Or '$(MSBuildLastExitCode)' != '0'">false</GitIsWorktreeValid>
+      <GitIsWorktreeValid Condition="'$(GitIsWorktreeValid)' != 'false'">true</GitIsWorktreeValid>
+    </PropertyGroup>
   </Target>
 
   <Target Name="VersionInfoGenerator_GetGitInfo" DependsOnTargets="VersionInfoGenerator_VerifyGitWorktree">
     <Exec
-      Condition="'$(GitIsInWorktree)' == 'true'"
+      Condition="'$(GitIsWorktreeValid)' == 'true'"
       Command="$(GitBinary) describe --long --always --dirty --exclude=* --abbrev=7"
       EchoOff="true"
       StandardOutputImportance="low"
@@ -53,10 +68,10 @@
       <Output PropertyName="GitRevShort" TaskParameter="ConsoleOutput" />
       <Output PropertyName="MSBuildLastExitCode" TaskParameter="ExitCode" />
     </Exec>
-    <Error Condition="'$(GitIsInWorktree)' == 'true' And '$(MSBuildLastExitCode)' != '0'" Text="Failed to parse GitRevShort." />
+    <Error Condition="'$(GitIsWorktreeValid)' == 'true' And '$(MSBuildLastExitCode)' != '0'" Text="Failed to parse GitRevShort." />
 
     <Exec
-      Condition="'$(GitIsInWorktree)' == 'true'"
+      Condition="'$(GitIsWorktreeValid)' == 'true'"
       Command="$(GitBinary) describe --long --always --dirty --exclude=* --abbrev=9999"
       EchoOff="true"
       StandardOutputImportance="low"
@@ -65,10 +80,10 @@
       <Output PropertyName="GitRevLong" TaskParameter="ConsoleOutput" />
       <Output PropertyName="MSBuildLastExitCode" TaskParameter="ExitCode" />
     </Exec>
-    <Error Condition="'$(GitIsInWorktree)' == 'true' And '$(MSBuildLastExitCode)' != '0'" Text="Failed to parse GitRevLong." />
+    <Error Condition="'$(GitIsWorktreeValid)' == 'true' And '$(MSBuildLastExitCode)' != '0'" Text="Failed to parse GitRevLong." />
 
     <Exec
-      Condition="'$(GitIsInWorktree)' == 'true'"
+      Condition="'$(GitIsWorktreeValid)' == 'true'"
       Command="$(GitBinary) rev-parse --abbrev-ref --symbolic-full-name HEAD"
       EchoOff="true"
       StandardOutputImportance="low"
@@ -77,10 +92,10 @@
       <Output PropertyName="GitBranch" TaskParameter="ConsoleOutput" />
       <Output PropertyName="MSBuildLastExitCode" TaskParameter="ExitCode" />
     </Exec>
-    <Error Condition="'$(GitIsInWorktree)' == 'true' And '$(MSBuildLastExitCode)' != '0'" Text="Failed to parse GitBranch." />
+    <Error Condition="'$(GitIsWorktreeValid)' == 'true' And '$(MSBuildLastExitCode)' != '0'" Text="Failed to parse GitBranch." />
 
     <Exec
-      Condition="'$(GitIsInWorktree)' == 'true'"
+      Condition="'$(GitIsWorktreeValid)' == 'true'"
       Command="$(GitBinary) describe --tags --abbrev=0"
       EchoOff="true"
       StandardOutputImportance="low"
@@ -90,12 +105,12 @@
       <Output PropertyName="GitTag" TaskParameter="ConsoleOutput" />
       <Output PropertyName="MSBuildLastExitCode" TaskParameter="ExitCode" />
     </Exec>
-    <PropertyGroup Condition="'$(GitIsInWorktree)' == 'true'">
+    <PropertyGroup Condition="'$(GitIsWorktreeValid)' == 'true'">
       <!-- Delete GitTag if the command errored out as it contains the command's stderr -->
       <GitTag Condition="'$(MSBuildLastExitCode)' != '0'"></GitTag>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(GitIsInWorktree)' == 'true'">
+    <PropertyGroup Condition="'$(GitIsWorktreeValid)' == 'true'">
       <GitIsDirty>$(GitRevShort.Contains('-dirty'))</GitIsDirty>
     </PropertyGroup>
   </Target>
@@ -106,7 +121,7 @@
       <SemVer Condition="'$(VersionPrerelease)' != ''">$(SemVer)-$(VersionPrerelease)</SemVer>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(GitIsInWorktree)' == 'true'">
+    <PropertyGroup Condition="'$(GitIsWorktreeValid)' == 'true'">
       <Version>$(Version
         .Replace('@@GitRevShort@@', '$(GitRevShort)')
         .Replace('@@GitRevLong@@', '$(GitRevLong)')
@@ -125,9 +140,9 @@
     </PropertyGroup>
 
     <PropertyGroup>
-      <_VersionMetadata Condition="'$(GitIsInWorktree)' == 'true'">git$(GitRevShort)-$(GitBranch)</_VersionMetadata>
-      <_VersionMetadata Condition="'$(GitIsInWorktree)' != 'true'">untracked</_VersionMetadata>
-      <VersionMetadata Condition="'$(GitIsInWorktree)' == 'true' And '$(VersionMetadata)' == ''">@@VersionMetadata@@</VersionMetadata>
+      <_VersionMetadata Condition="'$(GitIsWorktreeValid)' == 'true'">git$(GitRevShort)-$(GitBranch)</_VersionMetadata>
+      <_VersionMetadata Condition="'$(GitIsWorktreeValid)' != 'true'">untracked</_VersionMetadata>
+      <VersionMetadata Condition="'$(GitIsWorktreeValid)' == 'true' And '$(VersionMetadata)' == ''">@@VersionMetadata@@</VersionMetadata>
       <VersionMetadata>$(VersionMetadata.Replace('@@VersionMetadata@@', '$(_VersionMetadata)'))</VersionMetadata>
     </PropertyGroup>
 
@@ -136,7 +151,7 @@
     </PropertyGroup>
 
     <!-- Override RepositoryXXX properties -->
-    <PropertyGroup Condition="'$(GitIsInWorktree)' == 'true' And '$(RepositoryUrl)' != '' And '$(OverrideRepositoryInfo)' != 'false'">
+    <PropertyGroup Condition="'$(GitIsWorktreeValid)' == 'true' And '$(RepositoryUrl)' != '' And '$(OverrideRepositoryInfo)' != 'false'">
       <RepositoryCommit Condition="'$(RepositoryCommit)' == '' And '$(GitIsDirty)' == 'false'">$(GitRevLong)</RepositoryCommit>
       <RepositoryBranch Condition="'$(RepositoryBranch)' == ''">$(GitBranch)</RepositoryBranch>
     </PropertyGroup>
