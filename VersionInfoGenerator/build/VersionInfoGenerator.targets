@@ -152,18 +152,18 @@
       <VersionMetadata>$(VersionMetadata.Replace('@@VersionMetadata@@', '$(_VersionMetadata)'))</VersionMetadata>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(UseVersionMetadata)' != 'false'">
+    <PropertyGroup Condition="'$(VersionInfoUseMetadata)' != 'false'">
       <SemVer Condition="'$(VersionMetadata)' != ''">$(SemVer)+$(VersionMetadata)</SemVer>
     </PropertyGroup>
 
     <!-- Override RepositoryXXX properties -->
-    <PropertyGroup Condition="'$(GitIsWorktreeValid)' == 'true' And '$(RepositoryUrl)' != '' And '$(OverrideRepositoryInfo)' != 'false'">
+    <PropertyGroup Condition="'$(GitIsWorktreeValid)' == 'true' And '$(RepositoryUrl)' != '' And '$(VersionInfoOverrideRepositoryInfo)' != 'false'">
       <RepositoryCommit Condition="'$(RepositoryCommit)' == '' And '$(GitIsDirty)' == 'false'">$(GitRevLong)</RepositoryCommit>
       <RepositoryBranch Condition="'$(RepositoryBranch)' == ''">$(GitBranch)</RepositoryBranch>
     </PropertyGroup>
 
     <!-- Override assembly version properties -->
-    <PropertyGroup Condition="'$(OverrideProjectVersion)' != 'false'">
+    <PropertyGroup Condition="'$(VersionInfoOverrideVersions)' != 'false'">
       <AssemblyVersion>$(Version)</AssemblyVersion>
       <FileVersion>$(Version)</FileVersion>
       <InformationalVersion>@@SemVer@@</InformationalVersion>

@@ -52,12 +52,12 @@ internal static class VersionInfo
   <VersionPrerelease></VersionPrerelease>
   <!-- If specified, it replaces the default SemVer metadata format -->
   <VersionMetadata>git@@GitRevShort@@-@@GitBranch@@</VersionMetadata>
-  <!-- Controls whether to append VersionMetadata to the SemVer property -->
-  <UseVersionMetadata>true</UseVersionMetadata>
+  <!-- Controls whether the SemVer should have a metadata component -->
+  <VersionInfoUseMetadata>true</VersionInfoUseMetadata>
   <!-- Controls whether to override AssemblyVersion, FileVersion and InformationalVersion -->
-  <OverrideProjectVersion>true</OverrideProjectVersion>
+  <VersionInfoOverrideVersions>true</VersionInfoOverrideVersions>
   <!-- Controls whether to override RepositoryCommit and RepositoryBranch -->
-  <OverrideRepositoryInfo>true</OverrideRepositoryInfo>
+  <VersionInfoOverrideRepositoryInfo>true</VersionInfoOverrideRepositoryInfo>
   <!-- The name of generated class -->
   <VersionInfoClassName>VersionInfo</VersionInfoClassName>
   <!-- The namespace to use for the VersionInfo class -->
