@@ -4,6 +4,12 @@
 
   <Import Project="$(MSBuildThisFileDirectory)/VersionInfoGenerator.JsonTask.targets" />
 
+  <!-- Back up the user-defined ProjectVersion before
+       NuGet.Build.Tasks.Pack.targets overrides it -->
+  <PropertyGroup>
+    <_PackageVersion>$(PackageVersion)</_PackageVersion>
+  </PropertyGroup>
+
   <Target Name="VersionInfoGenerator_GetGitBinary">
     <Exec Command="git --version"
       Condition="'$(GitBinary)' == ''"
@@ -162,7 +168,12 @@
       <RepositoryBranch Condition="'$(RepositoryBranch)' == ''">$(GitBranch)</RepositoryBranch>
     </PropertyGroup>
 
-    <!-- Override assembly version properties -->
+    <!-- Override package version -->
+    <PropertyGroup Condition="'$(VersionInfoOverridePackageVersion)' != 'false'">
+      <PackageVersion Condition="'$(_PackageVersion)' == ''">$(SemVer)</PackageVersion>
+    </PropertyGroup>
+
+    <!-- Override assembly versions -->
     <PropertyGroup Condition="'$(VersionInfoOverrideVersions)' != 'false'">
       <AssemblyVersion Condition="'$(AssemblyVersion)' == ''">$(Version)</AssemblyVersion>
       <FileVersion Condition="'$(FileVersion)' == ''">$(Version)</FileVersion>
