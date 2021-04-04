@@ -88,7 +88,12 @@
       ConsoleToMSBuild="true"
       IgnoreExitCode="true">
       <Output PropertyName="GitTag" TaskParameter="ConsoleOutput" />
+      <Output PropertyName="MSBuildLastExitCode" TaskParameter="ExitCode" />
     </Exec>
+    <PropertyGroup Condition="'$(GitIsInWorktree)' == 'true'">
+      <!-- Delete GitTag if the command errored out as it contains the command's stderr -->
+      <GitTag Condition="'$(MSBuildLastExitCode)' != '0'"></GitTag>
+    </PropertyGroup>
 
     <PropertyGroup Condition="'$(GitIsInWorktree)' == 'true'">
       <GitIsDirty>$(GitRevShort.Contains('-dirty'))</GitIsDirty>
