@@ -69,7 +69,7 @@
 
     <Exec
       Condition="'$(GitIsInWorktree)' == 'true'"
-      Command="$(GitBinary) branch --show-current"
+      Command="$(GitBinary) rev-parse --abbrev-ref --symbolic-full-name HEAD"
       EchoOff="true"
       StandardOutputImportance="low"
       ConsoleToMSBuild="true"
@@ -92,10 +92,6 @@
 
     <PropertyGroup Condition="'$(GitIsInWorktree)' == 'true'">
       <GitIsDirty>$(GitRevShort.Contains('-dirty'))</GitIsDirty>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(GitIsInWorktree)' == 'true' And '$(GitBranch)' == ''">
-      <GitBranch>DETACHED</GitBranch>
     </PropertyGroup>
   </Target>
 
