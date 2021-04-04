@@ -166,7 +166,19 @@
     <PropertyGroup Condition="'$(OverrideProjectVersion)' != 'false'">
       <AssemblyVersion>$(Version)</AssemblyVersion>
       <FileVersion>$(Version)</FileVersion>
-      <InformationalVersion>$(SemVer)</InformationalVersion>
+      <InformationalVersion>@@SemVer@@</InformationalVersion>
+    </PropertyGroup>
+
+    <PropertyGroup>
+      <InformationalVersion>$(InformationalVersion
+        .Replace('@@Version@@', '$(Version)')
+        .Replace('@@VersionPrerelease@@', '$(VersionPrerelease)')
+        .Replace('@@VersionMetadata@@', '$(VersionMetadata)')
+        .Replace('@@SemVer@@', '$(SemVer)')
+        .Replace('@@GitRevShort@@', '$(GitRevShort)')
+        .Replace('@@GitRevLong@@', '$(GitRevLong)')
+        .Replace('@@GitTag@@', '$(GitTag)')
+        .Replace('@@GitBranch@@', '$(GitBranch)'))</InformationalVersion>
     </PropertyGroup>
   </Target>
 
