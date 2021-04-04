@@ -164,9 +164,9 @@
 
     <!-- Override assembly version properties -->
     <PropertyGroup Condition="'$(VersionInfoOverrideVersions)' != 'false'">
-      <AssemblyVersion>$(Version)</AssemblyVersion>
-      <FileVersion>$(Version)</FileVersion>
-      <InformationalVersion>@@SemVer@@</InformationalVersion>
+      <AssemblyVersion Condition="'$(AssemblyVersion)' == ''">$(Version)</AssemblyVersion>
+      <FileVersion Condition="'$(FileVersion)' == ''">$(Version)</FileVersion>
+      <InformationalVersion Condition="'$(InformationalVersion)' == ''">@@SemVer@@</InformationalVersion>
     </PropertyGroup>
 
     <PropertyGroup>
