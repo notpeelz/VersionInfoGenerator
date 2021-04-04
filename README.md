@@ -56,6 +56,8 @@ internal static class VersionInfo
   <UseVersionMetadata>true</UseVersionMetadata>
   <!-- Controls whether to override AssemblyVersion, FileVersion and InformationalVersion -->
   <OverrideProjectVersion>true</OverrideProjectVersion>
+  <!-- Controls whether to override RepositoryCommit and RepositoryBranch -->
+  <OverrideRepositoryInfo>true</OverrideRepositoryInfo>
   <!-- The name of generated class -->
   <VersionInfoClassName>VersionInfo</VersionInfoClassName>
   <!-- The namespace to use for the VersionInfo class -->

@@ -99,13 +99,13 @@
     </PropertyGroup>
   </Target>
 
-  <Target Name="VersionInfoGenerator_UpdateProperties" DependsOnTargets="VersionInfoGenerator_GetGitInfo" BeforeTargets="PrepareForBuild">
+  <Target Name="VersionInfoGenerator_UpdateProperties" DependsOnTargets="VersionInfoGenerator_GetGitInfo" BeforeTargets="BuildOnlySettings;GenerateNuspec">
     <PropertyGroup>
       <SemVer>$(Version)</SemVer>
       <SemVer Condition="'$(VersionPrerelease)' != ''">$(SemVer)-$(VersionPrerelease)</SemVer>
     </PropertyGroup>
 
-    <PropertyGroup Condition="$(GitIsInWorktree) == 'true'">
+    <PropertyGroup Condition="'$(GitIsInWorktree)' == 'true'">
       <Version>$(Version
         .Replace('@@GitRevShort@@', '$(GitRevShort)')
         .Replace('@@GitRevLong@@', '$(GitRevLong)')
@@ -134,6 +134,13 @@
       <SemVer Condition="'$(VersionMetadata)' != ''">$(SemVer)+$(VersionMetadata)</SemVer>
     </PropertyGroup>
 
+    <!-- Override RepositoryXXX properties -->
+    <PropertyGroup Condition="'$(GitIsInWorktree)' == 'true' And '$(RepositoryUrl)' != '' And '$(OverrideRepositoryInfo)' != 'false'">
+      <RepositoryCommit Condition="'$(RepositoryCommit)' == '' And '$(GitIsDirty)' == 'false'">$(GitRevLong)</RepositoryCommit>
+      <RepositoryBranch Condition="'$(RepositoryBranch)' == ''">$(GitBranch)</RepositoryBranch>
+    </PropertyGroup>
+
+    <!-- Override assembly version properties -->
     <PropertyGroup Condition="'$(OverrideProjectVersion)' != 'false'">
       <AssemblyVersion>$(Version)</AssemblyVersion>
       <FileVersion>$(Version)</FileVersion>
