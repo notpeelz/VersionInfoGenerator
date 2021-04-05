@@ -192,6 +192,16 @@
     </PropertyGroup>
   </Target>
 
+  <Target Name="VersionInfoGenerator_ValidateVersion" AfterTargets="VersionInfoGenerator_UpdateProperties">
+    <PropertyGroup>
+      <_VersionRegex><![CDATA[^([1-9]\d*|0).([1-9]\d*|0).([1-9]\d*|0)$]]></_VersionRegex>
+    </PropertyGroup>
+
+    <Error
+      Text="Version does not respect the Major.Minor.Patch format: $(Version)"
+      Condition="!$([System.Text.RegularExpressions.Regex]::IsMatch('$(Version)', '$(_VersionRegex)'))" />
+  </Target>
+
   <ItemGroup>
     <CompilerVisibleProperty Include="RootNamespace" />
     <CompilerVisibleProperty Include="VersionInfoGenerateClass" />
