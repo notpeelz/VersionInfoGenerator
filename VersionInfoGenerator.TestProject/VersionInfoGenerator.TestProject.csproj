@@ -15,6 +15,7 @@
     <!--<VersionInfoJsonOutputPath>../test.json</VersionInfoJsonOutputPath>-->
     <Version>1.0.0</Version>
     <VersionMetadata>@@VersionMetadata@@-Test</VersionMetadata>
+    <FileVersion>1.2.3.4</FileVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="System.Text.Json" Version="5.0.1" />

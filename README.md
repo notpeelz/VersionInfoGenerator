@@ -54,7 +54,7 @@ internal static class VersionInfo
   <VersionMetadata>git@@GitRevShort@@-@@GitBranch@@</VersionMetadata>
   <!-- Controls whether the SemVer should have a metadata component -->
   <VersionInfoUseMetadata>true</VersionInfoUseMetadata>
-  <!-- Controls whether to override AssemblyVersion, FileVersion and InformationalVersion -->
+  <!-- Controls whether to override FileVersion and InformationalVersion -->
   <VersionInfoOverrideVersions>true</VersionInfoOverrideVersions>
   <!-- Controls whether to override PackageVersion -->
   <VersionInfoOverridePackageVersion>true</VersionInfoOverridePackageVersion>
