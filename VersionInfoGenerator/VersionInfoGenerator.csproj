@@ -8,8 +8,16 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
-    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);CopyTasksToPackage</TargetsForTfmSpecificContentInPackage>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);CopyTargetsToPackage;CopyTasksToPackage</TargetsForTfmSpecificContentInPackage>
   </PropertyGroup>
+
+  <Target Name="CopyTargetsToPackage" DependsOnTargets="BuildOnlySettings">
+    <ItemGroup>
+      <TfmSpecificPackageFile Include="build/*">
+        <PackagePath>build</PackagePath>
+      </TfmSpecificPackageFile>
+    </ItemGroup>
+  </Target>
 
   <Target Name="CopyTasksToPackage" DependsOnTargets="BuildOnlySettings;ResolveReferences">
     <ItemGroup>
@@ -19,16 +27,13 @@
     </ItemGroup>
   </Target>
 
+  <!-- ILRepack -->
   <ItemGroup>
     <EmbedAssemblies Include="$(OutputPath)/VersionInfoGenerator.Generator.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="ILRepack.Lib.MSBuild" Version="2.1.16.1" PrivateAssets="all" />
   </ItemGroup>
-  <ItemGroup>
-    <_PackageFiles Include="build/*.targets" PackagePath="build" />
-  </ItemGroup>
 
+  <!-- Dependencies -->
   <ItemGroup>
     <ProjectReference Include="../VersionInfoGenerator.Generator/VersionInfoGenerator.Generator.csproj" ReferenceOutputAssembly="true" OutputItemType="Analyzer" />
     <ProjectReference Include="../VersionInfoGenerator.JsonTask/VersionInfoGenerator.JsonTask.csproj" ReferenceOutputAssembly="true" OutputItemType="Task" />
