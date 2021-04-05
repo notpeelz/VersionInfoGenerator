@@ -134,16 +134,6 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(GitIsWorktreeValid)' == 'true'">
-      <Version>$(Version
-        .Replace('@@GitRevShort@@', '$(GitRevShort)')
-        .Replace('@@GitRevLong@@', '$(GitRevLong)')
-        .Replace('@@GitTag@@', '$(GitTag)')
-        .Replace('@@GitBranch@@', '$(GitBranch)'))</Version>
-      <VersionPrerelease>$(VersionPrerelease
-        .Replace('@@GitRevShort@@', '$(GitRevShort)')
-        .Replace('@@GitRevLong@@', '$(GitRevLong)')
-        .Replace('@@GitTag@@', '$(GitTag)')
-        .Replace('@@GitBranch@@', '$(GitBranch)'))</VersionPrerelease>
       <VersionMetadata>$(VersionMetadata
         .Replace('@@GitRevShort@@', '$(GitRevShort)')
         .Replace('@@GitRevLong@@', '$(GitRevLong)')
