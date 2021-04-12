@@ -29,7 +29,7 @@
 
   <!-- ILRepack -->
   <ItemGroup>
-    <EmbedAssemblies Include="$(OutputPath)/VersionInfoGenerator.Generator.dll" />
+    <EmbeddedAssembly Include="$(OutputPath)/VersionInfoGenerator.Generator.dll" />
     <PackageReference Include="ILRepack.Lib.MSBuild" Version="2.1.16.1" PrivateAssets="all" />
   </ItemGroup>
 
