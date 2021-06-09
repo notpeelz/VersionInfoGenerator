@@ -81,12 +81,28 @@ namespace VersionInfoGenerator.Generator
             { "GitIsDirty", BoolExpression },
         };
 
+#pragma warning disable RS2008
+        private static readonly DiagnosticDescriptor VIG0001 = new(
+            id: "VIG0001",
+            title: "VersionInfoGenerator was run without the necessary MSBuild properties",
+            messageFormat: "VersionInfoGenerator was run without the necessary MSBuild properties",
+            category: "",
+            defaultSeverity: DiagnosticSeverity.Error,
+            isEnabledByDefault: true,
+            helpLinkUri: "https://github.com/notpeelz/VersionInfoGenerator/wiki/Diagnostic-messages#vig0001");
+
         public void Execute(GeneratorExecutionContext context)
         {
-            if (!bool.TryParse(GetMSBuildProperty("VersionInfoGenerateClass"), out var generate))
+            // XXX: we abort if this property is missing. This usually
+            // happens when the consumer forgets to set PrivateAssets="all"
+            // on the PackageReference.
+            if (!TryGetMSBuildProperty("VersionInfoGenerateClass", out var generateStr))
             {
-                generate = true;
+                context.ReportDiagnostic(Diagnostic.Create(VIG0001, null));
+                return;
             }
+
+            if (!bool.TryParse(generateStr, out var generate)) generate = true;
             if (!generate) return;
 
             var rootNamespace = GetMSBuildProperty("RootNamespace");
@@ -195,6 +211,17 @@ namespace VersionInfoGenerator.Generator
 
                 if (string.IsNullOrEmpty(value)) return null;
                 return value;
+            }
+
+            bool TryGetMSBuildProperty(string name, out string value)
+            {
+                if (!context.AnalyzerConfigOptions.GlobalOptions.TryGetValue($"build_property.{name}", out value))
+                {
+                    return false;
+                }
+
+                if (string.IsNullOrEmpty(value)) value = null;
+                return true;
             }
         }
     }
