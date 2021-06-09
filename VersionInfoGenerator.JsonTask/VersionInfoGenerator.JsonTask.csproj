@@ -1,18 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="../VersionInfoGenerator/VersionInfoSharedProps.props" />
-  <PropertyGroup>
-    <OutputType>Library</OutputType>
-    <RootNamespace>VersionInfoGenerator.JsonTask</RootNamespace>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Build.Framework" Version="16.9.0" />
     <PackageReference Include="System.Text.Json" Version="5.0.1" />
   </ItemGroup>
 
-  <Import Project="../VersionInfoGenerator/build/VersionInfoGenerator.targets" />
   <ItemGroup>
     <ProjectReference Include="../VersionInfoGenerator.Generator/VersionInfoGenerator.Generator.csproj" ReferenceOutputAssembly="true" OutputItemType="Analyzer" />
   </ItemGroup>
+
+  <Import Project="../VersionInfoGenerator/build/VersionInfoGenerator.targets" />
 </Project>

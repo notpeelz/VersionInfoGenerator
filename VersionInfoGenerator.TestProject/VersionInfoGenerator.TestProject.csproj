@@ -17,9 +17,11 @@
     <VersionMetadata>@@VersionMetadata@@-Test</VersionMetadata>
     <FileVersion>1.2.3.4</FileVersion>
   </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="System.Text.Json" Version="5.0.1" />
   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="../VersionInfoGenerator.Generator/VersionInfoGenerator.Generator.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
     <ProjectReference Include="../VersionInfoGenerator.JsonTask/VersionInfoGenerator.JsonTask.csproj" ReferenceOutputAssembly="false" OutputItemType="Task" />

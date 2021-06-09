@@ -1,23 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="VersionInfoSharedProps.props" />
+
   <PropertyGroup>
-    <PackageId>VersionInfoGenerator</PackageId>
-    <RootNamespace>VersionInfoGenerator</RootNamespace>
-    <BuildOutputTargetFolder>analyzers</BuildOutputTargetFolder>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <BuildOutputTargetFolder>analyzers</BuildOutputTargetFolder>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
-    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);CopyTargetsToPackage;CopyTasksToPackage</TargetsForTfmSpecificContentInPackage>
+    <TargetsForTfmSpecificContentInPackage>CopyTasksToPackage</TargetsForTfmSpecificContentInPackage>
   </PropertyGroup>
 
-  <Target Name="CopyTargetsToPackage" DependsOnTargets="BuildOnlySettings">
-    <ItemGroup>
-      <TfmSpecificPackageFile Include="build/*">
-        <PackagePath>build</PackagePath>
-      </TfmSpecificPackageFile>
-    </ItemGroup>
-  </Target>
+  <ItemGroup>
+    <Content Include="build/*" PackagePath="build/" Pack="true" />
+  </ItemGroup>
 
   <Target Name="CopyTasksToPackage" DependsOnTargets="BuildOnlySettings;ResolveReferences">
     <ItemGroup>
@@ -35,8 +28,8 @@
 
   <!-- Dependencies -->
   <ItemGroup>
-    <ProjectReference Include="../VersionInfoGenerator.Generator/VersionInfoGenerator.Generator.csproj" ReferenceOutputAssembly="true" OutputItemType="Analyzer" />
-    <ProjectReference Include="../VersionInfoGenerator.JsonTask/VersionInfoGenerator.JsonTask.csproj" ReferenceOutputAssembly="true" OutputItemType="Task" />
+    <ProjectReference Include="../VersionInfoGenerator.Generator/VersionInfoGenerator.Generator.csproj" OutputItemType="Analyzer" />
+    <ProjectReference Include="../VersionInfoGenerator.JsonTask/VersionInfoGenerator.JsonTask.csproj" OutputItemType="Task" />
   </ItemGroup>
 
   <PropertyGroup>
