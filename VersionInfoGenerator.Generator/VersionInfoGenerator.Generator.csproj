@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="../VersionInfoGenerator/VersionInfoSharedProps.props" />
+  <Import Project="../VersionInfoGenerator/PackageProps.props" />
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2" PrivateAssets="all" />

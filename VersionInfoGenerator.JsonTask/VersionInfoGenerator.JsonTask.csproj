@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="../VersionInfoGenerator/VersionInfoSharedProps.props" />
+  <Import Project="../VersionInfoGenerator/PackageProps.props" />
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Build.Framework" Version="16.9.0" />
