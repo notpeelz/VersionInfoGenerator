@@ -37,6 +37,7 @@
   </Target>
 
   <Target Name="VersionInfoGenerator_VerifyGitWorktree" DependsOnTargets="VersionInfoGenerator_GetGitBinary">
+    <!-- Verify that we're in a git repo -->
     <Exec
       Command="$(GitBinary) rev-parse --is-inside-work-tree"
       EchoOff="true"
@@ -47,6 +48,8 @@
       IgnoreExitCode="true">
       <Output PropertyName="GitIsInWorktree" TaskParameter="ConsoleOutput" />
     </Exec>
+
+    <!-- Verify that we're in a valid git worktree -->
     <Exec
       Condition="'$(GitIsInWorktree)' == 'true'"
       Command="$(GitBinary) rev-list -n 1 --all"
@@ -62,6 +65,22 @@
     <PropertyGroup>
       <GitIsWorktreeValid Condition="'$(GitIsWorktreeValid)' == '' Or '$(MSBuildLastExitCode)' != '0'">false</GitIsWorktreeValid>
       <GitIsWorktreeValid Condition="'$(GitIsWorktreeValid)' != 'false'">true</GitIsWorktreeValid>
+    </PropertyGroup>
+
+    <!-- Verify that HEAD is a valid revision -->
+    <Exec
+      Condition="'$(GitIsWorktreeValid)' == 'true'"
+      Command="$(GitBinary) rev-parse --verify HEAD"
+      EchoOff="true"
+      StandardOutputImportance="low"
+      StandardErrorImportance="low"
+      IgnoreStandardErrorWarningFormat="true"
+      ConsoleToMSBuild="true"
+      IgnoreExitCode="true">
+      <Output PropertyName="MSBuildLastExitCode" TaskParameter="ExitCode" />
+    </Exec>
+    <PropertyGroup Condition="'$(GitIsWorktreeValid)' == 'true'">
+      <GitIsWorktreeValid Condition="'$(MSBuildLastExitCode)' != '0'">false</GitIsWorktreeValid>
     </PropertyGroup>
   </Target>
 
