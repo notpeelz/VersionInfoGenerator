@@ -28,11 +28,10 @@
       GitBranch="$(GitBranch)"
       GitTag="$(GitTag)"
       GitIsDirty="$(GitIsDirty)">
-      <Output ItemName="Generated" TaskParameter="GeneratedFiles" />
+      <Output ItemName="GeneratedFiles" TaskParameter="GeneratedFiles" />
     </VersionInfoGeneratorJsonTask>
     <ItemGroup>
-      <Content Include="@(Generated)" />
-      <FileWrites Include="@(Generated)" />
+      <FileWrites Include="@(GeneratedFiles)" />
     </ItemGroup>
   </Target>
 </Project>
