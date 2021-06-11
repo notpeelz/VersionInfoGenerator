@@ -58,33 +58,42 @@ namespace VersionInfoGenerator.JsonTask
             // at the wrong step in the MSBuild pipeline.
             if (!Directory.Exists(this.MSBuildOutputPath))
             {
-                this.BuildEngine.LogErrorEvent(new(null, "VIG0001", null, 0, 0, 0, 0, $"MSBuildOutputPath doesn't exist: {this.MSBuildOutputPath}", "", nameof(VersionInfoGeneratorJsonTask)));
+                this.BuildEngine.LogErrorEvent(new(
+                    code: "VIG0001",
+                    message: $"The MSBuild output path doesn't exist: {this.MSBuildOutputPath}",
+                    subcategory: null,
+                    file: null, lineNumber: 0, columnNumber: 0, endLineNumber: 0, endColumnNumber: 0,
+                    helpKeyword: null,
+                    senderName: nameof(VersionInfoGeneratorJsonTask)));
                 return false;
             }
 
-            this.OutputPath = this.OutputPath?.TrimStart('/');
+            this.OutputPath = this.OutputPath?.Replace('\\', '/');
             var path = Path.Combine(this.MSBuildOutputPath, this.OutputPath ?? "");
 
             // Make sure we're not about to write to files outside of the
             // build dir.
             if (!Path.GetFullPath(path).StartsWith(Path.GetFullPath(this.MSBuildOutputPath)))
             {
-                this.BuildEngine.LogErrorEvent(new(null, "VIG0002", null, 0, 0, 0, 0, "OutputPath has to stay within MSBuildOutputPath.", "", nameof(VersionInfoGeneratorJsonTask)));
+                this.BuildEngine.LogErrorEvent(new(
+                    code: "VIG0002",
+                    message: "OutputPath has to stay within the MSBuild output path.",
+                    subcategory: null,
+                    file: null, lineNumber: 0, columnNumber: 0, endLineNumber: 0, endColumnNumber: 0,
+                    helpKeyword: null,
+                    senderName: nameof(VersionInfoGeneratorJsonTask)));
                 return false;
             }
 
             // If OutputPath is null or ends with "/", we append the
             // default filename.
-            if (this.OutputPath?.EndsWith("/") != false)
+            if (this.OutputPath == null || this.OutputPath.EndsWith("/"))
             {
                 path = Path.Combine(path, "VersionInfo.json");
             }
 
             // Create subfolders
-            // Note: MSBuildOutputPath should already exist since we check
-            // for that at the beginning.
-            var directory = Path.GetDirectoryName(path);
-            if (!string.IsNullOrEmpty(directory)) Directory.CreateDirectory(directory);
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
 
             var props = this.SerializedProperties?.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(x => x.Trim('\x20', '\r', '\n'))
