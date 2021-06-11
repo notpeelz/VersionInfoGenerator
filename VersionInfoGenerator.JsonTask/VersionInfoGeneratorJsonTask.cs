@@ -59,7 +59,7 @@ namespace VersionInfoGenerator.JsonTask
             if (!Directory.Exists(this.MSBuildOutputPath))
             {
                 this.BuildEngine.LogErrorEvent(new(
-                    code: "VIG0001",
+                    code: "VIGJ0001",
                     message: $"The MSBuild output path doesn't exist: {this.MSBuildOutputPath}",
                     subcategory: null,
                     file: null, lineNumber: 0, columnNumber: 0, endLineNumber: 0, endColumnNumber: 0,
@@ -76,7 +76,7 @@ namespace VersionInfoGenerator.JsonTask
             if (!Path.GetFullPath(path).StartsWith(Path.GetFullPath(this.MSBuildOutputPath)))
             {
                 this.BuildEngine.LogErrorEvent(new(
-                    code: "VIG0002",
+                    code: "VIGJ0002",
                     message: "OutputPath has to stay within the MSBuild output path.",
                     subcategory: null,
                     file: null, lineNumber: 0, columnNumber: 0, endLineNumber: 0, endColumnNumber: 0,
