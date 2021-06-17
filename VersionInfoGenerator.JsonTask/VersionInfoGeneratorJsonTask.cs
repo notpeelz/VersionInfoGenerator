@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 using Microsoft.Build.Framework;
 
 namespace VersionInfoGenerator.JsonTask
@@ -99,37 +98,21 @@ namespace VersionInfoGenerator.JsonTask
                 .Select(x => x.Trim('\x20', '\r', '\n'))
                 .ToArray();
 
-            using var sw = new StreamWriter(path);
-            using var ms = new MemoryStream();
-            using (var jsonWriter = new Utf8JsonWriter(ms, new() { Indented = true }))
+            using var sw = new StreamWriter(path, false, Encoding.UTF8);
+            var obj = new VersionInfoDTO
             {
-                jsonWriter.WriteStartObject();
-                SerializeProperty(nameof(this.RootNamespace), this.RootNamespace);
-                SerializeProperty(nameof(this.Version), this.Version);
-                SerializeProperty(nameof(this.VersionPrerelease), this.VersionPrerelease);
-                SerializeProperty(nameof(this.VersionMetadata), this.VersionMetadata);
-                SerializeProperty(nameof(this.SemVer), this.SemVer);
-                SerializeProperty(nameof(this.GitRevShort), this.GitRevShort);
-                SerializeProperty(nameof(this.GitRevLong), this.GitRevLong);
-                SerializeProperty(nameof(this.GitBranch), this.GitBranch);
-                SerializeProperty(nameof(this.GitTag), this.GitTag);
-                SerializeProperty(nameof(this.GitIsDirty), this.GitIsDirty);
-                jsonWriter.WriteEndObject();
-
-                void SerializeProperty<T>(string name, T value)
-                {
-                    if (props != null && props.Length > 0 && !props.Contains(name)) return;
-
-                    if (typeof(T) == typeof(string))
-                        jsonWriter.WriteString(name, (string)(object)value);
-                    else if (typeof(T) == typeof(bool))
-                        jsonWriter.WriteBoolean(name, (bool)(object)value);
-                    else
-                        throw new InvalidOperationException($"Unsupported property type: {typeof(T)}");
-                }
-            }
-
-            sw.Write(Encoding.UTF8.GetString(ms.ToArray()));
+                RootNamespace = this.RootNamespace,
+                Version = this.Version,
+                VersionPrerelease = this.VersionPrerelease,
+                VersionMetadata = this.VersionMetadata,
+                SemVer = this.SemVer,
+                GitRevShort = this.GitRevShort,
+                GitRevLong = this.GitRevLong,
+                GitBranch = this.GitBranch,
+                GitTag = this.GitTag,
+                GitIsDirty = this.GitIsDirty,
+            };
+            sw.Write(SimpleJson.SimpleJson.SerializeObject(obj));
             this.GeneratedFiles = new[] { path };
             return true;
         }
