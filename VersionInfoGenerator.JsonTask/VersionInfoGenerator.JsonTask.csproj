@@ -2,8 +2,8 @@
   <Import Project="../VersionInfoGenerator/PackageProps.props" />
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Build.Framework" Version="16.9.0" />
-    <PackageReference Include="System.Text.Json" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Build.Framework" Version="16.10.0" />
+    <PackageReference Include="System.Text.Json" Version="5.0.2" />
   </ItemGroup>
 
   <ItemGroup>
