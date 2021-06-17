@@ -12,7 +12,7 @@
   <Target
     Condition="'$(VersionInfoGenerateJson)' == 'true'"
     Name="VersionInfoGeneratorJsonTask"
-    DependsOnTargets="VersionInfoGenerator_GetGitInfo"
+    DependsOnTargets="VersionInfoGenerator_UpdateProperties"
     AfterTargets="BeforeCompile">
     <VersionInfoGeneratorJsonTask
       MSBuildOutputPath="$(OutputPath)"
