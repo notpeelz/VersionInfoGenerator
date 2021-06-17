@@ -146,7 +146,7 @@
     </PropertyGroup>
   </Target>
 
-  <Target Name="VersionInfoGenerator_UpdateProperties" DependsOnTargets="VersionInfoGenerator_GetGitInfo" BeforeTargets="BuildOnlySettings;GenerateNuspec">
+  <Target Name="VersionInfoGenerator_UpdateProperties" DependsOnTargets="VersionInfoGenerator_GetGitInfo" BeforeTargets="GenerateNuspec">
     <PropertyGroup>
       <SemVer>$(Version)</SemVer>
       <SemVer Condition="'$(VersionPrerelease)' != ''">$(SemVer)-$(VersionPrerelease)</SemVer>
