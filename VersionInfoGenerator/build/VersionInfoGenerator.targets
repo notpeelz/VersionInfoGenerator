@@ -156,6 +156,14 @@
     DependsOnTargets="VersionInfoGenerator_GetGitInfo"
     BeforeTargets="ResolveReferences">
     <PropertyGroup>
+      <_VersionRegex><![CDATA[^([1-9]\d*|0).([1-9]\d*|0).([1-9]\d*|0)$]]></_VersionRegex>
+    </PropertyGroup>
+
+    <Error
+      Text="Version does not respect the Major.Minor.Patch format: $(Version)"
+      Condition="!$([System.Text.RegularExpressions.Regex]::IsMatch('$(Version)', '$(_VersionRegex)'))" />
+
+    <PropertyGroup>
       <SemVer>$(Version)</SemVer>
       <SemVer Condition="'$(VersionPrerelease)' != ''">$(SemVer)-$(VersionPrerelease)</SemVer>
     </PropertyGroup>
@@ -207,16 +215,6 @@
         .Replace('@@GitTag@@', '$(GitTag)')
         .Replace('@@GitBranch@@', '$(GitBranch)'))</InformationalVersion>
     </PropertyGroup>
-  </Target>
-
-  <Target Name="VersionInfoGenerator_ValidateVersion" AfterTargets="VersionInfoGenerator_UpdateProperties">
-    <PropertyGroup>
-      <_VersionRegex><![CDATA[^([1-9]\d*|0).([1-9]\d*|0).([1-9]\d*|0)$]]></_VersionRegex>
-    </PropertyGroup>
-
-    <Error
-      Text="Version does not respect the Major.Minor.Patch format: $(Version)"
-      Condition="!$([System.Text.RegularExpressions.Regex]::IsMatch('$(Version)', '$(_VersionRegex)'))" />
   </Target>
 
   <ItemGroup>
