@@ -138,12 +138,9 @@ Special variables can be used to customize the SemVer metadata (as an alternativ
 
 If you encounter any issues, make sure to:
 
+- Rebuild the project/solution then restart your IDE
+- Test building through the command line using `dotnet build`
 - Update your IDE to the latest version (requires at least Visual Studio 2019 16.9; Jetbrains Rider is untested)
-
 - Update the dotnet runtime to the latest version
-
-- Clean the project/solution. Restart your IDE then rebuild the project/solution
-
-- Test building through the command line using `dotnet build``
 
 If none of the above works, [open an issue](https://github.com/notpeelz/VersionInfoGenerator/issues/new).
