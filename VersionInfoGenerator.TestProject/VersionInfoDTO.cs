@@ -1,4 +1,4 @@
-public class VersionInfoJsonData
+public class VersionInfoDTO
 {
     public string RootNamespace { get; set; }
 

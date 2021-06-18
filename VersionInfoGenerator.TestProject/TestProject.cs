@@ -18,7 +18,7 @@ Console.WriteLine("GitIsDirty: " + VersionInfoTest.GitIsDirty);
 Console.WriteLine();
 
 using var sr = new StreamReader("VersionInfo.json");
-var json = JsonSerializer.Deserialize<VersionInfoJsonData>(sr.ReadToEnd());
+var json = JsonSerializer.Deserialize<VersionInfoDTO>(sr.ReadToEnd());
 
 Console.WriteLine("JSON:");
 Console.WriteLine("------------------------");
