@@ -13,7 +13,7 @@ namespace VersionInfoGenerator.JsonTask
     // being rebuilt.
     // As a workaround, NodeReuse can be disabled by setting
     // $Env:MSBUILDDISABLENODEREUSE=1
-    public class VersionInfoGeneratorJsonTask : ITask
+    public class CreateVersionInfoJson : ITask
     {
         public IBuildEngine BuildEngine { get; set; }
 
@@ -63,7 +63,7 @@ namespace VersionInfoGenerator.JsonTask
                     subcategory: null,
                     file: null, lineNumber: 0, columnNumber: 0, endLineNumber: 0, endColumnNumber: 0,
                     helpKeyword: null,
-                    senderName: nameof(VersionInfoGeneratorJsonTask)));
+                    senderName: nameof(CreateVersionInfoJson)));
                 return false;
             }
 
@@ -80,7 +80,7 @@ namespace VersionInfoGenerator.JsonTask
                     subcategory: null,
                     file: null, lineNumber: 0, columnNumber: 0, endLineNumber: 0, endColumnNumber: 0,
                     helpKeyword: null,
-                    senderName: nameof(VersionInfoGeneratorJsonTask)));
+                    senderName: nameof(CreateVersionInfoJson)));
                 return false;
             }
 

@@ -6,14 +6,14 @@
 
   <UsingTask
     Condition="'$(VersionInfoGenerateJson)' == 'true'"
-    TaskName="VersionInfoGeneratorJsonTask"
+    TaskName="CreateVersionInfoJson"
     AssemblyFile="$(_VersionInfoGeneratorJsonTaskPath)" />
 
   <Target
     Condition="'$(VersionInfoGenerateJson)' == 'true' And '$(BuildingProject)' == 'true'"
     Name="VersionInfoGenerator_GenerateJson"
     AfterTargets="VersionInfoGenerator_UpdateProperties">
-    <VersionInfoGeneratorJsonTask
+    <CreateVersionInfoJson
       MSBuildOutputPath="$(OutputPath)"
       OutputPath="$(VersionInfoJsonOutputPath)"
       SerializedProperties="$(VersionInfoJsonSerializedProperties)"
@@ -28,7 +28,7 @@
       GitTag="$(GitTag)"
       GitIsDirty="$(GitIsDirty)">
       <Output ItemName="GeneratedFiles" TaskParameter="GeneratedFiles" />
-    </VersionInfoGeneratorJsonTask>
+    </CreateVersionInfoJson>
     <ItemGroup>
       <FileWrites Include="@(GeneratedFiles)" />
     </ItemGroup>
