@@ -5,7 +5,7 @@
     -->
   </PropertyGroup>
 
-  <Target Name="VersionInfoConfig" AfterTargets="GetGitInfo">
+  <Target Name="VersionInfoConfig" AfterTargets="VersionInfoGenerator_GetGitInfo">
     <PropertyGroup Condition="'$(GitBranch)' == 'master'">
       <VersionMetadata>$(VersionMetadata)-RELEASE</VersionMetadata>
     </PropertyGroup>
