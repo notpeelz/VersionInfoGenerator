@@ -2,8 +2,6 @@
   <Import Project="$(MSBuildProjectDirectory)/VersionInfoGenerator.Config.props"
     Condition="Exists('$(MSBuildProjectDirectory)/VersionInfoGenerator.Config.props')" />
 
-  <Import Project="$(MSBuildThisFileDirectory)/VersionInfoGenerator.JsonTask.targets" />
-
   <!-- Back up the user-defined ProjectVersion before
        NuGet.Build.Tasks.Pack.targets overrides it -->
   <PropertyGroup>
@@ -239,4 +237,6 @@
     <CompilerVisibleProperty Include="GitTag" />
     <CompilerVisibleProperty Include="GitIsDirty" />
   </ItemGroup>
+
+  <Import Project="$(MSBuildThisFileDirectory)/VersionInfoGenerator.JsonTask.targets" />
 </Project>

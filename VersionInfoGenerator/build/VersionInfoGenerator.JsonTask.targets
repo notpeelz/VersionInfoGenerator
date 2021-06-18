@@ -10,10 +10,9 @@
     AssemblyFile="$(_VersionInfoGeneratorJsonTaskPath)" />
 
   <Target
-    Condition="'$(VersionInfoGenerateJson)' == 'true'"
-    Name="VersionInfoGeneratorJsonTask"
-    DependsOnTargets="VersionInfoGenerator_UpdateProperties"
-    AfterTargets="BeforeCompile">
+    Condition="'$(VersionInfoGenerateJson)' == 'true' And '$(BuildingProject)' == 'true'"
+    Name="VersionInfoGenerator_GenerateJson"
+    AfterTargets="VersionInfoGenerator_UpdateProperties">
     <VersionInfoGeneratorJsonTask
       MSBuildOutputPath="$(OutputPath)"
       OutputPath="$(VersionInfoJsonOutputPath)"
