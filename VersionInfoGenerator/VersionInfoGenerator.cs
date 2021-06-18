@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
-namespace VersionInfoGenerator.Generator
+namespace VersionInfoGenerator
 {
     [Generator]
     public class VersionInfoGenerator : ISourceGenerator

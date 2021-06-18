@@ -1,4 +1,4 @@
-namespace VersionInfoGenerator.Generator
+namespace VersionInfoGenerator
 {
     internal static class VersionInfoRuntime
     {

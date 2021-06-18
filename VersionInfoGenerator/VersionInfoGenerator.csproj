@@ -2,40 +2,62 @@
   <Import Project="PackageProps.props" />
 
   <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>preview</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(_BuildingIntermediateGenerator)' != 'true'">
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <BuildOutputTargetFolder>analyzers</BuildOutputTargetFolder>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     <TargetsForTfmSpecificContentInPackage>CopyTasksToPackage</TargetsForTfmSpecificContentInPackage>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(_BuildingIntermediateGenerator)' != 'true'">
     <None Include="../README.md" PackagePath="/" Pack="true" />
     <None Include="build/*" PackagePath="build/" Pack="true" />
+    <ProjectReference
+      Include="../VersionInfoGenerator.JsonTask/VersionInfoGenerator.JsonTask.csproj"
+      PrivateAssets="all"
+      ReferenceOutputAssembly="false"
+      OutputItemType="PackedTask" />
   </ItemGroup>
 
-  <Target Name="CopyTasksToPackage" DependsOnTargets="BuildOnlySettings;ResolveReferences">
+  <Target
+    Condition="'$(BuildingProject)' == 'true' And '$(_BuildingIntermediateGenerator)' != 'true'"
+    Name="CreateIntermediateGenerator"
+    BeforeTargets="ResolveReferences">
+    <PropertyGroup>
+      <_IntermediateGeneratorOutputPath>$(IntermediateOutputPath)/vig</_IntermediateGeneratorOutputPath>
+    </PropertyGroup>
+
+    <MSBuild
+      Projects="$(MSBuildProjectFullPath)"
+      Properties="_BuildingIntermediateGenerator=true;OutputPath=$(_IntermediateGeneratorOutputPath);Configuration=Debug"
+      Targets="Build">
+      <Output TaskParameter="TargetOutputs" ItemName="_IntermediateGeneratorOutput" />
+    </MSBuild>
+
     <ItemGroup>
-      <TfmSpecificPackageFile Include="@(ReferenceCopyLocalPaths-&gt;WithMetadataValue('ReferenceSourceTarget', 'ProjectReference')-&gt;WithMetadataValue('OutputItemType', 'Task'))" Condition="'%(Extension)' == '.dll'">
-        <PackagePath>tools/$(TargetFramework)</PackagePath>
+      <FileWrites Include="$(_IntermediateGeneratorOutputPath)/**/*" />
+      <Analyzer Include="@(_IntermediateGeneratorOutput)" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="CopyTasksToPackage" DependsOnTargets="ResolveReferences">
+    <ItemGroup>
+      <TfmSpecificPackageFile Include="@(PackedTask)">
+        <PackagePath>tools/netstandard2.0/</PackagePath>
       </TfmSpecificPackageFile>
     </ItemGroup>
   </Target>
 
-  <!-- ILRepack -->
-  <ItemGroup>
-    <EmbeddedAssembly Include="$(OutputPath)/VersionInfoGenerator.Generator.dll" />
-    <PackageReference Include="ILRepack.Lib.MSBuild" Version="2.1.16.1" PrivateAssets="all" />
-  </ItemGroup>
-
   <!-- Dependencies -->
   <ItemGroup>
-    <ProjectReference Include="../VersionInfoGenerator.Generator/VersionInfoGenerator.Generator.csproj" OutputItemType="Analyzer" />
-    <ProjectReference Include="../VersionInfoGenerator.JsonTask/VersionInfoGenerator.JsonTask.csproj" OutputItemType="Task" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.10.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.10.0" PrivateAssets="all" />
   </ItemGroup>
 
-  <PropertyGroup>
-    <_VersionInfoGeneratorJsonTaskPath>$(MSBuildThisFileDirectory)/../VersionInfoGenerator.JsonTask/bin/$(Configuration)/netstandard2.0/VersionInfoGenerator.JsonTask.dll</_VersionInfoGeneratorJsonTaskPath>
-  </PropertyGroup>
-
-  <Import Project="build/VersionInfoGenerator.targets" />
+  <Import Condition="'$(_BuildingIntermediateGenerator)' != 'true'" Project="build/VersionInfoGenerator.targets" />
 </Project>

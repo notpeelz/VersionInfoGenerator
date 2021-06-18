@@ -96,7 +96,9 @@
       <Output PropertyName="GitRevShort" TaskParameter="ConsoleOutput" />
       <Output PropertyName="MSBuildLastExitCode" TaskParameter="ExitCode" />
     </Exec>
-    <Error Condition="'$(GitIsWorktreeValid)' == 'true' And '$(MSBuildLastExitCode)' != '0'" Text="Failed to parse GitRevShort: $(GitRevShort)" />
+    <Error
+      Condition="'$(GitIsWorktreeValid)' == 'true' And '$(MSBuildLastExitCode)' != '0'"
+      Text="Failed to parse GitRevShort: $(GitRevShort)" />
 
     <Exec
       Condition="'$(GitIsWorktreeValid)' == 'true'"
@@ -109,7 +111,9 @@
       <Output PropertyName="GitRevLong" TaskParameter="ConsoleOutput" />
       <Output PropertyName="MSBuildLastExitCode" TaskParameter="ExitCode" />
     </Exec>
-    <Error Condition="'$(GitIsWorktreeValid)' == 'true' And '$(MSBuildLastExitCode)' != '0'" Text="Failed to parse GitRevLong: $(GitRevLong)" />
+    <Error
+      Condition="'$(GitIsWorktreeValid)' == 'true' And '$(MSBuildLastExitCode)' != '0'"
+      Text="Failed to parse GitRevLong: $(GitRevLong)" />
 
     <Exec
       Condition="'$(GitIsWorktreeValid)' == 'true'"
@@ -122,7 +126,9 @@
       <Output PropertyName="GitBranch" TaskParameter="ConsoleOutput" />
       <Output PropertyName="MSBuildLastExitCode" TaskParameter="ExitCode" />
     </Exec>
-    <Error Condition="'$(GitIsWorktreeValid)' == 'true' And '$(MSBuildLastExitCode)' != '0'" Text="Failed to parse GitBranch: $(GitBranch)" />
+    <Error
+      Condition="'$(GitIsWorktreeValid)' == 'true' And '$(MSBuildLastExitCode)' != '0'"
+      Text="Failed to parse GitBranch: $(GitBranch)" />
 
     <Exec
       Condition="'$(GitIsWorktreeValid)' == 'true'"
@@ -146,7 +152,11 @@
     </PropertyGroup>
   </Target>
 
-  <Target Name="VersionInfoGenerator_UpdateProperties" DependsOnTargets="VersionInfoGenerator_GetGitInfo" BeforeTargets="GenerateNuspec">
+  <Target
+    Condition="'$(BuildingProject)' == 'true'"
+    Name="VersionInfoGenerator_UpdateProperties"
+    DependsOnTargets="VersionInfoGenerator_GetGitInfo"
+    BeforeTargets="ResolveReferences">
     <PropertyGroup>
       <SemVer>$(Version)</SemVer>
       <SemVer Condition="'$(VersionPrerelease)' != ''">$(SemVer)-$(VersionPrerelease)</SemVer>

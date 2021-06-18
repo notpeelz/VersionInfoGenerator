@@ -23,12 +23,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../VersionInfoGenerator.Generator/VersionInfoGenerator.Generator.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
-    <ProjectReference Include="../VersionInfoGenerator.JsonTask/VersionInfoGenerator.JsonTask.csproj" ReferenceOutputAssembly="false" OutputItemType="Task" />
+    <ProjectReference Include="../VersionInfoGenerator/VersionInfoGenerator.csproj" OutputItemType="Analyzer" PrivateAssets="all" />
+    <ProjectReference Include="../VersionInfoGenerator.JsonTask/VersionInfoGenerator.JsonTask.csproj" PrivateAssets="all" />
   </ItemGroup>
 
   <PropertyGroup>
-    <_VersionInfoGeneratorJsonTaskPath>$(MSBuildThisFileDirectory)/../VersionInfoGenerator.JsonTask/bin/$(Configuration)/netstandard2.0/VersionInfoGenerator.JsonTask.dll</_VersionInfoGeneratorJsonTaskPath>
+    <_VersionInfoGeneratorJsonTaskPath>$(MSBuildThisFileDirectory)/../VersionInfoGenerator.JsonTask/bin/VersionInfoGenerator.JsonTask.dll</_VersionInfoGeneratorJsonTaskPath>
   </PropertyGroup>
 
   <Import Project="../VersionInfoGenerator/build/VersionInfoGenerator.targets" />

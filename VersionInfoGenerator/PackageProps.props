@@ -8,10 +8,7 @@
     <PackageProjectUrl>https://github.com/notpeelz/VersionInfoGenerator</PackageProjectUrl>
     <RepositoryUrl>https://github.com/notpeelz/VersionInfoGenerator.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <LangVersion>preview</LangVersion>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <IncludeSymbols>false</IncludeSymbols>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 </Project>
