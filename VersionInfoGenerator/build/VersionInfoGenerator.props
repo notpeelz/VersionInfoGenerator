@@ -1,0 +1,6 @@
+<Project>
+  <!--
+    This file only exists so that NuGet.Build.Tasks.Pack.targets stops
+    complaining about not having a build/{PackageId}.props file (NU5129)
+  -->
+</Project>

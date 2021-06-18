@@ -1,4 +1,6 @@
 <Project>
+  <Import Project="$(MSBuildThisFileDirectory)/EventCodes.props" />
+
   <Import Project="$(MSBuildProjectDirectory)/VersionInfoGenerator.Config.props"
     Condition="Exists('$(MSBuildProjectDirectory)/VersionInfoGenerator.Config.props')" />
 
@@ -31,7 +33,10 @@
       <GitBinary Condition="'$(GitBinary)' == '' And Exists('C:\msysgit\bin\git.exe')">C:\msysgit\bin\git.exe</GitBinary>
     </PropertyGroup>
 
-    <Error Condition="'$(GitBinary)' == ''" Text="Failed to locate the git binary." />
+    <Error
+      Condition="'$(GitBinary)' == ''"
+      Code="$(_VIG_GIT_BINARY_MISSING)"
+      Text="Failed to locate the git binary." />
   </Target>
 
   <Target Name="VersionInfoGenerator_VerifyGitWorktree" DependsOnTargets="VersionInfoGenerator_GetGitBinary">
@@ -96,6 +101,7 @@
     </Exec>
     <Error
       Condition="'$(GitIsWorktreeValid)' == 'true' And '$(MSBuildLastExitCode)' != '0'"
+      Code="$(_VIG_GIT_REV_SHORT_FAILED_PARSING)"
       Text="Failed to parse GitRevShort: $(GitRevShort)" />
 
     <Exec
@@ -111,6 +117,7 @@
     </Exec>
     <Error
       Condition="'$(GitIsWorktreeValid)' == 'true' And '$(MSBuildLastExitCode)' != '0'"
+      Code="$(_VIG_GIT_REV_LONG_FAILED_PARSING)"
       Text="Failed to parse GitRevLong: $(GitRevLong)" />
 
     <Exec
@@ -126,6 +133,7 @@
     </Exec>
     <Error
       Condition="'$(GitIsWorktreeValid)' == 'true' And '$(MSBuildLastExitCode)' != '0'"
+      Code="$(_VIG_GIT_BRANCH_FAILED_PARSING)"
       Text="Failed to parse GitBranch: $(GitBranch)" />
 
     <Exec
@@ -160,8 +168,9 @@
     </PropertyGroup>
 
     <Error
-      Text="Version does not respect the Major.Minor.Patch format: $(Version)"
-      Condition="!$([System.Text.RegularExpressions.Regex]::IsMatch('$(Version)', '$(_VersionRegex)'))" />
+      Condition="!$([System.Text.RegularExpressions.Regex]::IsMatch('$(Version)', '$(_VersionRegex)'))"
+      Code="$(_VIG_VERSION_INVALID_FORMAT)"
+      Text="Version does not respect the Major.Minor.Patch format: $(Version)" />
 
     <PropertyGroup>
       <SemVer>$(Version)</SemVer>
