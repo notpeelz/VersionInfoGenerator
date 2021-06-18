@@ -107,14 +107,22 @@ namespace VersionInfoGenerator
 
             var rootNamespace = GetMSBuildProperty("RootNamespace");
             var classNamespace = GetMSBuildProperty("VersionInfoClassNamespace");
-            if (classNamespace == null)
+            if (!bool.TryParse(GetMSBuildProperty("VersionInfoClassNamespaceGlobal"), out var useGlobalNamespace))
             {
-                if (!bool.TryParse(GetMSBuildProperty("VersionInfoClassNamespaceGlobal"), out var useGlobalNamespace))
-                {
-                    useGlobalNamespace = false;
-                }
+                useGlobalNamespace = false;
+            }
 
-                if (!useGlobalNamespace) classNamespace = rootNamespace;
+            if (useGlobalNamespace)
+            {
+                // VersionInfoClassNamespaceGlobal has precedence over
+                // VersionInfoClassNamespace.
+                classNamespace = null;
+            }
+            else
+            {
+                // If RootNamespace is null, it will fall back to the global
+                // namespace.
+                classNamespace = rootNamespace;
             }
 
             var className = GetMSBuildProperty("VersionInfoClassName") ?? "VersionInfo";
@@ -162,7 +170,7 @@ namespace VersionInfoGenerator
                     ? SingletonList<MemberDeclarationSyntax>(
                         NamespaceDeclaration(IdentifierName(classNamespace))
                             .WithMembers(SingletonList<MemberDeclarationSyntax>(versionInfoClass)))
-                    // Use the global namespace if we can't infer the namespace
+                    // Use the global namespace if we don't have a namespace
                     : SingletonList<MemberDeclarationSyntax>(versionInfoClass))
                 .NormalizeWhitespace();
 
