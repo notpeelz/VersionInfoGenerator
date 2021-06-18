@@ -24,7 +24,7 @@ In your `.csproj`:
 
 Output:
 
-![file_info](img/file_info.jpg)
+![file_info](https://raw.githubusercontent.com/notpeelz/VersionInfoGenerator/fe6d8c6461b1c7dfc86dcd850d5e843e2d840cbb/img/file_info.jpg)
 
 ```cs
 internal static class VersionInfo
