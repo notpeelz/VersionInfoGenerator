@@ -43,19 +43,20 @@ namespace VersionInfoGenerator
 
         private static readonly LiteralExpressionProperty StringExpression = new(x => (
             expr: x == null
-                ? LiteralExpression(SyntaxKind.NullLiteralExpression)
+                ? LiteralExpression(SyntaxKind.DefaultLiteralExpression)
                 : LiteralExpression(SyntaxKind.StringLiteralExpression, Literal(x)),
             type: PredefinedType(Token(SyntaxKind.StringKeyword))));
 
         private static readonly LiteralExpressionProperty IntExpression = new(x => (
             expr: x == null
-                ? LiteralExpression(SyntaxKind.NumericLiteralExpression, Literal(0))
+                ? LiteralExpression(SyntaxKind.DefaultLiteralExpression)
                 : LiteralExpression(SyntaxKind.NumericLiteralExpression, Literal(int.Parse(x))),
             type: PredefinedType(Token(SyntaxKind.IntKeyword))));
 
         private static readonly LiteralExpressionProperty BoolExpression = new(x => (
-            expr: LiteralExpression(
-                bool.Parse(x ?? "false")
+            expr: x == null
+                ? LiteralExpression(SyntaxKind.DefaultLiteralExpression)
+                : LiteralExpression(bool.Parse(x)
                     ? SyntaxKind.TrueLiteralExpression
                     : SyntaxKind.FalseLiteralExpression),
             type: PredefinedType(Token(SyntaxKind.BoolKeyword))));
