@@ -251,6 +251,7 @@
   </Target>
 
   <ItemGroup>
+    <CompilerVisibleProperty Include="BuildingProject" />
     <CompilerVisibleProperty Include="RootNamespace" />
     <CompilerVisibleProperty Include="VersionInfoGenerateClass" />
     <CompilerVisibleProperty Include="VersionInfoClassSerializedProperties" />

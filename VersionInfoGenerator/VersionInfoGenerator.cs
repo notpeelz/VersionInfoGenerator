@@ -112,6 +112,11 @@ namespace VersionInfoGenerator
             if (!bool.TryParse(generateStr, out var generate)) generate = true;
             if (!generate) return;
 
+            if (!bool.TryParse(GetMSBuildProperty("BuildingProject"), out var buildingProject))
+            {
+                buildingProject = false;
+            }
+
             var rootNamespace = GetMSBuildProperty("RootNamespace");
             var classNamespace = GetMSBuildProperty("VersionInfoClassNamespace");
             if (!bool.TryParse(GetMSBuildProperty("VersionInfoClassNamespaceGlobal"), out var useGlobalNamespace))
@@ -149,7 +154,7 @@ namespace VersionInfoGenerator
                                     Token(SyntaxKind.CommaToken),
                                     AttributeArgument(LiteralExpression(
                                         SyntaxKind.StringLiteralExpression,
-                                        Literal(VersionInfoRuntime.SemVer)))
+                                        Literal(VersionInfoRuntime.SemVer))),
                                 }))))),
                     AttributeList(SingletonSeparatedList(
                         Attribute(IdentifierName("CompilerGenerated")))),
@@ -171,7 +176,7 @@ namespace VersionInfoGenerator
                         IdentifierName("Compiler"))),
                     UsingDirective(QualifiedName(
                         QualifiedName(IdentifierName("System"), IdentifierName("Runtime")),
-                        IdentifierName("CompilerServices")))
+                        IdentifierName("CompilerServices"))),
                 }))
                 .WithMembers(classNamespace != null
                     ? SingletonList<MemberDeclarationSyntax>(
@@ -201,7 +206,9 @@ namespace VersionInfoGenerator
                     }
 
                     var value = GetMSBuildProperty(prop.Key);
-                    var (expr, type) = literalProp.GetExpression(value);
+                    // If the project is building, don't populate any fields
+                    // since the GitInfo properties haven't been populated yet.
+                    var (expr, type) = literalProp.GetExpression(buildingProject ? value : null);
 
                     yield return FieldDeclaration(
                         VariableDeclaration(type)
@@ -212,7 +219,7 @@ namespace VersionInfoGenerator
                                 new[]
                                 {
                                     Token(SyntaxKind.PublicKeyword),
-                                    Token(SyntaxKind.ConstKeyword)
+                                    Token(SyntaxKind.ConstKeyword),
                                 }));
                 }
             }
