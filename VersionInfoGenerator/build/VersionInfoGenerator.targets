@@ -172,6 +172,7 @@
     </Exec>
     <Error
       Condition="'$(GitIsWorktreeValid)' == 'true' And '$(GitTag)' != '' And '$(MSBuildLastExitCode)' != '0'"
+      Code="$(_VIG_GIT_COMMITS_SINCE_TAG_FAILED_PARSING)"
       Text="Failed to parse GitCommitsSinceTag: $(GitCommitsSinceTag)" />
 
     <!-- GitIsDirty -->
