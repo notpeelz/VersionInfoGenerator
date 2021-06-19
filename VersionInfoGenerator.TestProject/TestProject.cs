@@ -13,6 +13,7 @@ Console.WriteLine("GitRevShort: " + VersionInfoTest.GitRevShort);
 Console.WriteLine("GitRevLong: " + VersionInfoTest.GitRevLong);
 Console.WriteLine("GitBranch: " + VersionInfoTest.GitBranch);
 Console.WriteLine("GitTag: " + VersionInfoTest.GitTag);
+Console.WriteLine("GitCommitsSinceTag: " + VersionInfoTest.GitCommitsSinceTag);
 Console.WriteLine("GitIsDirty: " + VersionInfoTest.GitIsDirty);
 
 Console.WriteLine();
@@ -31,4 +32,5 @@ Console.WriteLine("GitRevShort: " + json.GitRevShort);
 Console.WriteLine("GitRevLong: " + json.GitRevLong);
 Console.WriteLine("GitBranch: " + json.GitBranch);
 Console.WriteLine("GitTag: " + json.GitTag);
+Console.WriteLine("GitCommitsSinceTag: " + json.GitCommitsSinceTag);
 Console.WriteLine("GitIsDirty: " + json.GitIsDirty);

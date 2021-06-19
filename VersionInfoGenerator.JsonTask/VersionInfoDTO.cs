@@ -20,6 +20,8 @@ namespace VersionInfoGenerator.JsonTask
 
         public string GitTag { get; set; }
 
+        public int GitCommitsSinceTag { get; set; }
+
         public bool GitIsDirty { get; set; }
     }
 }

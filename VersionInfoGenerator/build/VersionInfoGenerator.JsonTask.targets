@@ -26,6 +26,7 @@
       GitRevLong="$(GitRevLong)"
       GitBranch="$(GitBranch)"
       GitTag="$(GitTag)"
+      GitCommitsSinceTag="$(GitCommitsSinceTag)"
       GitIsDirty="$(GitIsDirty)">
       <Output ItemName="GeneratedFiles" TaskParameter="GeneratedFiles" />
     </CreateVersionInfoJson>

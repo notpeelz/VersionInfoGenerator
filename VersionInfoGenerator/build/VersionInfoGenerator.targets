@@ -88,6 +88,7 @@
   </Target>
 
   <Target Name="VersionInfoGenerator_GetGitInfo" DependsOnTargets="VersionInfoGenerator_VerifyGitWorktree">
+    <!-- GitRevShort -->
     <Exec
       Condition="'$(GitIsWorktreeValid)' == 'true'"
       Command="$(GitBinary) describe --long --always --dirty --exclude=* --abbrev=7"
@@ -104,6 +105,7 @@
       Code="$(_VIG_GIT_REV_SHORT_FAILED_PARSING)"
       Text="Failed to parse GitRevShort: $(GitRevShort)" />
 
+    <!-- GitRevLong -->
     <Exec
       Condition="'$(GitIsWorktreeValid)' == 'true'"
       Command="$(GitBinary) describe --long --always --dirty --exclude=* --abbrev=9999"
@@ -120,6 +122,7 @@
       Code="$(_VIG_GIT_REV_LONG_FAILED_PARSING)"
       Text="Failed to parse GitRevLong: $(GitRevLong)" />
 
+    <!-- GitBranch -->
     <Exec
       Condition="'$(GitIsWorktreeValid)' == 'true'"
       Command="$(GitBinary) rev-parse --abbrev-ref --symbolic-full-name HEAD"
@@ -136,6 +139,7 @@
       Code="$(_VIG_GIT_BRANCH_FAILED_PARSING)"
       Text="Failed to parse GitBranch: $(GitBranch)" />
 
+    <!-- GitTag -->
     <Exec
       Condition="'$(GitIsWorktreeValid)' == 'true'"
       Command="$(GitBinary) describe --tags --abbrev=0"
@@ -149,10 +153,28 @@
       <Output PropertyName="MSBuildLastExitCode" TaskParameter="ExitCode" />
     </Exec>
     <PropertyGroup Condition="'$(GitIsWorktreeValid)' == 'true'">
-      <!-- Delete GitTag if the command errored out as it contains the command's stderr -->
+      <!-- Clear GitTag if the command errored out as it contains the command's stderr -->
       <GitTag Condition="'$(MSBuildLastExitCode)' != '0'"></GitTag>
     </PropertyGroup>
 
+    <!-- GitCommitsSinceTag -->
+    <Exec
+      Condition="'$(GitIsWorktreeValid)' == 'true' And '$(GitTag)' != ''"
+      Command="$(GitBinary) rev-list &quot;$(GitTag)&quot;.. --count"
+      EchoOff="true"
+      StandardOutputImportance="low"
+      StandardErrorImportance="low"
+      IgnoreStandardErrorWarningFormat="true"
+      ConsoleToMSBuild="true"
+      IgnoreExitCode="true">
+      <Output PropertyName="GitCommitsSinceTag" TaskParameter="ConsoleOutput" />
+      <Output PropertyName="MSBuildLastExitCode" TaskParameter="ExitCode" />
+    </Exec>
+    <Error
+      Condition="'$(GitIsWorktreeValid)' == 'true' And '$(GitTag)' != '' And '$(MSBuildLastExitCode)' != '0'"
+      Text="Failed to parse GitCommitsSinceTag: $(GitCommitsSinceTag)" />
+
+    <!-- GitIsDirty -->
     <PropertyGroup Condition="'$(GitIsWorktreeValid)' == 'true'">
       <GitIsDirty>$(GitRevShort.Contains('-dirty'))</GitIsDirty>
     </PropertyGroup>
@@ -182,6 +204,7 @@
         .Replace('@@GitRevShort@@', '$(GitRevShort)')
         .Replace('@@GitRevLong@@', '$(GitRevLong)')
         .Replace('@@GitTag@@', '$(GitTag)')
+        .Replace('@@GitCommitsSinceTag@@', '$(GitCommitsSinceTag)')
         .Replace('@@GitBranch@@', '$(GitBranch)'))</VersionMetadata>
     </PropertyGroup>
 
@@ -222,6 +245,7 @@
         .Replace('@@GitRevShort@@', '$(GitRevShort)')
         .Replace('@@GitRevLong@@', '$(GitRevLong)')
         .Replace('@@GitTag@@', '$(GitTag)')
+        .Replace('@@GitCommitsSinceTag@@', '$(GitCommitsSinceTag)')
         .Replace('@@GitBranch@@', '$(GitBranch)'))</InformationalVersion>
     </PropertyGroup>
   </Target>
@@ -242,6 +266,7 @@
     <CompilerVisibleProperty Include="GitRevLong" />
     <CompilerVisibleProperty Include="GitBranch" />
     <CompilerVisibleProperty Include="GitTag" />
+    <CompilerVisibleProperty Include="GitCommitsSinceTag" />
     <CompilerVisibleProperty Include="GitIsDirty" />
   </ItemGroup>
 

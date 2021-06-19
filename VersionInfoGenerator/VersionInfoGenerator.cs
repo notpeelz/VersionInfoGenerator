@@ -47,9 +47,15 @@ namespace VersionInfoGenerator
                 : LiteralExpression(SyntaxKind.StringLiteralExpression, Literal(x)),
             type: PredefinedType(Token(SyntaxKind.StringKeyword))));
 
+        private static readonly LiteralExpressionProperty IntExpression = new(x => (
+            expr: x == null
+                ? LiteralExpression(SyntaxKind.NumericLiteralExpression, Literal(0))
+                : LiteralExpression(SyntaxKind.NumericLiteralExpression, Literal(int.Parse(x))),
+            type: PredefinedType(Token(SyntaxKind.IntKeyword))));
+
         private static readonly LiteralExpressionProperty BoolExpression = new(x => (
             expr: LiteralExpression(
-                (bool)Convert.ChangeType(x ?? "false", TypeCode.Boolean)
+                bool.Parse(x ?? "false")
                     ? SyntaxKind.TrueLiteralExpression
                     : SyntaxKind.FalseLiteralExpression),
             type: PredefinedType(Token(SyntaxKind.BoolKeyword))));
@@ -78,6 +84,7 @@ namespace VersionInfoGenerator
             { "GitRevLong", StringExpression },
             { "GitBranch", StringExpression },
             { "GitTag", StringExpression },
+            { "GitCommitsSinceTag", IntExpression },
             { "GitIsDirty", BoolExpression },
         };
 

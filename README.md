@@ -38,6 +38,7 @@ internal static class VersionInfo
     public const string GitRevLong = "ac717b1885cd0f984cabe77dd5f37c9200795298";
     public const string GitBranch = "master";
     public const string GitTag = "v1.0.0";
+    public const int GitCommitsSinceTag = 0;
     public const bool GitIsDirty = false;
 }
 ```
@@ -72,13 +73,13 @@ internal static class VersionInfo
   <!-- Controls whether to generate the VersionInfo class -->
   <VersionInfoGenerateClass>true</VersionInfoGenerateClass>
   <!-- Controls what properties to include in the VersionInfo class -->
-  <VersionInfoClassSerializedProperties>RootNamespace;Version;VersionPrerelease;VersionMetadata;SemVer;GitRevShort;GitRevLong;GitBranch;GitTag;GitIsDirty</VersionInfoClassSerializedProperties>
+  <VersionInfoClassSerializedProperties>RootNamespace;Version;VersionPrerelease;VersionMetadata;SemVer;GitRevShort;GitRevLong;GitBranch;GitTag;GitCommitsSinceTag;GitIsDirty</VersionInfoClassSerializedProperties>
   <!-- Controls whether to generate a VersionInfo JSON file in the output folder -->
   <VersionInfoGenerateJson>false</VersionInfoGenerateJson>
   <!-- The name of the VersionInfo JSON file -->
   <VersionInfoJsonOutputPath>VersionInfo.json</VersionInfoJsonOutputPath>
   <!-- Controls what properties to include in the VersionInfo JSON file -->
-  <VersionInfoJsonSerializedProperties>RootNamespace;Version;VersionPrerelease;VersionMetadata;SemVer;GitRevShort;GitRevLong;GitBranch;GitTag;GitIsDirty</VersionInfoClassJsonSerializedProperties>
+  <VersionInfoJsonSerializedProperties>RootNamespace;Version;VersionPrerelease;VersionMetadata;SemVer;GitRevShort;GitRevLong;GitBranch;GitTag;GitCommitsSinceTag;GitIsDirty</VersionInfoClassJsonSerializedProperties>
 </PropertyGroup>
 ```
 
@@ -91,6 +92,15 @@ A config file (named `VersionInfoGenerator.Config.props`) can be created to gain
   </PropertyGroup>
 
   <Target Name="VersionInfoConfig" AfterTargets="VersionInfoGenerator_GetGitInfo">
+    <PropertyGroup>
+      <VersionMetadata>NO_TAG</VersionMetadata>
+      <VersionMetadata Condition="'$(GitTag)' != ''">$(GitTag)</VersionMetadata>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(GitCommitsSinceTag)' != '0'">
+      <VersionMetadata>$(VersionMetadata)-$(GitCommitsSinceTag)</VersionMetadata>
+    </PropertyGroup>
+
     <PropertyGroup Condition="'$(GitBranch)' == 'master'">
       <VersionMetadata>$(VersionMetadata)-RELEASE</VersionMetadata>
     </PropertyGroup>
@@ -120,6 +130,7 @@ Output (`bin/Release/xxx/VersionInfo.json`):
   "GitRevLong": "0378e47109d698eeceaf07ad75e48ea36143d2e3",
   "GitBranch": "master",
   "GitTag": "v1.0.0",
+  "GitCommitsSinceTag": 0,
   "GitIsDirty": false
 }
 ```
@@ -132,6 +143,7 @@ Special variables can be used to customize the SemVer metadata (as an alternativ
 - `@@GitRevLong@@`: the full hash of the current commit (suffixed with `-dirty` if there's uncommited changes)
 - `@@GitBranch@@`: the current git branch
 - `@@GitTag@@`: the current git tag
+- `@@GitCommitsSinceTag@@`: the number of commits since the last git tag
 - `@@VersionMetadata@`: the default VersionMetadata format (`git@@GitRevShort@@-@@GitBranch@@`)
 
 # Troubleshooting

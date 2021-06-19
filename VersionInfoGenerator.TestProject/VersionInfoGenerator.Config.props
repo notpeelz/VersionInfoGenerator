@@ -6,6 +6,15 @@
   </PropertyGroup>
 
   <Target Name="VersionInfoConfig" AfterTargets="VersionInfoGenerator_GetGitInfo">
+    <PropertyGroup>
+      <VersionMetadata>NO_TAG</VersionMetadata>
+      <VersionMetadata Condition="'$(GitTag)' != ''">$(GitTag)</VersionMetadata>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(GitCommitsSinceTag)' != '0'">
+      <VersionMetadata>$(VersionMetadata)-$(GitCommitsSinceTag)</VersionMetadata>
+    </PropertyGroup>
+
     <PropertyGroup Condition="'$(GitBranch)' == 'master'">
       <VersionMetadata>$(VersionMetadata)-RELEASE</VersionMetadata>
     </PropertyGroup>
