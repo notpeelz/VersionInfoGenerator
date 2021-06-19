@@ -28,10 +28,10 @@
       GitTag="$(GitTag)"
       GitCommitsSinceTag="$(GitCommitsSinceTag)"
       GitIsDirty="$(GitIsDirty)">
-      <Output ItemName="GeneratedFiles" TaskParameter="GeneratedFiles" />
+      <Output TaskParameter="GeneratedFiles" ItemName="_VersionInfoJson_GeneratedFiles"  />
     </CreateVersionInfoJson>
     <ItemGroup>
-      <FileWrites Include="@(GeneratedFiles)" />
+      <FileWrites Include="@(_VersionInfoJson_GeneratedFiles)" />
     </ItemGroup>
   </Target>
 </Project>
