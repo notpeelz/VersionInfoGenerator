@@ -21,6 +21,11 @@
       PrivateAssets="all"
       ReferenceOutputAssembly="false"
       OutputItemType="PackedTask" />
+    <ProjectReference
+      Include="../VersionInfoGenerator.GitInfoTask/VersionInfoGenerator.GitInfoTask.csproj"
+      PrivateAssets="all"
+      ReferenceOutputAssembly="false"
+      OutputItemType="PackedTask" />
   </ItemGroup>
 
   <Target
@@ -58,6 +63,10 @@
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.10.0" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.10.0" PrivateAssets="all" />
   </ItemGroup>
+
+  <PropertyGroup>
+    <_VersionInfoGeneratorGitInfoTaskPath>$(MSBuildThisFileDirectory)/../VersionInfoGenerator.GitInfoTask/bin/VersionInfoGenerator.GitInfoTask.dll</_VersionInfoGeneratorGitInfoTaskPath>
+  </PropertyGroup>
 
   <Import Condition="'$(_BuildingIntermediateGenerator)' != 'true'" Project="build/VersionInfoGenerator.targets" />
 </Project>

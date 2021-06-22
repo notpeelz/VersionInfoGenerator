@@ -4,6 +4,15 @@
   <Import Project="$(MSBuildProjectDirectory)/VersionInfoGenerator.Config.props"
     Condition="Exists('$(MSBuildProjectDirectory)/VersionInfoGenerator.Config.props')" />
 
+  <PropertyGroup>
+    <_VersionInfoGeneratorGitInfoTaskPath
+      Condition="'$(_VersionInfoGeneratorGitInfoTaskPath)' == ''">$(MSBuildThisFileDirectory)/../tools/netstandard2.0/VersionInfoGenerator.GitInfoTask.dll</_VersionInfoGeneratorGitInfoTaskPath>
+  </PropertyGroup>
+
+  <UsingTask
+    TaskName="GetGitInfo"
+    AssemblyFile="$(_VersionInfoGeneratorGitInfoTaskPath)" />
+
   <!-- Back up the user-defined ProjectVersion before
        NuGet.Build.Tasks.Pack.targets overrides it -->
   <PropertyGroup>
@@ -18,7 +27,7 @@
       StandardErrorImportance="low"
       CustomErrorRegularExpression="error|fatal"
       IgnoreExitCode="true">
-      <Output PropertyName="MSBuildLastExitCode" TaskParameter="ExitCode" />
+      <Output TaskParameter="ExitCode" PropertyName="MSBuildLastExitCode" />
     </Exec>
 
     <!-- Use git from PATH if possible (cross-platform) -->
@@ -28,8 +37,8 @@
 
     <!-- Windows-specific fallbacks -->
     <PropertyGroup Condition="'$(GitBinary)' == '' And '$(OS)' == 'Windows_NT'">
-      <GitBinary Condition="'$(GitBinary)' == '' And Exists('C:\Program Files\Git\bin\git.exe')">"C:\Program Files\Git\bin\git.exe"</GitBinary>
-      <GitBinary Condition="'$(GitBinary)' == '' And Exists('C:\Program Files (x86)\Git\bin\git.exe')">"C:\Program Files (x86)\Git\bin\git.exe"</GitBinary>
+      <GitBinary Condition="'$(GitBinary)' == '' And Exists('C:\Program Files\Git\bin\git.exe')">C:\Program Files\Git\bin\git.exe</GitBinary>
+      <GitBinary Condition="'$(GitBinary)' == '' And Exists('C:\Program Files (x86)\Git\bin\git.exe')">C:\Program Files (x86)\Git\bin\git.exe</GitBinary>
       <GitBinary Condition="'$(GitBinary)' == '' And Exists('C:\msysgit\bin\git.exe')">C:\msysgit\bin\git.exe</GitBinary>
     </PropertyGroup>
 
@@ -37,33 +46,39 @@
       Condition="'$(GitBinary)' == ''"
       Code="$(_VIG_GIT_BINARY_MISSING)"
       Text="Failed to locate the git binary." />
+
+    <PropertyGroup>
+      <_GitBinaryEscaped>&quot;$(GitBinary.Replace('"', '\"'))&quot;</_GitBinaryEscaped>
+    </PropertyGroup>
   </Target>
 
-  <Target Name="VersionInfoGenerator_VerifyGitWorktree" DependsOnTargets="VersionInfoGenerator_GetGitBinary">
+  <Target
+    Name="VersionInfoGenerator_VerifyGitWorktree"
+    DependsOnTargets="VersionInfoGenerator_GetGitBinary">
     <!-- Verify that we're in a git repo -->
     <Exec
-      Command="$(GitBinary) rev-parse --is-inside-work-tree"
+      Command="$(_GitBinaryEscaped) rev-parse --is-inside-work-tree"
       EchoOff="true"
       StandardOutputImportance="low"
       StandardErrorImportance="low"
       IgnoreStandardErrorWarningFormat="true"
       ConsoleToMSBuild="true"
       IgnoreExitCode="true">
-      <Output PropertyName="GitIsInWorktree" TaskParameter="ConsoleOutput" />
+      <Output TaskParameter="ConsoleOutput" PropertyName="GitIsInWorktree" />
     </Exec>
 
     <!-- Verify that we're in a valid git worktree -->
     <Exec
       Condition="'$(GitIsInWorktree)' == 'true'"
-      Command="$(GitBinary) rev-list -n 1 --all"
+      Command="$(_GitBinaryEscaped) rev-list -n 1 --all"
       EchoOff="true"
       StandardOutputImportance="low"
       StandardErrorImportance="low"
       IgnoreStandardErrorWarningFormat="true"
       ConsoleToMSBuild="true"
       IgnoreExitCode="true">
-      <Output PropertyName="GitIsWorktreeValid" TaskParameter="ConsoleOutput" />
-      <Output PropertyName="MSBuildLastExitCode" TaskParameter="ExitCode" />
+      <Output TaskParameter="ConsoleOutput" PropertyName="GitIsWorktreeValid" />
+      <Output TaskParameter="ExitCode" PropertyName="MSBuildLastExitCode" />
     </Exec>
     <PropertyGroup>
       <GitIsWorktreeValid Condition="'$(GitIsWorktreeValid)' == '' Or '$(MSBuildLastExitCode)' != '0'">false</GitIsWorktreeValid>
@@ -73,7 +88,7 @@
     <!-- Verify that HEAD is a valid revision -->
     <Exec
       Condition="'$(GitIsWorktreeValid)' == 'true'"
-      Command="$(GitBinary) rev-parse --verify HEAD"
+      Command="$(_GitBinaryEscaped) rev-parse --verify HEAD"
       EchoOff="true"
       StandardOutputImportance="low"
       StandardErrorImportance="low"
@@ -87,98 +102,19 @@
     </PropertyGroup>
   </Target>
 
-  <Target Name="VersionInfoGenerator_GetGitInfo" DependsOnTargets="VersionInfoGenerator_VerifyGitWorktree">
-    <!-- GitRevShort -->
-    <Exec
+  <Target
+    Name="VersionInfoGenerator_GetGitInfo"
+    DependsOnTargets="VersionInfoGenerator_VerifyGitWorktree">
+    <GetGitInfo
       Condition="'$(GitIsWorktreeValid)' == 'true'"
-      Command="$(GitBinary) describe --long --always --dirty --exclude=* --abbrev=7"
-      EchoOff="true"
-      StandardOutputImportance="low"
-      IgnoreStandardErrorWarningFormat="true"
-      ConsoleToMSBuild="true"
-      IgnoreExitCode="true">
-      <Output PropertyName="GitRevShort" TaskParameter="ConsoleOutput" />
-      <Output PropertyName="MSBuildLastExitCode" TaskParameter="ExitCode" />
-    </Exec>
-    <Error
-      Condition="'$(GitIsWorktreeValid)' == 'true' And '$(MSBuildLastExitCode)' != '0'"
-      Code="$(_VIG_GIT_REV_SHORT_FAILED_PARSING)"
-      Text="Failed to parse GitRevShort: $(GitRevShort)" />
-
-    <!-- GitRevLong -->
-    <Exec
-      Condition="'$(GitIsWorktreeValid)' == 'true'"
-      Command="$(GitBinary) describe --long --always --dirty --exclude=* --abbrev=9999"
-      EchoOff="true"
-      StandardOutputImportance="low"
-      IgnoreStandardErrorWarningFormat="true"
-      ConsoleToMSBuild="true"
-      IgnoreExitCode="true">
-      <Output PropertyName="GitRevLong" TaskParameter="ConsoleOutput" />
-      <Output PropertyName="MSBuildLastExitCode" TaskParameter="ExitCode" />
-    </Exec>
-    <Error
-      Condition="'$(GitIsWorktreeValid)' == 'true' And '$(MSBuildLastExitCode)' != '0'"
-      Code="$(_VIG_GIT_REV_LONG_FAILED_PARSING)"
-      Text="Failed to parse GitRevLong: $(GitRevLong)" />
-
-    <!-- GitBranch -->
-    <Exec
-      Condition="'$(GitIsWorktreeValid)' == 'true'"
-      Command="$(GitBinary) rev-parse --abbrev-ref --symbolic-full-name HEAD"
-      EchoOff="true"
-      StandardOutputImportance="low"
-      IgnoreStandardErrorWarningFormat="true"
-      ConsoleToMSBuild="true"
-      IgnoreExitCode="true">
-      <Output PropertyName="GitBranch" TaskParameter="ConsoleOutput" />
-      <Output PropertyName="MSBuildLastExitCode" TaskParameter="ExitCode" />
-    </Exec>
-    <Error
-      Condition="'$(GitIsWorktreeValid)' == 'true' And '$(MSBuildLastExitCode)' != '0'"
-      Code="$(_VIG_GIT_BRANCH_FAILED_PARSING)"
-      Text="Failed to parse GitBranch: $(GitBranch)" />
-
-    <!-- GitTag -->
-    <Exec
-      Condition="'$(GitIsWorktreeValid)' == 'true'"
-      Command="$(GitBinary) describe --tags --abbrev=0"
-      EchoOff="true"
-      StandardOutputImportance="low"
-      StandardErrorImportance="low"
-      IgnoreStandardErrorWarningFormat="true"
-      ConsoleToMSBuild="true"
-      IgnoreExitCode="true">
-      <Output PropertyName="GitTag" TaskParameter="ConsoleOutput" />
-      <Output PropertyName="MSBuildLastExitCode" TaskParameter="ExitCode" />
-    </Exec>
-    <PropertyGroup Condition="'$(GitIsWorktreeValid)' == 'true'">
-      <!-- Clear GitTag if the command errored out as it contains the command's stderr -->
-      <GitTag Condition="'$(MSBuildLastExitCode)' != '0'"></GitTag>
-    </PropertyGroup>
-
-    <!-- GitCommitsSinceTag -->
-    <Exec
-      Condition="'$(GitIsWorktreeValid)' == 'true' And '$(GitTag)' != ''"
-      Command="$(GitBinary) rev-list &quot;$(GitTag)&quot;.. --count"
-      EchoOff="true"
-      StandardOutputImportance="low"
-      StandardErrorImportance="low"
-      IgnoreStandardErrorWarningFormat="true"
-      ConsoleToMSBuild="true"
-      IgnoreExitCode="true">
-      <Output PropertyName="GitCommitsSinceTag" TaskParameter="ConsoleOutput" />
-      <Output PropertyName="MSBuildLastExitCode" TaskParameter="ExitCode" />
-    </Exec>
-    <Error
-      Condition="'$(GitIsWorktreeValid)' == 'true' And '$(GitTag)' != '' And '$(MSBuildLastExitCode)' != '0'"
-      Code="$(_VIG_GIT_COMMITS_SINCE_TAG_FAILED_PARSING)"
-      Text="Failed to parse GitCommitsSinceTag: $(GitCommitsSinceTag)" />
-
-    <!-- GitIsDirty -->
-    <PropertyGroup Condition="'$(GitIsWorktreeValid)' == 'true'">
-      <GitIsDirty>$(GitRevShort.Contains('-dirty'))</GitIsDirty>
-    </PropertyGroup>
+      GitBinary="$(GitBinary)">
+      <Output TaskParameter="GitRevShort" PropertyName="GitRevShort" />
+      <Output TaskParameter="GitRevLong" PropertyName="GitRevLong" />
+      <Output TaskParameter="GitBranch" PropertyName="GitBranch" />
+      <Output TaskParameter="GitTag" PropertyName="GitTag" />
+      <Output TaskParameter="GitCommitsSinceTag" PropertyName="GitCommitsSinceTag" />
+      <Output TaskParameter="GitIsDirty" PropertyName="GitIsDirty" />
+    </GetGitInfo>
   </Target>
 
   <Target

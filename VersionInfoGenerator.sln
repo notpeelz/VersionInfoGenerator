@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VersionInfoGenerator.TestPr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VersionInfoGenerator.JsonTask", "VersionInfoGenerator.JsonTask\VersionInfoGenerator.JsonTask.csproj", "{ECD63464-FD6C-4BBE-A506-88214A8F452A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VersionInfoGenerator.GitInfoTask", "VersionInfoGenerator.GitInfoTask\VersionInfoGenerator.GitInfoTask.csproj", "{C8E90760-3A18-4DA1-BA72-1D97FDC32F48}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{ECD63464-FD6C-4BBE-A506-88214A8F452A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECD63464-FD6C-4BBE-A506-88214A8F452A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECD63464-FD6C-4BBE-A506-88214A8F452A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8E90760-3A18-4DA1-BA72-1D97FDC32F48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8E90760-3A18-4DA1-BA72-1D97FDC32F48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8E90760-3A18-4DA1-BA72-1D97FDC32F48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8E90760-3A18-4DA1-BA72-1D97FDC32F48}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
