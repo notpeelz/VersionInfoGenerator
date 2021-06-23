@@ -6,7 +6,8 @@ using Microsoft.Build.Framework;
 
 namespace VersionInfoGenerator.GitInfoTask
 {
-    public class GetGitInfo : ITask
+    [LoadInSeparateAppDomain]
+    public class GetGitInfo : MarshalByRefObject, ITask
     {
         private const string EVENT_CODE_GIT_REV_SHORT_PARSE_FAILED = "VIG1001";
         private const string EVENT_CODE_GIT_REV_LONG_PARSE_FAILED = "VIG1002";

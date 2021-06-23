@@ -13,7 +13,8 @@ namespace VersionInfoGenerator.JsonTask
     // being rebuilt.
     // As a workaround, NodeReuse can be disabled by setting
     // $Env:MSBUILDDISABLENODEREUSE=1
-    public class CreateVersionInfoJson : ITask
+    [LoadInSeparateAppDomain]
+    public class CreateVersionInfoJson : MarshalByRefObject, ITask
     {
         public IBuildEngine BuildEngine { get; set; }
 
