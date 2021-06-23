@@ -205,6 +205,8 @@ namespace VersionInfoGenerator.GitInfoTask
             // in netstandard2.0
             using var process = Process.Start(new ProcessStartInfo(this.GitBinary, args)
             {
+                WindowStyle = ProcessWindowStyle.Hidden,
+                CreateNoWindow = true,
                 UseShellExecute = false,
                 RedirectStandardInput = true,
                 RedirectStandardError = true,
