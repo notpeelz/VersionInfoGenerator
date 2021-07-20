@@ -193,7 +193,7 @@ namespace VersionInfoGenerator
 
             IEnumerable<FieldDeclarationSyntax> GenerateFields()
             {
-                var props = GetMSBuildProperty("VersionInfoClassSerializedProperties")
+                var props = GetMSBuildProperty("_VersionInfoClassSerializedProperties", decodeBase64: true)
                     ?.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
                     .Select(x => x.Trim('\x20', '\r', '\n'))
                     .ToArray();
@@ -225,7 +225,7 @@ namespace VersionInfoGenerator
                 }
             }
 
-            string GetMSBuildProperty(string name)
+            string GetMSBuildProperty(string name, bool decodeBase64 = false)
             {
                 if (!context.AnalyzerConfigOptions.GlobalOptions.TryGetValue($"build_property.{name}", out var value))
                 {
@@ -233,10 +233,16 @@ namespace VersionInfoGenerator
                 }
 
                 if (string.IsNullOrEmpty(value)) return null;
+
+                if (decodeBase64)
+                {
+                    value = Encoding.UTF8.GetString(Convert.FromBase64String(value));
+                }
+
                 return value;
             }
 
-            bool TryGetMSBuildProperty(string name, out string value)
+            bool TryGetMSBuildProperty(string name, out string value, bool decodeBase64 = false)
             {
                 if (!context.AnalyzerConfigOptions.GlobalOptions.TryGetValue($"build_property.{name}", out value))
                 {
@@ -244,6 +250,12 @@ namespace VersionInfoGenerator
                 }
 
                 if (string.IsNullOrEmpty(value)) value = null;
+
+                if (decodeBase64)
+                {
+                    value = Encoding.UTF8.GetString(Convert.FromBase64String(value));
+                }
+
                 return true;
             }
         }

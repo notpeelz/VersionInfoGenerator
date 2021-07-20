@@ -1,4 +1,4 @@
-<Project>
+<Project InitialTargets="_VersionInfoGenerator_InitializeProperties">
   <Import Project="$(MSBuildThisFileDirectory)/EventCodes.props" />
 
   <Import Project="$(MSBuildProjectDirectory)/VersionInfoGenerator.Config.props"
@@ -11,6 +11,10 @@
 
   <UsingTask
     TaskName="VIGGetGitInfo"
+    AssemblyFile="$(_VersionInfoGeneratorInternalTasksPath)" />
+
+  <UsingTask
+    TaskName="VIGEncodeBase64"
     AssemblyFile="$(_VersionInfoGeneratorInternalTasksPath)" />
 
   <!-- Back up the user-defined ProjectVersion before
@@ -187,11 +191,17 @@
     </PropertyGroup>
   </Target>
 
+  <Target Name="_VersionInfoGenerator_InitializeProperties">
+    <VIGEncodeBase64 Value="$(VersionInfoClassSerializedProperties)">
+      <Output TaskParameter="EncodedValue" PropertyName="_VersionInfoClassSerializedProperties" />
+    </VIGEncodeBase64>
+  </Target>
+
   <ItemGroup>
     <CompilerVisibleProperty Include="BuildingProject" />
     <CompilerVisibleProperty Include="RootNamespace" />
     <CompilerVisibleProperty Include="VersionInfoGenerateClass" />
-    <CompilerVisibleProperty Include="VersionInfoClassSerializedProperties" />
+    <CompilerVisibleProperty Include="_VersionInfoClassSerializedProperties" />
     <CompilerVisibleProperty Include="VersionInfoClassNamespace" />
     <CompilerVisibleProperty Include="VersionInfoClassNamespaceGlobal" />
     <CompilerVisibleProperty Include="VersionInfoClassName" />
