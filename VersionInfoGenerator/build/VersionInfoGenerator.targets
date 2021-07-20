@@ -191,6 +191,7 @@
     </PropertyGroup>
   </Target>
 
+  <!-- Workaround for https://github.com/dotnet/roslyn/issues/44596 -->
   <Target Name="_VersionInfoGenerator_InitializeProperties">
     <VIGEncodeBase64 Value="$(VersionInfoClassSerializedProperties)">
       <Output TaskParameter="EncodedValue" PropertyName="_VersionInfoClassSerializedProperties" />
