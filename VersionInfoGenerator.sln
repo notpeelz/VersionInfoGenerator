@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VersionInfoGenerator.TestPr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VersionInfoGenerator.JsonTask", "VersionInfoGenerator.JsonTask\VersionInfoGenerator.JsonTask.csproj", "{ECD63464-FD6C-4BBE-A506-88214A8F452A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VersionInfoGenerator.GitInfoTask", "VersionInfoGenerator.GitInfoTask\VersionInfoGenerator.GitInfoTask.csproj", "{C8E90760-3A18-4DA1-BA72-1D97FDC32F48}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VersionInfoGenerator.InternalTasks", "VersionInfoGenerator.InternalTasks\VersionInfoGenerator.InternalTasks.csproj", "{C8E90760-3A18-4DA1-BA72-1D97FDC32F48}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

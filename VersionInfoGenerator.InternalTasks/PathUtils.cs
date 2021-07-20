@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace VersionInfoGenerator.GitInfoTask
+namespace VersionInfoGenerator.InternalTasks
 {
     internal class PathUtils
     {

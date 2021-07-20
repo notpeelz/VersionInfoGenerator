@@ -22,7 +22,7 @@
       ReferenceOutputAssembly="false"
       OutputItemType="PackedTask" />
     <ProjectReference
-      Include="../VersionInfoGenerator.GitInfoTask/VersionInfoGenerator.GitInfoTask.csproj"
+      Include="../VersionInfoGenerator.InternalTasks/VersionInfoGenerator.InternalTasks.csproj"
       PrivateAssets="all"
       ReferenceOutputAssembly="false"
       OutputItemType="PackedTask" />
@@ -64,7 +64,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <_VersionInfoGeneratorGitInfoTaskPath>$(MSBuildThisFileDirectory)/../VersionInfoGenerator.GitInfoTask/bin/VersionInfoGenerator.GitInfoTask.dll</_VersionInfoGeneratorGitInfoTaskPath>
+    <_VersionInfoGeneratorInternalTasksPath>$(MSBuildThisFileDirectory)/../VersionInfoGenerator.InternalTasks/bin/VersionInfoGenerator.InternalTasks.dll</_VersionInfoGeneratorInternalTasksPath>
   </PropertyGroup>
 
   <Import Condition="'$(_BuildingIntermediateGenerator)' != 'true'" Project="build/VersionInfoGenerator.targets" />

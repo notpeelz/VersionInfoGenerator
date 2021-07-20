@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <_VersionInfoGeneratorGitInfoTaskPath>$(MSBuildThisFileDirectory)/../VersionInfoGenerator.GitInfoTask/bin/VersionInfoGenerator.GitInfoTask.dll</_VersionInfoGeneratorGitInfoTaskPath>
+    <_VersionInfoGeneratorInternalTasksPath>$(MSBuildThisFileDirectory)/../VersionInfoGenerator.InternalTasks/bin/VersionInfoGenerator.InternalTasks.dll</_VersionInfoGeneratorInternalTasksPath>
     <_VersionInfoGeneratorJsonTaskPath>$(MSBuildThisFileDirectory)/../VersionInfoGenerator.JsonTask/bin/VersionInfoGenerator.JsonTask.dll</_VersionInfoGeneratorJsonTaskPath>
   </PropertyGroup>
 

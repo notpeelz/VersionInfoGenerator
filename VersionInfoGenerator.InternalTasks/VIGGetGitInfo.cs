@@ -4,10 +4,10 @@ using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using Microsoft.Build.Framework;
 
-namespace VersionInfoGenerator.GitInfoTask
+namespace VersionInfoGenerator.InternalTasks
 {
     [LoadInSeparateAppDomain]
-    public class GetGitInfo : MarshalByRefObject, ITask
+    public class VIGGetGitInfo : MarshalByRefObject, ITask
     {
         private const string EVENT_CODE_GIT_REV_SHORT_PARSE_FAILED = "VIG1001";
         private const string EVENT_CODE_GIT_REV_LONG_PARSE_FAILED = "VIG1002";
@@ -90,7 +90,7 @@ namespace VersionInfoGenerator.GitInfoTask
                         subcategory: null,
                         file: null, lineNumber: 0, columnNumber: 0, endLineNumber: 0, endColumnNumber: 0,
                         helpKeyword: null,
-                        senderName: nameof(GetGitInfo)));
+                        senderName: nameof(VIGGetGitInfo)));
                     return null;
                 }
 
@@ -111,7 +111,7 @@ namespace VersionInfoGenerator.GitInfoTask
                         subcategory: null,
                         file: null, lineNumber: 0, columnNumber: 0, endLineNumber: 0, endColumnNumber: 0,
                         helpKeyword: null,
-                        senderName: nameof(GetGitInfo)));
+                        senderName: nameof(VIGGetGitInfo)));
                     return false;
                 }
 
@@ -129,7 +129,7 @@ namespace VersionInfoGenerator.GitInfoTask
                         subcategory: null,
                         file: null, lineNumber: 0, columnNumber: 0, endLineNumber: 0, endColumnNumber: 0,
                         helpKeyword: null,
-                        senderName: nameof(GetGitInfo)));
+                        senderName: nameof(VIGGetGitInfo)));
                     return false;
                 }
 
@@ -147,7 +147,7 @@ namespace VersionInfoGenerator.GitInfoTask
                         subcategory: null,
                         file: null, lineNumber: 0, columnNumber: 0, endLineNumber: 0, endColumnNumber: 0,
                         helpKeyword: null,
-                        senderName: nameof(GetGitInfo)));
+                        senderName: nameof(VIGGetGitInfo)));
                     return false;
                 }
 
@@ -175,7 +175,7 @@ namespace VersionInfoGenerator.GitInfoTask
                         subcategory: null,
                         file: null, lineNumber: 0, columnNumber: 0, endLineNumber: 0, endColumnNumber: 0,
                         helpKeyword: null,
-                        senderName: nameof(GetGitInfo)));
+                        senderName: nameof(VIGGetGitInfo)));
                     return false;
                 }
 
@@ -187,7 +187,7 @@ namespace VersionInfoGenerator.GitInfoTask
                         subcategory: null,
                         file: null, lineNumber: 0, columnNumber: 0, endLineNumber: 0, endColumnNumber: 0,
                         helpKeyword: null,
-                        senderName: nameof(GetGitInfo)));
+                        senderName: nameof(VIGGetGitInfo)));
                     return false;
                 }
 

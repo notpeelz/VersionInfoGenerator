@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 
-namespace VersionInfoGenerator.GitInfoTask
+namespace VersionInfoGenerator.InternalTasks
 {
     internal class MutexWrapper : IDisposable
     {
