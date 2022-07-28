@@ -25,7 +25,7 @@
 
   <!-- Work around for https://github.com/dotnet/wpf/issues/6792 -->
   <!-- TODO: remove this once .NET 6.0.9 is out -->
-  <Target Name="RemoveDuplicateAnalyzers" BeforeTargets="CoreCompile">
+  <Target Name="VersionInfoGenerator_RemoveDuplicateAnalyzers" BeforeTargets="CoreCompile">
     <ItemGroup>
       <FilteredAnalyzer Include="@(Analyzer->Distinct())" />
       <Analyzer Remove="@(Analyzer)" />
