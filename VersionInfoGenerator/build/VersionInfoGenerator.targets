@@ -25,7 +25,7 @@
   <!-- Back up the user-defined ProjectVersion before
        NuGet.Build.Tasks.Pack.targets overrides it -->
   <PropertyGroup>
-    <_PackageVersion>$(PackageVersion)</_PackageVersion>
+    <_VIG_PackageVersion>$(PackageVersion)</_VIG_PackageVersion>
   </PropertyGroup>
 
   <Target Name="VersionInfoGenerator_GetGitBinary">
@@ -173,7 +173,7 @@
 
     <!-- Override package version -->
     <PropertyGroup Condition="'$(VersionInfoOverridePackageVersion)' != 'false'">
-      <PackageVersion Condition="'$(_PackageVersion)' == ''">$(SemVer)</PackageVersion>
+      <PackageVersion Condition="'$(_VIG_PackageVersion)' == ''">$(SemVer)</PackageVersion>
     </PropertyGroup>
 
     <!-- Override assembly versions -->
