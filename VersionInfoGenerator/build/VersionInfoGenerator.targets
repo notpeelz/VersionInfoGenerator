@@ -23,16 +23,6 @@
     <_PackageVersion>$(PackageVersion)</_PackageVersion>
   </PropertyGroup>
 
-  <!-- Work around for https://github.com/dotnet/wpf/issues/6792 -->
-  <!-- TODO: remove this once .NET 6.0.9 is out -->
-  <Target Name="VersionInfoGenerator_RemoveDuplicateAnalyzers" BeforeTargets="CoreCompile">
-    <ItemGroup>
-      <FilteredAnalyzer Include="@(Analyzer->Distinct())" />
-      <Analyzer Remove="@(Analyzer)" />
-      <Analyzer Include="@(FilteredAnalyzer)" />
-    </ItemGroup>
-  </Target>
-
   <Target Name="VersionInfoGenerator_GetGitBinary">
     <Exec Command="git --version"
       Condition="'$(GitBinary)' == ''"
