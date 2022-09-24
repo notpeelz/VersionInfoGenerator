@@ -6,15 +6,7 @@ using Microsoft.Build.Framework;
 
 namespace VersionInfoGenerator.JsonTask
 {
-    // For some reason, LoadInSeparateAppDomainAttribute isn't sufficient to
-    // prevent MSBuild from locking the task DLL.
-    // This is a problem because the NodeReuse MSBuild feature keeps a
-    // background instance of MSBuild running, preventing the Task DLL from
-    // being rebuilt.
-    // As a workaround, NodeReuse can be disabled by setting
-    // $Env:MSBUILDDISABLENODEREUSE=1
-    [LoadInSeparateAppDomain]
-    public class CreateVersionInfoJson : MarshalByRefObject, ITask
+    public class CreateVersionInfoJson : ITask
     {
         public IBuildEngine BuildEngine { get; set; }
 

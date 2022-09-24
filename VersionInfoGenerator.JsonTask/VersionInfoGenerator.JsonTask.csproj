@@ -1,12 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="../VersionInfoGenerator/PackageProps.props" />
+  <Import Project="../msbuild/PackageProps.props" />
+  <Import Project="../msbuild/VersionInfo.props" />
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>9</LangVersion>
-    <OutputPath>bin</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
   </PropertyGroup>
 
   <ItemGroup>

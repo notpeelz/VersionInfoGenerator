@@ -155,7 +155,7 @@ namespace VersionInfoGenerator
                                     Token(SyntaxKind.CommaToken),
                                     AttributeArgument(LiteralExpression(
                                         SyntaxKind.StringLiteralExpression,
-                                        Literal(VersionInfoRuntime.SemVer))),
+                                        Literal(VersionInfo.SemVer))),
                                 }))))),
                     AttributeList(SingletonSeparatedList(
                         Attribute(IdentifierName("CompilerGenerated")))),

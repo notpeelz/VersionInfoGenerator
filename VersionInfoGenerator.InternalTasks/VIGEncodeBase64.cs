@@ -4,8 +4,7 @@ using Microsoft.Build.Framework;
 
 namespace VersionInfoGenerator.InternalTasks
 {
-    [LoadInSeparateAppDomain]
-    public class VIGEncodeBase64 : MarshalByRefObject, ITask
+    public class VIGEncodeBase64 : ITask
     {
         public IBuildEngine BuildEngine { get; set; }
 

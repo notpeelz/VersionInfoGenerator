@@ -1,53 +1,25 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="PackageProps.props" />
+  <Import Project="../msbuild/PackageProps.props" />
+  <Import Project="../msbuild/VersionInfo.props" />
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>9</LangVersion>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(_BuildingIntermediateGenerator)' != 'true'">
+  <PropertyGroup>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <BuildOutputTargetFolder>analyzers</BuildOutputTargetFolder>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     <TargetsForTfmSpecificContentInPackage>CopyTasksToPackage</TargetsForTfmSpecificContentInPackage>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(_BuildingIntermediateGenerator)' != 'true'">
+  <ItemGroup>
     <None Include="../README.md" PackagePath="/" Pack="true" />
     <None Include="build/*" PackagePath="build/" Pack="true" />
-    <ProjectReference
-      Include="../VersionInfoGenerator.JsonTask/VersionInfoGenerator.JsonTask.csproj"
-      PrivateAssets="all"
-      ReferenceOutputAssembly="false"
-      OutputItemType="PackedTask" />
-    <ProjectReference
-      Include="../VersionInfoGenerator.InternalTasks/VersionInfoGenerator.InternalTasks.csproj"
-      PrivateAssets="all"
-      ReferenceOutputAssembly="false"
-      OutputItemType="PackedTask" />
+    <ProjectReference Include="../VersionInfoGenerator.JsonTask/VersionInfoGenerator.JsonTask.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" OutputItemType="PackedTask" />
+    <ProjectReference Include="../VersionInfoGenerator.InternalTasks/VersionInfoGenerator.InternalTasks.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" OutputItemType="PackedTask" />
   </ItemGroup>
-
-  <Target
-    Condition="'$(BuildingProject)' == 'true' And '$(_BuildingIntermediateGenerator)' != 'true'"
-    Name="CreateIntermediateGenerator"
-    BeforeTargets="ResolveReferences">
-    <PropertyGroup>
-      <_IntermediateGeneratorOutputPath>$(IntermediateOutputPath)/vig</_IntermediateGeneratorOutputPath>
-    </PropertyGroup>
-
-    <MSBuild
-      Projects="$(MSBuildProjectFullPath)"
-      Properties="_BuildingIntermediateGenerator=true;OutputPath=$(_IntermediateGeneratorOutputPath);Configuration=Debug"
-      Targets="Build">
-      <Output TaskParameter="TargetOutputs" ItemName="_IntermediateGeneratorOutput" />
-    </MSBuild>
-
-    <ItemGroup>
-      <FileWrites Include="$(_IntermediateGeneratorOutputPath)/**/*" />
-      <Analyzer Include="@(_IntermediateGeneratorOutput)" />
-    </ItemGroup>
-  </Target>
 
   <Target Name="CopyTasksToPackage" DependsOnTargets="ResolveReferences">
     <ItemGroup>
@@ -62,10 +34,4 @@
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.10.0" PrivateAssets="all" />
   </ItemGroup>
-
-  <PropertyGroup>
-    <_VersionInfoGeneratorInternalTasksPath>$(MSBuildThisFileDirectory)/../VersionInfoGenerator.InternalTasks/bin/VersionInfoGenerator.InternalTasks.dll</_VersionInfoGeneratorInternalTasksPath>
-  </PropertyGroup>
-
-  <Import Condition="'$(_BuildingIntermediateGenerator)' != 'true'" Project="build/VersionInfoGenerator.targets" />
 </Project>

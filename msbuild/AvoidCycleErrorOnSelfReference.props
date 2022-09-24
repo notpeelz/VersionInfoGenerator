@@ -1,0 +1,15 @@
+<Project>
+  <!-- Workaround for NU1108: https://github.com/NuGet/Home/issues/6754#issuecomment-592283619 -->
+
+  <PropertyGroup>
+    <PackageId Condition="'$(PackageId)' == ''">$(MSBuildProjectName)</PackageId>
+    <PackageIdTemp>$(PackageId)</PackageIdTemp>
+    <PackageId>$(PackageId)_temp</PackageId>
+  </PropertyGroup>
+
+  <Target Name="_UpdatePackageId" BeforeTargets="$(PackDependsOn)">
+    <PropertyGroup>
+      <PackageId>$(PackageIdTemp)</PackageId>
+    </PropertyGroup>
+  </Target>
+</Project>

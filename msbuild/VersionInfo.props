@@ -1,0 +1,9 @@
+<Project>
+  <Import
+    Project="$(MSBuildThisFileDirectory)/AvoidCycleErrorOnSelfReference.props"
+    Condition="'$(MSBuildProjectName)' == 'VersionInfoGenerator'" />
+
+  <ItemGroup>
+    <PackageReference Include="VersionInfoGenerator" Version="2.1.3" PrivateAssets="all" />
+  </ItemGroup>
+</Project>
