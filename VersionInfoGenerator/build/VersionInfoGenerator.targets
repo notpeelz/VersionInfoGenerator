@@ -1,21 +1,21 @@
-<Project InitialTargets="_VersionInfoGenerator_InitializeProperties">
+<Project InitialTargets="_VIG_InitializeProperties">
   <Import Project="$(MSBuildThisFileDirectory)/EventCodes.props" />
 
   <Import Project="$(MSBuildProjectDirectory)/VersionInfoGenerator.Config.props"
     Condition="Exists('$(MSBuildProjectDirectory)/VersionInfoGenerator.Config.props')" />
 
   <PropertyGroup>
-    <_VersionInfoGeneratorInternalTasksPath
-      Condition="'$(_VersionInfoGeneratorInternalTasksPath)' == ''">$(MSBuildThisFileDirectory)/../tools/netstandard2.0/VersionInfoGenerator.InternalTasks.dll</_VersionInfoGeneratorInternalTasksPath>
+    <_VIG_InternalTasksPath
+      Condition="'$(_VIG_InternalTasksPath)' == ''">$(MSBuildThisFileDirectory)/../tools/netstandard2.0/VersionInfoGenerator.InternalTasks.dll</_VIG_InternalTasksPath>
   </PropertyGroup>
 
   <UsingTask
     TaskName="VIGGetGitInfo"
-    AssemblyFile="$(_VersionInfoGeneratorInternalTasksPath)" />
+    AssemblyFile="$(_VIG_InternalTasksPath)" />
 
   <UsingTask
     TaskName="VIGEncodeBase64"
-    AssemblyFile="$(_VersionInfoGeneratorInternalTasksPath)" />
+    AssemblyFile="$(_VIG_InternalTasksPath)" />
 
   <!-- Back up the user-defined ProjectVersion before
        NuGet.Build.Tasks.Pack.targets overrides it -->
@@ -191,7 +191,7 @@
     </PropertyGroup>
   </Target>
 
-  <Target Name="_VersionInfoGenerator_InitializeProperties">
+  <Target Name="_VIG_InitializeProperties">
     <VIGEncodeBase64 Value="$(VersionInfoClassSerializedProperties)">
       <Output TaskParameter="EncodedValue" PropertyName="_VersionInfoClassSerializedProperties" />
     </VIGEncodeBase64>

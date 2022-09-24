@@ -1,13 +1,13 @@
 <Project>
   <PropertyGroup>
-    <_VersionInfoGeneratorJsonTaskPath
-      Condition="'$(_VersionInfoGeneratorJsonTaskPath)' == ''">$(MSBuildThisFileDirectory)/../tools/netstandard2.0/VersionInfoGenerator.JsonTask.dll</_VersionInfoGeneratorJsonTaskPath>
+    <_VIG_JsonTaskPath
+      Condition="'$(_VIG_JsonTaskPath)' == ''">$(MSBuildThisFileDirectory)/../tools/netstandard2.0/VersionInfoGenerator.JsonTask.dll</_VIG_JsonTaskPath>
   </PropertyGroup>
 
   <UsingTask
     Condition="'$(VersionInfoGenerateJson)' == 'true'"
     TaskName="CreateVersionInfoJson"
-    AssemblyFile="$(_VersionInfoGeneratorJsonTaskPath)" />
+    AssemblyFile="$(_VIG_JsonTaskPath)" />
 
   <Target
     Condition="'$(VersionInfoGenerateJson)' == 'true' And '$(BuildingProject)' == 'true'"
