@@ -1,8 +1,13 @@
 <Project InitialTargets="_VIG_InitializeProperties">
   <Import Project="$(MSBuildThisFileDirectory)/EventCodes.props" />
 
-  <Import Project="$(MSBuildProjectDirectory)/VersionInfoGenerator.Config.props"
-    Condition="Exists('$(MSBuildProjectDirectory)/VersionInfoGenerator.Config.props')" />
+  <PropertyGroup>
+    <_VIG_ConfigFile>VersionInfoGenerator.Config.props</_VIG_ConfigFile>
+    <_VIG_ConfigBaseDir>$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)', '$(_VIG_ConfigFile)'))</_VIG_ConfigBaseDir>
+    <_VIG_ConfigPath>$(_VIG_ConfigBaseDir)/$(_VIG_ConfigFile)</_VIG_ConfigPath>
+  </PropertyGroup>
+
+  <Import Project="$(_VIG_ConfigPath)" Condition="Exists('$(_VIG_ConfigPath)')" />
 
   <PropertyGroup>
     <_VIG_InternalTasksPath
