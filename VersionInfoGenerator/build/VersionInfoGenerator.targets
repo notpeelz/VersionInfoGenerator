@@ -28,7 +28,23 @@
     <_VIG_PackageVersion>$(PackageVersion)</_VIG_PackageVersion>
   </PropertyGroup>
 
-  <Target Name="VersionInfoGenerator_GetGitBinary">
+  <Target Name="_VIG_ValidateLocale">
+    <Exec Command="echo test"
+      StandardOutputImportance="low"
+      StandardErrorImportance="low"
+      ConsoleToMSBuild="true"
+      IgnoreExitCode="true">
+      <Output TaskParameter="ConsoleOutput" PropertyName="_VIG_TestLocaleOutput" />
+    </Exec>
+    <Error
+      Code="$(_VIG_CONSOLE_OUTPUT_POLLUTION_DETECTED)"
+      Text="ConsoleOutput pollution detected; see https://github.com/dotnet/msbuild/issues/4194"
+      Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('$(_VIG_TestLocaleOutput)', 'locale'))" />
+  </Target>
+
+  <Target
+    Name="VersionInfoGenerator_GetGitBinary"
+    DependsOnTargets="_VIG_ValidateLocale">
     <Exec Command="git --version"
       Condition="'$(GitBinary)' == ''"
       EchoOff="true"
