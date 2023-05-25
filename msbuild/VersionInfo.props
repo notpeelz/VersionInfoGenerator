@@ -7,7 +7,7 @@
   <ItemGroup>
     <PackageReference
       Include="VersionInfoGenerator"
-      Version="2.1.7"
+      Version="3.0.0"
       PrivateAssets="all"
       />
   </ItemGroup>
