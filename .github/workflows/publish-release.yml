@@ -28,9 +28,7 @@ jobs:
         with:
           token: ${{ github.token }}
           tag: ${{ github.ref }}
-          title: "v${{ github.ref_name }}"
-          files: |
-            VersionInfoGenerator/bin/Release/*.nupkg
+          title: "${{ github.ref_name }}"
       - name: Publish NuGet package
         run: |
           for pkg in ./VersionInfoGenerator/bin/Release/*.nupkg; do
