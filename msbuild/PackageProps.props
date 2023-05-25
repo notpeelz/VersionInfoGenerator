@@ -1,6 +1,7 @@
 <Project>
   <PropertyGroup>
     <Version>2.1.7</Version>
+    <VersionMetadata>git-@@GitRevShort@@</VersionMetadata>
     <Authors>notpeelz</Authors>
     <Description>Access version information (including git state) from MSBuild and at runtime.</Description>
     <PackageTags>MSBuild;Version;Versioning;Git;GitInfo;SemVer</PackageTags>
