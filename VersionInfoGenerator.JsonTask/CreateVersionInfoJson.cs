@@ -120,6 +120,7 @@ namespace VersionInfoGenerator.JsonTask
         GitRevLong = this.GitRevLong,
         GitBranch = this.GitBranch,
         GitTag = this.GitTag,
+        GitCommitsSinceTag = this.GitCommitsSinceTag,
         GitIsDirty = this.GitIsDirty,
       };
       sw.Write(SimpleJson.SimpleJson.SerializeObject(obj));
