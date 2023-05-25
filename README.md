@@ -119,6 +119,7 @@ A JSON file can be generated for version processing by external tools, e.g.:
 ```
 
 Output (`bin/Release/xxx/VersionInfo.json`):
+
 ```json
 {
   "RootNamespace": "VersionInfoGenerator.TestProject",
