@@ -1,0 +1,15 @@
+{
+  "[csharp]": {
+    "editor.defaultFormatter": "csharpier.csharpier-vscode"
+  },
+  "[xml]": {
+    "editor.defaultFormatter": "redhat.vscode-xml"
+  },
+  "xml.format.enforceQuoteStyle": "preferred",
+  "xml.preferences.quoteStyle": "double",
+  "xml.format.closingBracketNewLine": true,
+  "xml.format.emptyElements": "collapse",
+  "xml.format.splitAttributes": true,
+  "xml.format.splitAttributesIndentSize": 1,
+  "xml.format.maxLineWidth": 100
+}

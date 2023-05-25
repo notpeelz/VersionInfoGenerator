@@ -2,84 +2,118 @@
   <Import Project="$(MSBuildThisFileDirectory)/EventCodes.props" />
 
   <PropertyGroup>
-    <_VIG_ConfigFile>VersionInfoGenerator.Config.props</_VIG_ConfigFile>
-    <_VIG_ConfigBaseDir>$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)', '$(_VIG_ConfigFile)'))</_VIG_ConfigBaseDir>
-    <_VIG_ConfigPath>$(_VIG_ConfigBaseDir)/$(_VIG_ConfigFile)</_VIG_ConfigPath>
+    <_VIG_ConfigFile><![CDATA[VersionInfoGenerator.Config.props]]></_VIG_ConfigFile>
+    <_VIG_ConfigBaseDir>
+      <![CDATA[$([MSBuild]::GetDirectoryNameOfFileAbove('$(MSBuildProjectDirectory)', '$(_VIG_ConfigFile)'))]]>
+    </_VIG_ConfigBaseDir>
+    <_VIG_ConfigPath>
+      <![CDATA[$(_VIG_ConfigBaseDir)/$(_VIG_ConfigFile)]]>
+    </_VIG_ConfigPath>
   </PropertyGroup>
 
-  <Import Project="$(_VIG_ConfigPath)" Condition="Exists('$(_VIG_ConfigPath)')" />
+  <Import
+    Project="$(_VIG_ConfigPath)"
+    Condition="Exists('$(_VIG_ConfigPath)')"
+    />
 
   <PropertyGroup>
-    <_VIG_InternalTasksPath
-      Condition="'$(_VIG_InternalTasksPath)' == ''">$(MSBuildThisFileDirectory)/../tools/netstandard2.0/VersionInfoGenerator.InternalTasks.dll</_VIG_InternalTasksPath>
+    <_VIG_InternalTasksPath Condition="'$(_VIG_InternalTasksPath)' == ''">
+      <![CDATA[$(MSBuildThisFileDirectory)/../tools/netstandard2.0/VersionInfoGenerator.InternalTasks.dll]]>
+    </_VIG_InternalTasksPath>
   </PropertyGroup>
 
   <UsingTask
     TaskName="VIGGetGitInfo"
-    AssemblyFile="$(_VIG_InternalTasksPath)" />
+    AssemblyFile="$(_VIG_InternalTasksPath)"
+    />
 
   <UsingTask
     TaskName="VIGEncodeBase64"
-    AssemblyFile="$(_VIG_InternalTasksPath)" />
+    AssemblyFile="$(_VIG_InternalTasksPath)"
+    />
 
   <!-- Back up the user-defined ProjectVersion before
        NuGet.Build.Tasks.Pack.targets overrides it -->
   <PropertyGroup>
-    <_VIG_PackageVersion>$(PackageVersion)</_VIG_PackageVersion>
+    <_VIG_PackageVersion>
+      <![CDATA[$(PackageVersion)]]>
+    </_VIG_PackageVersion>
   </PropertyGroup>
 
   <Target Name="_VIG_ValidateLocale">
-    <Exec Command="echo test"
+    <Exec
+      Command="echo test"
       StandardOutputImportance="low"
       StandardErrorImportance="low"
       ConsoleToMSBuild="true"
-      IgnoreExitCode="true">
-      <Output TaskParameter="ConsoleOutput" PropertyName="_VIG_TestLocaleOutput" />
+      IgnoreExitCode="true"
+      >
+      <Output
+        TaskParameter="ConsoleOutput"
+        PropertyName="_VIG_TestLocaleOutput"
+        />
     </Exec>
     <Error
       Code="$(_VIG_CONSOLE_OUTPUT_POLLUTION_DETECTED)"
       Text="ConsoleOutput pollution detected; see https://github.com/dotnet/msbuild/issues/4194"
-      Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('$(_VIG_TestLocaleOutput)', 'locale'))" />
+      Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('$(_VIG_TestLocaleOutput)', 'locale'))"
+      />
   </Target>
 
   <Target
     Name="VersionInfoGenerator_GetGitBinary"
-    DependsOnTargets="_VIG_ValidateLocale">
-    <Exec Command="git --version"
+    DependsOnTargets="_VIG_ValidateLocale"
+    >
+    <Exec
+      Command="git --version"
       Condition="'$(GitBinary)' == ''"
       EchoOff="true"
       StandardOutputImportance="low"
       StandardErrorImportance="low"
       CustomErrorRegularExpression="error|fatal"
-      IgnoreExitCode="true">
-      <Output TaskParameter="ExitCode" PropertyName="MSBuildLastExitCode" />
+      IgnoreExitCode="true"
+      >
+      <Output
+        TaskParameter="ExitCode"
+        PropertyName="MSBuildLastExitCode"
+        />
     </Exec>
 
     <!-- Use git from PATH if possible (cross-platform) -->
     <PropertyGroup Condition="'$(GitBinary)' == '' And '$(MSBuildLastExitCode)' == '0'">
-      <GitBinary>git</GitBinary>
+      <GitBinary>
+        <![CDATA[git]]>
+      </GitBinary>
     </PropertyGroup>
 
     <!-- Windows-specific fallbacks -->
     <PropertyGroup Condition="'$(GitBinary)' == '' And '$(OS)' == 'Windows_NT'">
-      <GitBinary Condition="'$(GitBinary)' == '' And Exists('C:\Program Files\Git\bin\git.exe')">C:\Program Files\Git\bin\git.exe</GitBinary>
-      <GitBinary Condition="'$(GitBinary)' == '' And Exists('C:\Program Files (x86)\Git\bin\git.exe')">C:\Program Files (x86)\Git\bin\git.exe</GitBinary>
-      <GitBinary Condition="'$(GitBinary)' == '' And Exists('C:\msysgit\bin\git.exe')">C:\msysgit\bin\git.exe</GitBinary>
+      <GitBinary Condition="'$(GitBinary)' == '' And Exists('C:\Program Files\Git\bin\git.exe')">
+        <![CDATA[C:\Program Files\Git\bin\git.exe]]>
+      </GitBinary>
+      <GitBinary Condition="'$(GitBinary)' == '' And Exists('C:\Program Files (x86)\Git\bin\git.exe')">
+        <![CDATA[C:\Program Files (x86)\Git\bin\git.exe]]>
+      </GitBinary>
+      <GitBinary Condition="'$(GitBinary)' == '' And Exists('C:\msysgit\bin\git.exe')">
+        <![CDATA[C:\msysgit\bin\git.exe]]>
+      </GitBinary>
     </PropertyGroup>
 
     <Error
       Condition="'$(GitBinary)' == ''"
       Code="$(_VIG_GIT_BINARY_MISSING)"
-      Text="Failed to locate the git binary." />
+      Text="Failed to locate the git binary."
+      />
 
     <PropertyGroup>
-      <_GitBinaryEscaped>&quot;$(GitBinary.Replace('"', '\"'))&quot;</_GitBinaryEscaped>
+      <_GitBinaryEscaped><![CDATA["$(GitBinary.Replace('"', '\"'))"]]></_GitBinaryEscaped>
     </PropertyGroup>
   </Target>
 
   <Target
     Name="VersionInfoGenerator_VerifyGitWorktree"
-    DependsOnTargets="VersionInfoGenerator_GetGitBinary">
+    DependsOnTargets="VersionInfoGenerator_GetGitBinary"
+    >
     <!-- Verify that we're in a git repo -->
     <Exec
       Command="$(_GitBinaryEscaped) rev-parse --is-inside-work-tree"
@@ -88,8 +122,12 @@
       StandardErrorImportance="low"
       IgnoreStandardErrorWarningFormat="true"
       ConsoleToMSBuild="true"
-      IgnoreExitCode="true">
-      <Output TaskParameter="ConsoleOutput" PropertyName="GitIsInWorktree" />
+      IgnoreExitCode="true"
+      >
+      <Output
+        TaskParameter="ConsoleOutput"
+        PropertyName="GitIsInWorktree"
+        />
     </Exec>
 
     <!-- Verify that we're in a valid git worktree -->
@@ -101,13 +139,24 @@
       StandardErrorImportance="low"
       IgnoreStandardErrorWarningFormat="true"
       ConsoleToMSBuild="true"
-      IgnoreExitCode="true">
-      <Output TaskParameter="ConsoleOutput" PropertyName="GitIsWorktreeValid" />
-      <Output TaskParameter="ExitCode" PropertyName="MSBuildLastExitCode" />
+      IgnoreExitCode="true"
+      >
+      <Output
+        TaskParameter="ConsoleOutput"
+        PropertyName="GitIsWorktreeValid"
+        />
+      <Output
+        TaskParameter="ExitCode"
+        PropertyName="MSBuildLastExitCode"
+        />
     </Exec>
     <PropertyGroup>
-      <GitIsWorktreeValid Condition="'$(GitIsWorktreeValid)' == '' Or '$(MSBuildLastExitCode)' != '0'">false</GitIsWorktreeValid>
-      <GitIsWorktreeValid Condition="'$(GitIsWorktreeValid)' != 'false'">true</GitIsWorktreeValid>
+      <GitIsWorktreeValid Condition="'$(GitIsWorktreeValid)' == '' Or '$(MSBuildLastExitCode)' != '0'">
+        <![CDATA[false]]>
+      </GitIsWorktreeValid>
+      <GitIsWorktreeValid Condition="'$(GitIsWorktreeValid)' != 'false'">
+        <![CDATA[true]]>
+      </GitIsWorktreeValid>
     </PropertyGroup>
 
     <!-- Verify that HEAD is a valid revision -->
@@ -119,26 +168,50 @@
       StandardErrorImportance="low"
       IgnoreStandardErrorWarningFormat="true"
       ConsoleToMSBuild="true"
-      IgnoreExitCode="true">
-      <Output PropertyName="MSBuildLastExitCode" TaskParameter="ExitCode" />
+      IgnoreExitCode="true"
+      >
+      <Output
+        PropertyName="MSBuildLastExitCode"
+        TaskParameter="ExitCode"
+        />
     </Exec>
     <PropertyGroup Condition="'$(GitIsWorktreeValid)' == 'true'">
-      <GitIsWorktreeValid Condition="'$(MSBuildLastExitCode)' != '0'">false</GitIsWorktreeValid>
+      <GitIsWorktreeValid Condition="'$(MSBuildLastExitCode)' != '0'"><![CDATA[false]]></GitIsWorktreeValid>
     </PropertyGroup>
   </Target>
 
   <Target
     Name="VersionInfoGenerator_GetGitInfo"
-    DependsOnTargets="VersionInfoGenerator_VerifyGitWorktree">
+    DependsOnTargets="VersionInfoGenerator_VerifyGitWorktree"
+    >
     <VIGGetGitInfo
       Condition="'$(GitIsWorktreeValid)' == 'true'"
-      GitBinary="$(GitBinary)">
-      <Output TaskParameter="GitRevShort" PropertyName="GitRevShort" />
-      <Output TaskParameter="GitRevLong" PropertyName="GitRevLong" />
-      <Output TaskParameter="GitBranch" PropertyName="GitBranch" />
-      <Output TaskParameter="GitTag" PropertyName="GitTag" />
-      <Output TaskParameter="GitCommitsSinceTag" PropertyName="GitCommitsSinceTag" />
-      <Output TaskParameter="GitIsDirty" PropertyName="GitIsDirty" />
+      GitBinary="$(GitBinary)"
+      >
+      <Output
+        TaskParameter="GitRevShort"
+        PropertyName="GitRevShort"
+        />
+      <Output
+        TaskParameter="GitRevLong"
+        PropertyName="GitRevLong"
+        />
+      <Output
+        TaskParameter="GitBranch"
+        PropertyName="GitBranch"
+        />
+      <Output
+        TaskParameter="GitTag"
+        PropertyName="GitTag"
+        />
+      <Output
+        TaskParameter="GitCommitsSinceTag"
+        PropertyName="GitCommitsSinceTag"
+        />
+      <Output
+        TaskParameter="GitIsDirty"
+        PropertyName="GitIsDirty"
+        />
     </VIGGetGitInfo>
   </Target>
 
@@ -146,76 +219,111 @@
     Condition="'$(BuildingProject)' == 'true'"
     Name="VersionInfoGenerator_UpdateProperties"
     DependsOnTargets="VersionInfoGenerator_GetGitInfo"
-    BeforeTargets="ResolveReferences">
+    BeforeTargets="ResolveReferences"
+    >
     <PropertyGroup>
-      <_VersionRegex><![CDATA[^([1-9]\d*|0).([1-9]\d*|0).([1-9]\d*|0)$]]></_VersionRegex>
+      <_VersionRegex>
+        <![CDATA[^([1-9]\d*|0).([1-9]\d*|0).([1-9]\d*|0)$]]>
+      </_VersionRegex>
     </PropertyGroup>
 
     <Error
       Condition="!$([System.Text.RegularExpressions.Regex]::IsMatch('$(Version)', '$(_VersionRegex)'))"
       Code="$(_VIG_VERSION_INVALID_FORMAT)"
-      Text="Version does not respect the Major.Minor.Patch format: $(Version)" />
+      Text="Version does not respect the Major.Minor.Patch format: $(Version)"
+      />
 
     <PropertyGroup>
-      <SemVer>$(Version)</SemVer>
-      <SemVer Condition="'$(VersionPrerelease)' != ''">$(SemVer)-$(VersionPrerelease)</SemVer>
+      <SemVer>
+        <![CDATA[$(Version)]]>
+      </SemVer>
+      <SemVer Condition="'$(VersionPrerelease)' != ''">
+        <![CDATA[$(SemVer)-$(VersionPrerelease)]]>
+      </SemVer>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(GitIsWorktreeValid)' == 'true'">
-      <VersionMetadata>$(VersionMetadata
+      <VersionMetadata>
+        <![CDATA[$(VersionMetadata
         .Replace('@@GitRevShort@@', '$(GitRevShort)')
         .Replace('@@GitRevLong@@', '$(GitRevLong)')
         .Replace('@@GitTag@@', '$(GitTag)')
         .Replace('@@GitCommitsSinceTag@@', '$(GitCommitsSinceTag)')
-        .Replace('@@GitBranch@@', '$(GitBranch)'))</VersionMetadata>
+        .Replace('@@GitBranch@@', '$(GitBranch)'))]]>
+      </VersionMetadata>
     </PropertyGroup>
 
     <PropertyGroup>
-      <_VersionMetadata Condition="'$(GitIsWorktreeValid)' == 'true'">git$(GitRevShort)-$(GitBranch)</_VersionMetadata>
-      <_VersionMetadata Condition="'$(GitIsWorktreeValid)' != 'true'">untracked</_VersionMetadata>
-      <VersionMetadata Condition="'$(GitIsWorktreeValid)' == 'true' And '$(VersionMetadata)' == ''">@@VersionMetadata@@</VersionMetadata>
-      <VersionMetadata>$(VersionMetadata.Replace('@@VersionMetadata@@', '$(_VersionMetadata)'))</VersionMetadata>
+      <_VersionMetadata Condition="'$(GitIsWorktreeValid)' == 'true'">
+        <![CDATA[git$(GitRevShort)-$(GitBranch)]]>
+      </_VersionMetadata>
+      <_VersionMetadata Condition="'$(GitIsWorktreeValid)' != 'true'">
+        <![CDATA[untracked]]>
+      </_VersionMetadata>
+      <VersionMetadata Condition="'$(GitIsWorktreeValid)' == 'true' And '$(VersionMetadata)' == ''">
+        <![CDATA[@@VersionMetadata@@]]>
+      </VersionMetadata>
+      <VersionMetadata>
+        <![CDATA[$(VersionMetadata.Replace('@@VersionMetadata@@', '$(_VersionMetadata)'))]]>
+      </VersionMetadata>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(VersionInfoUseMetadata)' != 'false'">
-      <SemVer Condition="'$(VersionMetadata)' != ''">$(SemVer)+$(VersionMetadata)</SemVer>
+      <SemVer Condition="'$(VersionMetadata)' != ''">
+        <![CDATA[$(SemVer)+$(VersionMetadata)]]>
+      </SemVer>
     </PropertyGroup>
 
     <!-- Override RepositoryXXX properties -->
     <PropertyGroup Condition="'$(GitIsWorktreeValid)' == 'true' And '$(RepositoryUrl)' != '' And '$(VersionInfoOverrideRepositoryInfo)' != 'false'">
-      <RepositoryCommit Condition="'$(RepositoryCommit)' == '' And '$(GitIsDirty)' == 'false'">$(GitRevLong)</RepositoryCommit>
-      <RepositoryBranch Condition="'$(RepositoryBranch)' == ''">$(GitBranch)</RepositoryBranch>
+      <RepositoryCommit Condition="'$(RepositoryCommit)' == '' And '$(GitIsDirty)' == 'false'">
+        <![CDATA[$(GitRevLong)]]>
+      </RepositoryCommit>
+      <RepositoryBranch Condition="'$(RepositoryBranch)' == ''">
+        <![CDATA[$(GitBranch)]]>
+      </RepositoryBranch>
     </PropertyGroup>
 
     <!-- Override package version -->
     <PropertyGroup Condition="'$(VersionInfoOverridePackageVersion)' != 'false'">
-      <PackageVersion Condition="'$(_VIG_PackageVersion)' == ''">$(SemVer)</PackageVersion>
+      <PackageVersion Condition="'$(_VIG_PackageVersion)' == ''">
+        <![CDATA[$(SemVer)]]>
+      </PackageVersion>
     </PropertyGroup>
 
     <!-- Override assembly versions -->
     <PropertyGroup Condition="'$(VersionInfoOverrideVersions)' != 'false'">
-      <FileVersion Condition="'$(FileVersion)' == ''">$(Version)</FileVersion>
-      <InformationalVersion Condition="'$(InformationalVersion)' == ''">@@SemVer@@</InformationalVersion>
+      <FileVersion Condition="'$(FileVersion)' == ''">
+        <![CDATA[$(Version)]]>
+      </FileVersion>
+      <InformationalVersion Condition="'$(InformationalVersion)' == ''">
+        <![CDATA[@@SemVer@@]]>
+      </InformationalVersion>
     </PropertyGroup>
 
     <PropertyGroup>
-      <InformationalVersion>$(InformationalVersion
-        .Replace('@@Version@@', '$(Version)')
-        .Replace('@@VersionPrerelease@@', '$(VersionPrerelease)')
-        .Replace('@@VersionMetadata@@', '$(VersionMetadata)')
-        .Replace('@@SemVer@@', '$(SemVer)')
-        .Replace('@@GitRevShort@@', '$(GitRevShort)')
-        .Replace('@@GitRevLong@@', '$(GitRevLong)')
-        .Replace('@@GitTag@@', '$(GitTag)')
-        .Replace('@@GitCommitsSinceTag@@', '$(GitCommitsSinceTag)')
-        .Replace('@@GitBranch@@', '$(GitBranch)'))</InformationalVersion>
+      <InformationalVersion>
+        <![CDATA[$(InformationalVersion
+          .Replace('@@Version@@', '$(Version)')
+          .Replace('@@VersionPrerelease@@', '$(VersionPrerelease)')
+          .Replace('@@VersionMetadata@@', '$(VersionMetadata)')
+          .Replace('@@SemVer@@', '$(SemVer)')
+          .Replace('@@GitRevShort@@', '$(GitRevShort)')
+          .Replace('@@GitRevLong@@', '$(GitRevLong)')
+          .Replace('@@GitTag@@', '$(GitTag)')
+          .Replace('@@GitCommitsSinceTag@@', '$(GitCommitsSinceTag)')
+          .Replace('@@GitBranch@@', '$(GitBranch)'))]]>
+      </InformationalVersion>
     </PropertyGroup>
   </Target>
 
   <!-- Workaround for https://github.com/dotnet/roslyn/issues/44596 -->
   <Target Name="_VIG_InitializeProperties">
     <VIGEncodeBase64 Value="$(VersionInfoClassSerializedProperties)">
-      <Output TaskParameter="EncodedValue" PropertyName="_VersionInfoClassSerializedProperties" />
+      <Output
+        TaskParameter="EncodedValue"
+        PropertyName="_VersionInfoClassSerializedProperties"
+        />
     </VIGEncodeBase64>
   </Target>
 

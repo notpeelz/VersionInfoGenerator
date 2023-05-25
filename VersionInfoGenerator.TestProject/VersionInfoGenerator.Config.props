@@ -5,18 +5,29 @@
     -->
   </PropertyGroup>
 
-  <Target Name="VersionInfoConfig" AfterTargets="VersionInfoGenerator_GetGitInfo">
+  <Target
+    Name="VersionInfoConfig"
+    AfterTargets="VersionInfoGenerator_GetGitInfo"
+    >
     <PropertyGroup>
-      <VersionMetadata>NO_TAG</VersionMetadata>
-      <VersionMetadata Condition="'$(GitTag)' != ''">$(GitTag)</VersionMetadata>
+      <VersionMetadata>
+        <![CDATA[NO_TAG]]>
+      </VersionMetadata>
+      <VersionMetadata Condition="'$(GitTag)' != ''">
+        <![CDATA[$(GitTag)]]>
+      </VersionMetadata>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(GitCommitsSinceTag)' != '0'">
-      <VersionMetadata>$(VersionMetadata)-$(GitCommitsSinceTag)</VersionMetadata>
+      <VersionMetadata>
+				<![CDATA[$(VersionMetadata)-$(GitCommitsSinceTag)]]>
+      </VersionMetadata>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(GitBranch)' == 'master'">
-      <VersionMetadata>$(VersionMetadata)-RELEASE</VersionMetadata>
+      <VersionMetadata>
+				<![CDATA[$(VersionMetadata)-RELEASE]]>
+      </VersionMetadata>
     </PropertyGroup>
   </Target>
 </Project>

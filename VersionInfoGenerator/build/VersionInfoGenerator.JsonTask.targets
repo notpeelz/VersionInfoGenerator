@@ -1,18 +1,21 @@
 <Project>
   <PropertyGroup>
-    <_VIG_JsonTaskPath
-      Condition="'$(_VIG_JsonTaskPath)' == ''">$(MSBuildThisFileDirectory)/../tools/netstandard2.0/VersionInfoGenerator.JsonTask.dll</_VIG_JsonTaskPath>
+    <_VIG_JsonTaskPath Condition="'$(_VIG_JsonTaskPath)' == ''">
+      <![CDATA[$(MSBuildThisFileDirectory)/../tools/netstandard2.0/VersionInfoGenerator.JsonTask.dll]]>
+    </_VIG_JsonTaskPath>
   </PropertyGroup>
 
   <UsingTask
     Condition="'$(VersionInfoGenerateJson)' == 'true'"
     TaskName="CreateVersionInfoJson"
-    AssemblyFile="$(_VIG_JsonTaskPath)" />
+    AssemblyFile="$(_VIG_JsonTaskPath)"
+    />
 
   <Target
     Condition="'$(VersionInfoGenerateJson)' == 'true' And '$(BuildingProject)' == 'true'"
     Name="VersionInfoGenerator_GenerateJson"
-    AfterTargets="VersionInfoGenerator_UpdateProperties">
+    AfterTargets="VersionInfoGenerator_UpdateProperties"
+    >
     <CreateVersionInfoJson
       MSBuildOutputPath="$(OutputPath)"
       OutputPath="$(VersionInfoJsonOutputPath)"
@@ -27,8 +30,12 @@
       GitBranch="$(GitBranch)"
       GitTag="$(GitTag)"
       GitCommitsSinceTag="$(GitCommitsSinceTag)"
-      GitIsDirty="$(GitIsDirty)">
-      <Output TaskParameter="GeneratedFiles" ItemName="_VersionInfoJson_GeneratedFiles"  />
+      GitIsDirty="$(GitIsDirty)"
+      >
+      <Output
+        TaskParameter="GeneratedFiles"
+        ItemName="_VersionInfoJson_GeneratedFiles"
+        />
     </CreateVersionInfoJson>
     <ItemGroup>
       <FileWrites Include="@(_VersionInfoJson_GeneratedFiles)" />

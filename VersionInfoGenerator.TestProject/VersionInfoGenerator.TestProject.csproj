@@ -24,7 +24,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Text.Json" Version="6.0.6" />
-    <PackageReference Include="VersionInfoGenerator" Version="*" />
+    <PackageReference
+      Include="System.Text.Json"
+      Version="6.0.6"
+      />
+    <PackageReference
+      Include="VersionInfoGenerator"
+      Version="*"
+      />
   </ItemGroup>
 </Project>

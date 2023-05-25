@@ -15,13 +15,34 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="../README.md" PackagePath="/" Pack="true" />
-    <None Include="build/*" PackagePath="build/" Pack="true" />
-    <ProjectReference Include="../VersionInfoGenerator.JsonTask/VersionInfoGenerator.JsonTask.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" OutputItemType="PackedTask" />
-    <ProjectReference Include="../VersionInfoGenerator.InternalTasks/VersionInfoGenerator.InternalTasks.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" OutputItemType="PackedTask" />
+    <None
+      Include="../README.md"
+      PackagePath="/"
+      Pack="true"
+      />
+    <None
+      Include="build/*"
+      PackagePath="build/"
+      Pack="true"
+      />
+    <ProjectReference
+      Include="../VersionInfoGenerator.JsonTask/VersionInfoGenerator.JsonTask.csproj"
+      PrivateAssets="all"
+      ReferenceOutputAssembly="false"
+      OutputItemType="PackedTask"
+      />
+    <ProjectReference
+      Include="../VersionInfoGenerator.InternalTasks/VersionInfoGenerator.InternalTasks.csproj"
+      PrivateAssets="all"
+      ReferenceOutputAssembly="false"
+      OutputItemType="PackedTask"
+      />
   </ItemGroup>
 
-  <Target Name="CopyTasksToPackage" DependsOnTargets="ResolveReferences">
+  <Target
+    Name="CopyTasksToPackage"
+    DependsOnTargets="ResolveReferences"
+    >
     <ItemGroup>
       <TfmSpecificPackageFile Include="@(PackedTask)">
         <PackagePath>tools/netstandard2.0/</PackagePath>
@@ -31,7 +52,15 @@
 
   <!-- Dependencies -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.3" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.3.0" PrivateAssets="all" />
+    <PackageReference
+      Include="Microsoft.CodeAnalysis.Analyzers"
+      Version="3.3.3"
+      PrivateAssets="all"
+      />
+    <PackageReference
+      Include="Microsoft.CodeAnalysis.CSharp"
+      Version="4.3.0"
+      PrivateAssets="all"
+      />
   </ItemGroup>
 </Project>
