@@ -32,8 +32,8 @@ internal static class VersionInfo
     public const string RootNamespace = "VersionInfoGenerator.TestProject";
     public const string Version = "1.0.0";
     public const string VersionPrerelease = "rc1";
-    public const string VersionMetadata = "gitac717b1-master";
-    public const string SemVer = "1.0.0-rc1+gitac717b1-master";
+    public const string VersionMetadata = "git-ac717b1";
+    public const string SemVer = "1.0.0-rc1+git-ac717b1";
     public const string GitRevShort = "ac717b1";
     public const string GitRevLong = "ac717b1885cd0f984cabe77dd5f37c9200795298";
     public const string GitBranch = "master";
@@ -52,7 +52,7 @@ internal static class VersionInfo
   <!-- The SemVer prerelease tag -->
   <VersionPrerelease></VersionPrerelease>
   <!-- If specified, it replaces the default SemVer metadata format -->
-  <VersionMetadata>git@@GitRevShort@@-@@GitBranch@@</VersionMetadata>
+  <VersionMetadata>git-@@GitRevShort@@</VersionMetadata>
   <!-- Controls whether the SemVer should have a metadata component -->
   <VersionInfoUseMetadata>true</VersionInfoUseMetadata>
   <!-- Controls whether to override FileVersion and InformationalVersion -->
@@ -125,8 +125,8 @@ Output (`bin/Release/xxx/VersionInfo.json`):
   "RootNamespace": "VersionInfoGenerator.TestProject",
   "Version": "1.0.0",
   "VersionPrerelease": null,
-  "VersionMetadata": "git0378e47-master",
-  "SemVer": "1.0.0+git0378e47-master",
+  "VersionMetadata": "git-0378e47",
+  "SemVer": "1.0.0+git-0378e47",
   "GitRevShort": "0378e47",
   "GitRevLong": "0378e47109d698eeceaf07ad75e48ea36143d2e3",
   "GitBranch": "master",

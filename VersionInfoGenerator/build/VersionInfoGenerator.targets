@@ -255,7 +255,7 @@
 
     <PropertyGroup>
       <_VersionMetadata Condition="'$(GitIsWorktreeValid)' == 'true'">
-        <![CDATA[git$(GitRevShort)-$(GitBranch)]]>
+        <![CDATA[git-$(GitRevShort)]]>
       </_VersionMetadata>
       <_VersionMetadata Condition="'$(GitIsWorktreeValid)' != 'true'">
         <![CDATA[untracked]]>
