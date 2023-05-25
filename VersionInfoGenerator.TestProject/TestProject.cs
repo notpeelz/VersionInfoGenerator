@@ -18,7 +18,10 @@ Console.WriteLine("GitIsDirty: " + VersionInfoTest.GitIsDirty);
 
 Console.WriteLine();
 
-using var sr = new StreamReader("VersionInfo.json");
+var dir = System.IO.Path.GetDirectoryName(
+  System.Reflection.Assembly.GetExecutingAssembly().Location
+);
+using var sr = new StreamReader(Path.Combine(dir, "VersionInfo.json"));
 var json = JsonSerializer.Deserialize<VersionInfoDTO>(sr.ReadToEnd());
 
 Console.WriteLine("JSON:");
