@@ -24,7 +24,7 @@ jobs:
       - name: Build
         run: dotnet build -c Release
       - name: Publish release
-        uses: notpeelz/action-gh-create-release@a3caaff31cdf1022430c5a95689330ed83de62f2 # v1.0.2
+        uses: notpeelz/action-gh-create-release@d7a786d3daf49f7f7d9ef97f80f297ab16bf361c # v1.1.0
         with:
           token: ${{ github.token }}
           tag: ${{ github.ref }}
