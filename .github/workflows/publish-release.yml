@@ -19,16 +19,13 @@ jobs:
           dotnet-version: 7.0.x
       - name: Checkout repo
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
-        with:
-          ref: ${{ github.sha }}
       - name: Build
         run: dotnet build -c Release
       - name: Publish release
         uses: notpeelz/action-gh-create-release@d7a786d3daf49f7f7d9ef97f80f297ab16bf361c # v1.1.0
         with:
-          token: ${{ github.token }}
-          tag: ${{ github.ref }}
-          title: "${{ github.ref_name }}"
+          tag: ${{ github.ref_name }}
+          title: ${{ github.ref_name }}
       - name: Publish NuGet package
         run: |
           for pkg in ./VersionInfoGenerator/bin/Release/*.nupkg; do
