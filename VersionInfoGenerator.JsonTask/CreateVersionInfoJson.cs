@@ -4,10 +4,8 @@ using System.Linq;
 using System.Text;
 using Microsoft.Build.Framework;
 
-namespace VersionInfoGenerator.JsonTask
-{
-  public class CreateVersionInfoJson : ITask
-  {
+namespace VersionInfoGenerator.JsonTask {
+  public class CreateVersionInfoJson : ITask {
     public IBuildEngine BuildEngine { get; set; }
 
     public ITaskHost HostObject { get; set; }
@@ -46,12 +44,10 @@ namespace VersionInfoGenerator.JsonTask
     public bool GitIsDirty { get; set; }
     #endregion
 
-    public bool Execute()
-    {
+    public bool Execute() {
       // Make sure that we're not accidentally creating the build dir
       // at the wrong step in the MSBuild pipeline.
-      if (!Directory.Exists(this.MSBuildOutputPath))
-      {
+      if (!Directory.Exists(this.MSBuildOutputPath)) {
         this.BuildEngine.LogErrorEvent(
           new(
             code: "VIGJ0001",
@@ -74,8 +70,7 @@ namespace VersionInfoGenerator.JsonTask
 
       // Make sure we're not about to write to files outside of the
       // build dir.
-      if (!Path.GetFullPath(path).StartsWith(Path.GetFullPath(this.MSBuildOutputPath)))
-      {
+      if (!Path.GetFullPath(path).StartsWith(Path.GetFullPath(this.MSBuildOutputPath))) {
         this.BuildEngine.LogErrorEvent(
           new(
             code: "VIGJ0002",
@@ -95,8 +90,7 @@ namespace VersionInfoGenerator.JsonTask
 
       // If OutputPath is null or ends with "/", we append the
       // default filename.
-      if (this.OutputPath == null || this.OutputPath.EndsWith("/"))
-      {
+      if (this.OutputPath == null || this.OutputPath.EndsWith("/")) {
         path = Path.Combine(path, "VersionInfo.json");
       }
 
@@ -109,8 +103,7 @@ namespace VersionInfoGenerator.JsonTask
         .ToArray();
 
       using var sw = new StreamWriter(path, false, Encoding.UTF8);
-      var obj = new VersionInfoDTO
-      {
+      var obj = new VersionInfoDTO {
         RootNamespace = this.RootNamespace,
         Version = this.Version,
         VersionPrerelease = this.VersionPrerelease,

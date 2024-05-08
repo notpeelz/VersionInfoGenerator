@@ -1,5 +1,4 @@
-public class VersionInfoDTO
-{
+public class VersionInfoDTO {
   public string RootNamespace { get; set; }
 
   public string Version { get; set; }

@@ -8,35 +8,29 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
-namespace VersionInfoGenerator
-{
+namespace VersionInfoGenerator {
   [Generator]
-  public class VersionInfoGenerator : ISourceGenerator
-  {
+  public class VersionInfoGenerator : ISourceGenerator {
     public void Initialize(GeneratorInitializationContext context) { }
 
     private abstract class Property { }
 
-    private class LiteralExpressionProperty : Property
-    {
+    private class LiteralExpressionProperty : Property {
       public delegate (LiteralExpressionSyntax expr, PredefinedTypeSyntax type) GetExpressionFunc(
         string value
       );
 
-      public LiteralExpressionProperty(GetExpressionFunc getExpressionFunc)
-      {
+      public LiteralExpressionProperty(GetExpressionFunc getExpressionFunc) {
         this.GetExpression = getExpressionFunc;
       }
 
       public GetExpressionFunc GetExpression { get; }
     }
 
-    private class TokenProperty : Property
-    {
+    private class TokenProperty : Property {
       public delegate SyntaxToken GetTokenFunc(string value);
 
-      public TokenProperty(GetTokenFunc getTokenFunc)
-      {
+      public TokenProperty(GetTokenFunc getTokenFunc) {
         this.GetToken = getTokenFunc;
       }
 
@@ -80,23 +74,20 @@ namespace VersionInfoGenerator
 
     private static readonly TokenProperty ModifierToken =
       new(
-        x =>
-          x switch
-          {
-            "private" => Token(SyntaxKind.PrivateKeyword),
-            "protected" => Token(SyntaxKind.ProtectedKeyword),
-            "internal" => Token(SyntaxKind.InternalKeyword),
-            "public" => Token(SyntaxKind.PublicKeyword),
-            "static" => Token(SyntaxKind.StaticKeyword),
-            "abstract" => Token(SyntaxKind.AbstractKeyword),
-            "partial" => Token(SyntaxKind.PartialKeyword),
-            _ => throw new InvalidOperationException($"Unsupported modifier: {x}"),
-          }
+        x => x switch {
+          "private" => Token(SyntaxKind.PrivateKeyword),
+          "protected" => Token(SyntaxKind.ProtectedKeyword),
+          "internal" => Token(SyntaxKind.InternalKeyword),
+          "public" => Token(SyntaxKind.PublicKeyword),
+          "static" => Token(SyntaxKind.StaticKeyword),
+          "abstract" => Token(SyntaxKind.AbstractKeyword),
+          "partial" => Token(SyntaxKind.PartialKeyword),
+          _ => throw new InvalidOperationException($"Unsupported modifier: {x}"),
+        }
       );
 
     private static readonly Dictionary<string, Property> SerializedProperties =
-      new()
-      {
+      new() {
         { "RootNamespace", StringExpression },
         { "Version", StringExpression },
         { "VersionPrerelease", StringExpression },
@@ -122,24 +113,24 @@ namespace VersionInfoGenerator
         helpLinkUri: "https://github.com/notpeelz/VersionInfoGenerator/wiki/Diagnostic-messages#vig0001"
       );
 
-    public void Execute(GeneratorExecutionContext context)
-    {
+    public void Execute(GeneratorExecutionContext context) {
       // XXX: we abort if this property is missing. This usually
       // happens when the consumer forgets to set PrivateAssets="all"
       // on the PackageReference.
-      if (!TryGetMSBuildProperty("VersionInfoGenerateClass", out var generateStr))
-      {
+      if (!TryGetMSBuildProperty("VersionInfoGenerateClass", out var generateStr)) {
         context.ReportDiagnostic(Diagnostic.Create(VIG0001, null));
         return;
       }
 
-      if (!bool.TryParse(generateStr, out var generate))
+      if (!bool.TryParse(generateStr, out var generate)) {
         generate = true;
-      if (!generate)
-        return;
+      }
 
-      if (!bool.TryParse(GetMSBuildProperty("BuildingProject"), out var buildingProject))
-      {
+      if (!generate) {
+        return;
+      }
+
+      if (!bool.TryParse(GetMSBuildProperty("BuildingProject"), out var buildingProject)) {
         buildingProject = false;
       }
 
@@ -150,19 +141,15 @@ namespace VersionInfoGenerator
           GetMSBuildProperty("VersionInfoClassNamespaceGlobal"),
           out var useGlobalNamespace
         )
-      )
-      {
+      ) {
         useGlobalNamespace = false;
       }
 
-      if (useGlobalNamespace)
-      {
+      if (useGlobalNamespace) {
         // VersionInfoClassNamespaceGlobal has precedence over
         // VersionInfoClassNamespace.
         classNamespace = null;
-      }
-      else
-      {
+      } else {
         // If RootNamespace is null, it will fall back to the global
         // namespace.
         classNamespace = rootNamespace;
@@ -174,16 +161,14 @@ namespace VersionInfoGenerator
       var versionInfoClass = ClassDeclaration(className)
         .WithAttributeLists(
           List(
-            new[]
-            {
+            new[] {
               AttributeList(
                 SingletonSeparatedList(
                   Attribute(IdentifierName("GeneratedCode"))
                     .WithArgumentList(
                       AttributeArgumentList(
                         SeparatedList<AttributeArgumentSyntax>(
-                          new SyntaxNodeOrToken[]
-                          {
+                          new SyntaxNodeOrToken[] {
                             AttributeArgument(
                               LiteralExpression(
                                 SyntaxKind.StringLiteralExpression,
@@ -215,8 +200,7 @@ namespace VersionInfoGenerator
       var src = CompilationUnit()
         .WithUsings(
           List(
-            new[]
-            {
+            new[] {
               UsingDirective(
                 QualifiedName(
                   QualifiedName(IdentifierName("System"), IdentifierName("CodeDom")),
@@ -248,19 +232,17 @@ namespace VersionInfoGenerator
         sourceText: SourceText.From(src.ToFullString(), Encoding.UTF8)
       );
 
-      IEnumerable<FieldDeclarationSyntax> GenerateFields()
-      {
+      IEnumerable<FieldDeclarationSyntax> GenerateFields() {
         var props = GetMSBuildProperty("_VersionInfoClassSerializedProperties", decodeBase64: true)
           ?.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
           .Select(x => x.Trim('\x20', '\r', '\n'))
           .ToArray();
-        foreach (var prop in SerializedProperties)
-        {
-          if (props != null && props.Length > 0 && !props.Contains(prop.Key))
+        foreach (var prop in SerializedProperties) {
+          if (props != null && props.Length > 0 && !props.Contains(prop.Key)) {
             continue;
+          }
 
-          if (prop.Value is not LiteralExpressionProperty literalProp)
-          {
+          if (prop.Value is not LiteralExpressionProperty literalProp) {
             throw new InvalidOperationException(
               $"Unsupported property value type: {prop.Value?.GetType()}"
             );
@@ -286,46 +268,42 @@ namespace VersionInfoGenerator
         }
       }
 
-      string GetMSBuildProperty(string name, bool decodeBase64 = false)
-      {
+      string GetMSBuildProperty(string name, bool decodeBase64 = false) {
         if (
           !context.AnalyzerConfigOptions.GlobalOptions.TryGetValue(
             $"build_property.{name}",
             out var value
           )
-        )
-        {
+        ) {
           throw new InvalidOperationException($"Missing MSBuild property: {name}");
         }
 
-        if (string.IsNullOrEmpty(value))
+        if (string.IsNullOrEmpty(value)) {
           return null;
+        }
 
-        if (decodeBase64)
-        {
+        if (decodeBase64) {
           value = Encoding.UTF8.GetString(Convert.FromBase64String(value));
         }
 
         return value;
       }
 
-      bool TryGetMSBuildProperty(string name, out string value, bool decodeBase64 = false)
-      {
+      bool TryGetMSBuildProperty(string name, out string value, bool decodeBase64 = false) {
         if (
           !context.AnalyzerConfigOptions.GlobalOptions.TryGetValue(
             $"build_property.{name}",
             out value
           )
-        )
-        {
+        ) {
           return false;
         }
 
-        if (string.IsNullOrEmpty(value))
+        if (string.IsNullOrEmpty(value)) {
           value = null;
+        }
 
-        if (decodeBase64)
-        {
+        if (decodeBase64) {
           value = Encoding.UTF8.GetString(Convert.FromBase64String(value));
         }
 

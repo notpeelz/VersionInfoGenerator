@@ -4,11 +4,9 @@ using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using Microsoft.Build.Framework;
 
-namespace VersionInfoGenerator.InternalTasks
-{
+namespace VersionInfoGenerator.InternalTasks {
   [LoadInSeparateAppDomain]
-  public class VIGGetGitInfo : MarshalByRefObject, ITask
-  {
+  public class VIGGetGitInfo : MarshalByRefObject, ITask {
     private const string EVENT_CODE_GIT_REV_SHORT_PARSE_FAILED = "VIG1001";
     private const string EVENT_CODE_GIT_REV_LONG_PARSE_FAILED = "VIG1002";
     private const string EVENT_CODE_GIT_BRANCH_PARSE_FAILED = "VIG1003";
@@ -40,25 +38,19 @@ namespace VersionInfoGenerator.InternalTasks
     [Output]
     public bool GitIsDirty { get; set; }
 
-    public bool Execute()
-    {
+    public bool Execute() {
       var gitDir = RunTask(this.GetGitDir);
       using var mutex = MutexWrapper.FromPath("VIGGitInfo", gitDir);
       return RunTask(this.ExecuteAsync);
     }
 
-    private static T RunTask<T>(Func<Task<T>> fn)
-    {
+    private static T RunTask<T>(Func<Task<T>> fn) {
       var task = fn();
 
-      try
-      {
+      try {
         task.Wait();
-      }
-      catch (AggregateException ex)
-      {
-        foreach (var innerEx in ex.InnerExceptions)
-        {
+      } catch (AggregateException ex) {
+        foreach (var innerEx in ex.InnerExceptions) {
           ExceptionDispatchInfo.Capture(innerEx).Throw();
         }
       }
@@ -66,19 +58,15 @@ namespace VersionInfoGenerator.InternalTasks
       return task.Result;
     }
 
-    private async Task<string> GetGitDir()
-    {
+    private async Task<string> GetGitDir() {
       const int MAX_ATTEMPTS = 10;
       var attempt = 0;
-      while (true)
-      {
+      while (true) {
         var (success, gitDir, err) = await this.TryRunGitCommand("rev-parse --git-dir");
 
-        if (!success)
-        {
+        if (!success) {
           // "fatal: .git/index: index file open failed: Permission denied"
-          if (err.ToLowerInvariant().Contains("permission denied") && attempt >= MAX_ATTEMPTS - 1)
-          {
+          if (err.ToLowerInvariant().Contains("permission denied") && attempt >= MAX_ATTEMPTS - 1) {
             await Task.Delay(100);
             attempt++;
             continue;
@@ -105,15 +93,13 @@ namespace VersionInfoGenerator.InternalTasks
       }
     }
 
-    private async Task<bool> ExecuteAsync()
-    {
+    private async Task<bool> ExecuteAsync() {
       {
         var (success, value, err) = await this.TryRunGitCommand(
           "describe --long --always --dirty --exclude=* --abbrev=7"
         );
 
-        if (!success)
-        {
+        if (!success) {
           this.BuildEngine.LogErrorEvent(
             new(
               code: EVENT_CODE_GIT_REV_SHORT_PARSE_FAILED,
@@ -139,8 +125,7 @@ namespace VersionInfoGenerator.InternalTasks
           "describe --long --always --dirty --exclude=* --abbrev=9999"
         );
 
-        if (!success)
-        {
+        if (!success) {
           this.BuildEngine.LogErrorEvent(
             new(
               code: EVENT_CODE_GIT_REV_LONG_PARSE_FAILED,
@@ -166,8 +151,7 @@ namespace VersionInfoGenerator.InternalTasks
           "rev-parse --abbrev-ref --symbolic-full-name HEAD"
         );
 
-        if (!success)
-        {
+        if (!success) {
           this.BuildEngine.LogErrorEvent(
             new(
               code: EVENT_CODE_GIT_BRANCH_PARSE_FAILED,
@@ -190,12 +174,12 @@ namespace VersionInfoGenerator.InternalTasks
 
       {
         var (success, value, _) = await this.TryRunGitCommand("describe --tags --abbrev=0");
-        if (success)
+        if (success) {
           this.GitTag = value;
+        }
       }
 
-      if (!string.IsNullOrEmpty(this.GitTag))
-      {
+      if (!string.IsNullOrEmpty(this.GitTag)) {
         // XXX: this is probably gonna break if the tag contains quotes
         // and maybe spaces.
         // Unfortunately ProcessStartInfo.ArgumentList is not available
@@ -204,8 +188,7 @@ namespace VersionInfoGenerator.InternalTasks
           $"rev-list \"{this.GitTag}\".. --count"
         );
 
-        if (!success)
-        {
+        if (!success) {
           this.BuildEngine.LogErrorEvent(
             new(
               code: EVENT_CODE_GIT_COMMITS_SINCE_TAG_PARSE_FAILED,
@@ -223,8 +206,7 @@ namespace VersionInfoGenerator.InternalTasks
           return false;
         }
 
-        if (!int.TryParse(value, out var number))
-        {
+        if (!int.TryParse(value, out var number)) {
           this.BuildEngine.LogErrorEvent(
             new(
               code: EVENT_CODE_GIT_COMMITS_SINCE_TAG_PARSE_FAILED,
@@ -250,14 +232,12 @@ namespace VersionInfoGenerator.InternalTasks
       return true;
     }
 
-    private async Task<(bool Success, string Output, string Error)> TryRunGitCommand(string args)
-    {
+    private async Task<(bool Success, string Output, string Error)> TryRunGitCommand(string args) {
       // XXX: ProcessStartInfo.ArgumentList would be nice to avoid
       // having to manually escape arguments, but it's not available
       // in netstandard2.0
       using var process = Process.Start(
-        new ProcessStartInfo(this.GitBinary, args)
-        {
+        new ProcessStartInfo(this.GitBinary, args) {
           WindowStyle = ProcessWindowStyle.Hidden,
           CreateNoWindow = true,
           UseShellExecute = false,

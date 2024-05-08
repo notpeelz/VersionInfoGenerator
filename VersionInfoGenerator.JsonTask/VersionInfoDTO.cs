@@ -1,7 +1,5 @@
-namespace VersionInfoGenerator.JsonTask
-{
-  public class VersionInfoDTO
-  {
+namespace VersionInfoGenerator.JsonTask {
+  public class VersionInfoDTO {
     public string RootNamespace { get; set; }
 
     public string Version { get; set; }

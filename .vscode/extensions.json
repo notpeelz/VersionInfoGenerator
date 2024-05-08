@@ -1,6 +1,6 @@
 {
   "recommendations": [
-    "csharpier.csharpier-vscode",
+    "ms-dotnettools.csharp",
     "redhat.vscode-xml"
   ]
 }
