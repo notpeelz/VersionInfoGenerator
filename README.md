@@ -145,7 +145,7 @@ Special variables can be used to customize the SemVer metadata (as an alternativ
 - `@@GitBranch@@`: the current git branch
 - `@@GitTag@@`: the current git tag
 - `@@GitCommitsSinceTag@@`: the number of commits since the last git tag
-- `@@VersionMetadata@`: the default VersionMetadata format (`git@@GitRevShort@@-@@GitBranch@@`)
+- `@@VersionMetadata@`: the default VersionMetadata format (`git-@@GitRevShort@@`)
 
 # Troubleshooting
 
