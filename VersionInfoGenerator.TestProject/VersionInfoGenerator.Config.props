@@ -20,13 +20,13 @@
 
     <PropertyGroup Condition="'$(GitCommitsSinceTag)' != '0'">
       <VersionMetadata>
-				<![CDATA[$(VersionMetadata)-$(GitCommitsSinceTag)]]>
+        <![CDATA[$(VersionMetadata)-$(GitCommitsSinceTag)]]>
       </VersionMetadata>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(GitBranch)' == 'master'">
       <VersionMetadata>
-				<![CDATA[$(VersionMetadata)-RELEASE]]>
+        <![CDATA[$(VersionMetadata)-RELEASE]]>
       </VersionMetadata>
     </PropertyGroup>
   </Target>
