@@ -49,6 +49,8 @@ internal static class VersionInfo
 <PropertyGroup>
   <!-- Major.Minor.Patch -->
   <Version>1.0.0</Version>
+  <!-- Controls whether the Version should be validated for semver compliance -->
+  <VersionValidate>true</VersionValidate>
   <!-- The SemVer prerelease tag -->
   <VersionPrerelease></VersionPrerelease>
   <!-- If specified, it replaces the default SemVer metadata format -->
