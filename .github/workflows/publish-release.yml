@@ -24,6 +24,7 @@ jobs:
       - name: Publish release
         uses: notpeelz/action-gh-create-release@c1bebd17c8a128e8db4165a68be4dc4e3f106ff1 # v5.0.1
         with:
+          strategy: use-existing-tag
           tag: ${{ github.ref_name }}
           title: ${{ github.ref_name }}
       - name: Publish NuGet package
