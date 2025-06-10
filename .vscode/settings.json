@@ -11,7 +11,7 @@
   "xml.preferences.quoteStyle": "double",
   "xml.format.closingBracketNewLine": true,
   "xml.format.emptyElements": "collapse",
-  "xml.format.splitAttributes": true,
+  "xml.format.splitAttributes": "splitNewLine",
   "xml.format.splitAttributesIndentSize": 1,
   "xml.format.maxLineWidth": 100
 }
