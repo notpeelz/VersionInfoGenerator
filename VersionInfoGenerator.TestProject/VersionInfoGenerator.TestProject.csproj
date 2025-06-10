@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <LangVersion>9</LangVersion>
     <OutputType>Exe</OutputType>
     <RestoreSources>nuget-pkgs/src;https://api.nuget.org/v3/index.json</RestoreSources>
