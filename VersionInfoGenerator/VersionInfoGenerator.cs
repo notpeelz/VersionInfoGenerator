@@ -5,19 +5,18 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace VersionInfoGenerator {
-  [Generator]
-  public class VersionInfoGenerator : ISourceGenerator {
-    public void Initialize(GeneratorInitializationContext context) { }
-
+  [Generator(LanguageNames.CSharp)]
+  public class VersionInfoGenerator : IIncrementalGenerator {
     private abstract class Property { }
 
     private class LiteralExpressionProperty : Property {
       public delegate (LiteralExpressionSyntax expr, PredefinedTypeSyntax type) GetExpressionFunc(
-        string value
+        string? value
       );
 
       public LiteralExpressionProperty(GetExpressionFunc getExpressionFunc) {
@@ -86,8 +85,18 @@ namespace VersionInfoGenerator {
         }
       );
 
-    private static readonly Dictionary<string, Property> SerializedProperties =
-      new() {
+#pragma warning disable RS2008
+    private static readonly DiagnosticDescriptor VIG0001 =
+      new(
+        id: "VIG0001",
+        title: "VersionInfoGenerator was run without the necessary MSBuild properties",
+        messageFormat: "VersionInfoGenerator was run without the necessary MSBuild properties",
+        category: "",
+        defaultSeverity: DiagnosticSeverity.Error,
+        isEnabledByDefault: true,
+        helpLinkUri: "https://github.com/notpeelz/VersionInfoGenerator/wiki/Diagnostic-messages#vig0001"
+      );
+    private static readonly Dictionary<string, Property> SerializableProperties = new() {
         { "RootNamespace", StringExpression },
         { "Version", StringExpression },
         { "VersionPrerelease", StringExpression },
@@ -101,28 +110,128 @@ namespace VersionInfoGenerator {
         { "GitIsDirty", BoolExpression },
       };
 
-#pragma warning disable RS2008
-    private static readonly DiagnosticDescriptor VIG0001 =
-      new(
-        id: "VIG0001",
-        title: "VersionInfoGenerator was run without the necessary MSBuild properties",
-        messageFormat: "VersionInfoGenerator was run without the necessary MSBuild properties",
-        category: "",
-        defaultSeverity: DiagnosticSeverity.Error,
-        isEnabledByDefault: true,
-        helpLinkUri: "https://github.com/notpeelz/VersionInfoGenerator/wiki/Diagnostic-messages#vig0001"
-      );
+    private class MSBuildProperties {
+      private static readonly string[] DefaultSerializedProperties = new[] {
+        nameof(RootNamespace),
+        nameof(Version),
+        nameof(VersionPrerelease),
+        nameof(VersionMetadata),
+        nameof(SemVer),
+        nameof(GitRevShort),
+        nameof(GitRevLong),
+        nameof(GitBranch),
+        nameof(GitTag),
+        nameof(GitCommitsSinceTag),
+        nameof(GitIsDirty),
+      };
 
-    public void Execute(GeneratorExecutionContext context) {
+      public required string? VersionInfoGenerateClass { get; init; }
+
+      public required string? BuildingProject { get; init; }
+
+      public required string? RootNamespace { get; init; }
+
+      public required string? VersionInfoClassNamespace { get; init; }
+
+      public required string? VersionInfoClassNamespaceGlobal { get; init; }
+
+      public required string? VersionInfoClassName { get; init; }
+
+      public required string? VersionInfoClassModifiers { get; init; }
+
+      public required Dictionary<string, string?> VersionInfoClassSerializedProperties { get; init; }
+
+      public required string? Version { get; init; }
+
+      public required string? VersionPrerelease { get; init; }
+
+      public required string? VersionMetadata { get; init; }
+
+      public required string? SemVer { get; init; }
+
+      public required string? GitRevShort { get; init; }
+
+      public required string? GitRevLong { get; init; }
+
+      public required string? GitBranch { get; init; }
+
+      public required string? GitTag { get; init; }
+
+      public required string? GitCommitsSinceTag { get; init; }
+
+      public required string? GitIsDirty { get; init; }
+
+      private MSBuildProperties() { }
+
+      public static MSBuildProperties FromAnalyzerOptions(AnalyzerConfigOptions globalOptions) {
+        string? GetProperty(string name) {
+          if (!globalOptions.TryGetValue($"build_property.{name}", out var value)) {
+            return null;
+          }
+
+          if (string.IsNullOrEmpty(value)) {
+            return null;
+          }
+
+          return value;
+        }
+
+        Dictionary<string, string?> GetSerializedProperties() {
+          var encoded = GetProperty("_VersionInfoClassSerializedProperties");
+          var decoded = encoded == null
+            ? null
+            : Encoding.UTF8.GetString(Convert.FromBase64String(encoded));
+          var propertyNames = decoded switch {
+            null => DefaultSerializedProperties,
+            var a => decoded
+              .Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
+              .Select(x => x.Trim('\x20', '\r', '\n')),
+          };
+          return propertyNames
+            .Select(x => new { Key = x, Value = GetProperty(x) })
+            .ToDictionary(x => x.Key, x => x.Value);
+        }
+
+        return new MSBuildProperties {
+          VersionInfoGenerateClass = GetProperty("VersionInfoGenerateClass"),
+          BuildingProject = GetProperty("BuildingProject"),
+          RootNamespace = GetProperty("RootNamespace"),
+          VersionInfoClassNamespace = GetProperty("VersionInfoClassNamespace"),
+          VersionInfoClassNamespaceGlobal = GetProperty("VersionInfoClassNamespaceGlobal"),
+          VersionInfoClassName = GetProperty("VersionInfoClassName"),
+          VersionInfoClassModifiers = GetProperty("VersionInfoClassModifiers"),
+          VersionInfoClassSerializedProperties = GetSerializedProperties(),
+          Version = GetProperty("Version"),
+          VersionPrerelease = GetProperty("VersionPrerelease"),
+          VersionMetadata = GetProperty("VersionMetadata"),
+          SemVer = GetProperty("SemVer"),
+          GitRevShort = GetProperty("GitRevShort"),
+          GitRevLong = GetProperty("GitRevLong"),
+          GitBranch = GetProperty("GitBranch"),
+          GitTag = GetProperty("GitTag"),
+          GitCommitsSinceTag = GetProperty("GitCommitsSinceTag"),
+          GitIsDirty = GetProperty("GitIsDirty"),
+        };
+      }
+    }
+
+    public void Initialize(IncrementalGeneratorInitializationContext context) {
+      var propertiesProvider = context.AnalyzerConfigOptionsProvider
+        .Select((options, _) => MSBuildProperties.FromAnalyzerOptions(options.GlobalOptions));
+
+      context.RegisterSourceOutput(propertiesProvider, GenerateVersionInfoClass);
+    }
+
+    private static void GenerateVersionInfoClass(SourceProductionContext context, MSBuildProperties properties) {
       // XXX: we abort if this property is missing. This usually
       // happens when the consumer forgets to set PrivateAssets="all"
       // on the PackageReference.
-      if (!TryGetMSBuildProperty("VersionInfoGenerateClass", out var generateStr)) {
+      if (properties.VersionInfoGenerateClass == null) {
         context.ReportDiagnostic(Diagnostic.Create(VIG0001, null));
         return;
       }
 
-      if (!bool.TryParse(generateStr, out var generate)) {
+      if (!bool.TryParse(properties.VersionInfoGenerateClass, out var generate)) {
         generate = true;
       }
 
@@ -130,15 +239,15 @@ namespace VersionInfoGenerator {
         return;
       }
 
-      if (!bool.TryParse(GetMSBuildProperty("BuildingProject"), out var buildingProject)) {
+      if (!bool.TryParse(properties.BuildingProject, out var buildingProject)) {
         buildingProject = false;
       }
 
-      var rootNamespace = GetMSBuildProperty("RootNamespace");
-      var classNamespace = GetMSBuildProperty("VersionInfoClassNamespace");
+      var rootNamespace = properties.RootNamespace;
+      var classNamespace = properties.VersionInfoClassNamespace;
       if (
         !bool.TryParse(
-          GetMSBuildProperty("VersionInfoClassNamespaceGlobal"),
+          properties.VersionInfoClassNamespaceGlobal,
           out var useGlobalNamespace
         )
       ) {
@@ -155,8 +264,8 @@ namespace VersionInfoGenerator {
         classNamespace = rootNamespace;
       }
 
-      var className = GetMSBuildProperty("VersionInfoClassName") ?? "VersionInfo";
-      var modifiers = GetMSBuildProperty("VersionInfoClassModifiers") ?? "internal static";
+      var className = properties.VersionInfoClassName ?? "VersionInfo";
+      var modifiers = properties.VersionInfoClassModifiers ?? "internal static";
 
       var versionInfoClass = ClassDeclaration(className)
         .WithAttributeLists(
@@ -233,22 +342,18 @@ namespace VersionInfoGenerator {
       );
 
       IEnumerable<FieldDeclarationSyntax> GenerateFields() {
-        var props = GetMSBuildProperty("_VersionInfoClassSerializedProperties", decodeBase64: true)
-          ?.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
-          .Select(x => x.Trim('\x20', '\r', '\n'))
-          .ToArray();
-        foreach (var prop in SerializedProperties) {
-          if (props != null && props.Length > 0 && !props.Contains(prop.Key)) {
+        var props = properties.VersionInfoClassSerializedProperties;
+        foreach (var prop in SerializableProperties) {
+          if (!props.TryGetValue(prop.Key, out var value)) {
             continue;
           }
 
           if (prop.Value is not LiteralExpressionProperty literalProp) {
             throw new InvalidOperationException(
-              $"Unsupported property value type: {prop.Value?.GetType()}"
+              $"Unsupported property value type: {prop.GetType()}"
             );
           }
 
-          var value = GetMSBuildProperty(prop.Key);
           // If the project is building, don't populate any fields
           // since the GitInfo properties haven't been populated yet.
           var (expr, type) = literalProp.GetExpression(buildingProject ? value : null);
@@ -266,48 +371,6 @@ namespace VersionInfoGenerator {
               TokenList(new[] { Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.ConstKeyword), })
             );
         }
-      }
-
-      string GetMSBuildProperty(string name, bool decodeBase64 = false) {
-        if (
-          !context.AnalyzerConfigOptions.GlobalOptions.TryGetValue(
-            $"build_property.{name}",
-            out var value
-          )
-        ) {
-          throw new InvalidOperationException($"Missing MSBuild property: {name}");
-        }
-
-        if (string.IsNullOrEmpty(value)) {
-          return null;
-        }
-
-        if (decodeBase64) {
-          value = Encoding.UTF8.GetString(Convert.FromBase64String(value));
-        }
-
-        return value;
-      }
-
-      bool TryGetMSBuildProperty(string name, out string value, bool decodeBase64 = false) {
-        if (
-          !context.AnalyzerConfigOptions.GlobalOptions.TryGetValue(
-            $"build_property.{name}",
-            out value
-          )
-        ) {
-          return false;
-        }
-
-        if (string.IsNullOrEmpty(value)) {
-          value = null;
-        }
-
-        if (decodeBase64) {
-          value = Encoding.UTF8.GetString(Convert.FromBase64String(value));
-        }
-
-        return true;
       }
     }
   }
