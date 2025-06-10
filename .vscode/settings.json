@@ -4,7 +4,8 @@
     "editor.formatOnSave": true
   },
   "[xml]": {
-    "editor.defaultFormatter": "redhat.vscode-xml"
+    "editor.defaultFormatter": "redhat.vscode-xml",
+    "editor.formatOnSave": true
   },
   "xml.format.enforceQuoteStyle": "preferred",
   "xml.preferences.quoteStyle": "double",
