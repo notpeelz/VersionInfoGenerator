@@ -10,7 +10,7 @@
   <ItemGroup>
     <PackageReference
       Include="Microsoft.Build.Framework"
-      Version="17.9.5"
+      Version="17.14.8"
       />
   </ItemGroup>
 </Project>

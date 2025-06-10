@@ -26,7 +26,7 @@
   <ItemGroup>
     <PackageReference
       Include="System.Text.Json"
-      Version="6.0.6"
+      Version="9.0.6"
       />
     <PackageReference
       Include="VersionInfoGenerator"
