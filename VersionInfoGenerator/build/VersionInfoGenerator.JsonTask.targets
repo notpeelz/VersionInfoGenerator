@@ -28,6 +28,8 @@
       GitRevShort="$(GitRevShort)"
       GitRevLong="$(GitRevLong)"
       GitBranch="$(GitBranch)"
+      GitCommitterDate="$(GitCommitterDate)"
+      GitAuthorDate="$(GitAuthorDate)"
       GitTag="$(GitTag)"
       GitCommitsSinceTag="$(GitCommitsSinceTag)"
       GitIsDirty="$(GitIsDirty)"

@@ -37,6 +37,10 @@ namespace VersionInfoGenerator.JsonTask {
 
     public string GitBranch { get; set; }
 
+    public string GitCommitterDate { get; set; }
+
+    public string GitAuthorDate { get; set; }
+
     public string GitTag { get; set; }
 
     public int GitCommitsSinceTag { get; set; }
@@ -112,6 +116,8 @@ namespace VersionInfoGenerator.JsonTask {
         GitRevShort = this.GitRevShort,
         GitRevLong = this.GitRevLong,
         GitBranch = this.GitBranch,
+        GitCommitterDate = this.GitCommitterDate,
+        GitAuthorDate = this.GitAuthorDate,
         GitTag = this.GitTag,
         GitCommitsSinceTag = this.GitCommitsSinceTag,
         GitIsDirty = this.GitIsDirty,

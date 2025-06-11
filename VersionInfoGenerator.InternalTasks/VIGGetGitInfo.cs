@@ -12,6 +12,8 @@ namespace VersionInfoGenerator.InternalTasks {
     private const string EVENT_CODE_GIT_BRANCH_PARSE_FAILED = "VIG1003";
     private const string EVENT_CODE_GIT_COMMITS_SINCE_TAG_PARSE_FAILED = "VIG1004";
     private const string EVENT_CODE_LOCATE_GIT_FOLDER_FAILED = "VIG1005";
+    private const string EVENT_CODE_GIT_COMMITTER_DATE_PARSE_FAILED = "VIG1006";
+    private const string EVENT_CODE_GIT_AUTHOR_DATE_PARSE_FAILED = "VIG1007";
 
     public IBuildEngine BuildEngine { get; set; }
 
@@ -28,6 +30,12 @@ namespace VersionInfoGenerator.InternalTasks {
 
     [Output]
     public string GitBranch { get; set; }
+
+    [Output]
+    public string GitCommitterDate { get; set; }
+
+    [Output]
+    public string GitAuthorDate { get; set; }
 
     [Output]
     public string GitTag { get; set; }
@@ -170,6 +178,58 @@ namespace VersionInfoGenerator.InternalTasks {
         }
 
         this.GitBranch = value;
+      }
+
+      {
+        var (success, value, err) = await this.TryRunGitCommand(
+          "show -s --format=%cd --date=iso8601-strict HEAD"
+        );
+
+        if (!success) {
+          this.BuildEngine.LogErrorEvent(
+            new(
+              code: EVENT_CODE_GIT_COMMITTER_DATE_PARSE_FAILED,
+              message: $"Failed to parse {nameof(this.GitCommitterDate)}: {err}",
+              subcategory: null,
+              file: null,
+              lineNumber: 0,
+              columnNumber: 0,
+              endLineNumber: 0,
+              endColumnNumber: 0,
+              helpKeyword: null,
+              senderName: nameof(VIGGetGitInfo)
+            )
+          );
+          return false;
+        }
+
+        this.GitCommitterDate = value;
+      }
+
+      {
+        var (success, value, err) = await this.TryRunGitCommand(
+          "show -s --format=%ad --date=iso8601-strict HEAD"
+        );
+
+        if (!success) {
+          this.BuildEngine.LogErrorEvent(
+            new(
+              code: EVENT_CODE_GIT_AUTHOR_DATE_PARSE_FAILED,
+              message: $"Failed to parse {nameof(this.GitAuthorDate)}: {err}",
+              subcategory: null,
+              file: null,
+              lineNumber: 0,
+              columnNumber: 0,
+              endLineNumber: 0,
+              endColumnNumber: 0,
+              helpKeyword: null,
+              senderName: nameof(VIGGetGitInfo)
+            )
+          );
+          return false;
+        }
+
+        this.GitAuthorDate = value;
       }
 
       {
