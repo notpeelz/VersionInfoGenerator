@@ -9,6 +9,8 @@
     <VersionInfoClassNamespaceGlobal>true</VersionInfoClassNamespaceGlobal>
     <VersionInfoGenerateClass>true</VersionInfoGenerateClass>
     <VersionInfoGenerateJson>true</VersionInfoGenerateJson>
+    <!-- <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles> -->
+    <!-- <CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath> -->
     <!--<VersionInfoJsonOutputPath>/test/blah/bleh</VersionInfoJsonOutputPath>-->
     <!--<VersionInfoJsonOutputPath>/test/blah/bleh/</VersionInfoJsonOutputPath>-->
     <!--<VersionInfoJsonOutputPath>blah/test.json</VersionInfoJsonOutputPath>-->
