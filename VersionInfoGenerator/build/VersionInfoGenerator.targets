@@ -201,6 +201,14 @@
         PropertyName="GitBranch"
         />
       <Output
+        TaskParameter="GitCommitterDate"
+        PropertyName="GitCommitterDate"
+        />
+      <Output
+        TaskParameter="GitAuthorDate"
+        PropertyName="GitAuthorDate"
+        />
+      <Output
         TaskParameter="GitTag"
         PropertyName="GitTag"
         />
@@ -348,6 +356,8 @@
     <CompilerVisibleProperty Include="GitRevShort" />
     <CompilerVisibleProperty Include="GitRevLong" />
     <CompilerVisibleProperty Include="GitBranch" />
+    <CompilerVisibleProperty Include="GitCommitterDate" />
+    <CompilerVisibleProperty Include="GitAuthorDate" />
     <CompilerVisibleProperty Include="GitTag" />
     <CompilerVisibleProperty Include="GitCommitsSinceTag" />
     <CompilerVisibleProperty Include="GitIsDirty" />

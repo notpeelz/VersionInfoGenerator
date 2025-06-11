@@ -105,6 +105,8 @@ namespace VersionInfoGenerator {
         { "GitRevShort", StringExpression },
         { "GitRevLong", StringExpression },
         { "GitBranch", StringExpression },
+        { "GitCommitterDate", StringExpression },
+        { "GitAuthorDate", StringExpression },
         { "GitTag", StringExpression },
         { "GitCommitsSinceTag", IntExpression },
         { "GitIsDirty", BoolExpression },
@@ -120,6 +122,8 @@ namespace VersionInfoGenerator {
         nameof(GitRevShort),
         nameof(GitRevLong),
         nameof(GitBranch),
+        nameof(GitCommitterDate),
+        nameof(GitAuthorDate),
         nameof(GitTag),
         nameof(GitCommitsSinceTag),
         nameof(GitIsDirty),
@@ -154,6 +158,10 @@ namespace VersionInfoGenerator {
       public required string? GitRevLong { get; init; }
 
       public required string? GitBranch { get; init; }
+
+      public required string? GitCommitterDate { get; init; }
+
+      public required string? GitAuthorDate { get; init; }
 
       public required string? GitTag { get; init; }
 
@@ -208,6 +216,8 @@ namespace VersionInfoGenerator {
           GitRevShort = GetProperty("GitRevShort"),
           GitRevLong = GetProperty("GitRevLong"),
           GitBranch = GetProperty("GitBranch"),
+          GitCommitterDate = GetProperty("GitCommitterDate"),
+          GitAuthorDate = GetProperty("GitAuthorDate"),
           GitTag = GetProperty("GitTag"),
           GitCommitsSinceTag = GetProperty("GitCommitsSinceTag"),
           GitIsDirty = GetProperty("GitIsDirty"),

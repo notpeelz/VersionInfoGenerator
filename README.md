@@ -37,6 +37,8 @@ internal static class VersionInfo
     public const string GitRevShort = "ac717b1";
     public const string GitRevLong = "ac717b1885cd0f984cabe77dd5f37c9200795298";
     public const string GitBranch = "master";
+    public const string GitCommitterDate = "2025-06-10T20:06:30-04:00";
+    public const string GitAuthorDate = "2025-06-10T16:59:01-04:00";
     public const string GitTag = "v1.0.0";
     public const int GitCommitsSinceTag = 0;
     public const bool GitIsDirty = false;
@@ -75,13 +77,13 @@ internal static class VersionInfo
   <!-- Controls whether to generate the VersionInfo class -->
   <VersionInfoGenerateClass>true</VersionInfoGenerateClass>
   <!-- Controls what properties to include in the VersionInfo class -->
-  <VersionInfoClassSerializedProperties>RootNamespace;Version;VersionPrerelease;VersionMetadata;SemVer;GitRevShort;GitRevLong;GitBranch;GitTag;GitCommitsSinceTag;GitIsDirty</VersionInfoClassSerializedProperties>
+  <VersionInfoClassSerializedProperties>RootNamespace;Version;VersionPrerelease;VersionMetadata;SemVer;GitRevShort;GitRevLong;GitBranch;GitCommitterDate;GitAuthorDate;GitTag;GitCommitsSinceTag;GitIsDirty</VersionInfoClassSerializedProperties>
   <!-- Controls whether to generate a VersionInfo JSON file in the output folder -->
   <VersionInfoGenerateJson>false</VersionInfoGenerateJson>
   <!-- The name of the VersionInfo JSON file -->
   <VersionInfoJsonOutputPath>VersionInfo.json</VersionInfoJsonOutputPath>
   <!-- Controls what properties to include in the VersionInfo JSON file -->
-  <VersionInfoJsonSerializedProperties>RootNamespace;Version;VersionPrerelease;VersionMetadata;SemVer;GitRevShort;GitRevLong;GitBranch;GitTag;GitCommitsSinceTag;GitIsDirty</VersionInfoClassJsonSerializedProperties>
+  <VersionInfoJsonSerializedProperties>RootNamespace;Version;VersionPrerelease;VersionMetadata;SemVer;GitRevShort;GitRevLong;GitBranch;GitCommitterDate;GitAuthorDate;GitTag;GitCommitsSinceTag;GitIsDirty</VersionInfoClassJsonSerializedProperties>
 </PropertyGroup>
 ```
 
@@ -132,6 +134,8 @@ Output (`bin/Release/xxx/VersionInfo.json`):
   "GitRevShort": "0378e47",
   "GitRevLong": "0378e47109d698eeceaf07ad75e48ea36143d2e3",
   "GitBranch": "master",
+  "GitCommitterDate": "2025-06-10T20:06:30-04:00",
+  "GitAuthorDate": "2025-06-10T16:59:01-04:00",
   "GitTag": "v1.0.0",
   "GitCommitsSinceTag": 0,
   "GitIsDirty": false
