@@ -18,7 +18,7 @@ In your `.csproj`:
 </PropertyGroup>
 
 <ItemGroup>
-  <PackageReference Include="VersionInfoGenerator" Version="3.1.0" PrivateAssets="all" />
+  <PackageReference Include="VersionInfoGenerator" Version="3.2.0" PrivateAssets="all" />
 </ItemGroup>
 ```
 
