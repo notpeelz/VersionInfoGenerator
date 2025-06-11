@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-    <LangVersion>9</LangVersion>
+    <LangVersion>11</LangVersion>
     <OutputType>Exe</OutputType>
     <RestoreSources>nuget-pkgs/src;https://api.nuget.org/v3/index.json</RestoreSources>
     <VersionInfoClassModifiers>public</VersionInfoClassModifiers>
@@ -9,6 +9,8 @@
     <VersionInfoClassNamespaceGlobal>true</VersionInfoClassNamespaceGlobal>
     <VersionInfoGenerateClass>true</VersionInfoGenerateClass>
     <VersionInfoGenerateJson>true</VersionInfoGenerateJson>
+    <!-- <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles> -->
+    <!-- <CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath> -->
     <!--<VersionInfoJsonOutputPath>/test/blah/bleh</VersionInfoJsonOutputPath>-->
     <!--<VersionInfoJsonOutputPath>/test/blah/bleh/</VersionInfoJsonOutputPath>-->
     <!--<VersionInfoJsonOutputPath>blah/test.json</VersionInfoJsonOutputPath>-->
