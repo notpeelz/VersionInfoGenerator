@@ -340,7 +340,12 @@
     </VIGEncodeBase64>
   </Target>
 
+  <PropertyGroup>
+    <_VIG_Initialized>true</_VIG_Initialized>
+  </PropertyGroup>
+
   <ItemGroup>
+    <CompilerVisibleProperty Include="_VIG_Initialized" />
     <CompilerVisibleProperty Include="BuildingProject" />
     <CompilerVisibleProperty Include="RootNamespace" />
     <CompilerVisibleProperty Include="VersionInfoGenerateClass" />

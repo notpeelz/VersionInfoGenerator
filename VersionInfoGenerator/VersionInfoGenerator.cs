@@ -113,31 +113,20 @@ namespace VersionInfoGenerator {
       };
 
     private class MSBuildProperties {
-      private static readonly string[] DefaultSerializedProperties = new[] {
-        nameof(RootNamespace),
-        nameof(Version),
-        nameof(VersionPrerelease),
-        nameof(VersionMetadata),
-        nameof(SemVer),
-        nameof(GitRevShort),
-        nameof(GitRevLong),
-        nameof(GitBranch),
-        nameof(GitCommitterDate),
-        nameof(GitAuthorDate),
-        nameof(GitTag),
-        nameof(GitCommitsSinceTag),
-        nameof(GitIsDirty),
-      };
+      private static readonly string[] DefaultSerializedProperties =
+        SerializableProperties.Select(x => x.Key).ToArray();
 
-      public required string? VersionInfoGenerateClass { get; init; }
+      public required bool? Initialized { get; init; }
 
-      public required string? BuildingProject { get; init; }
+      public required bool? VersionInfoGenerateClass { get; init; }
+
+      public required bool? BuildingProject { get; init; }
 
       public required string? RootNamespace { get; init; }
 
       public required string? VersionInfoClassNamespace { get; init; }
 
-      public required string? VersionInfoClassNamespaceGlobal { get; init; }
+      public required bool? VersionInfoClassNamespaceGlobal { get; init; }
 
       public required string? VersionInfoClassName { get; init; }
 
@@ -184,6 +173,15 @@ namespace VersionInfoGenerator {
           return value;
         }
 
+        bool? GetBoolProperty(string name) {
+          var value = GetProperty(name);
+          if (!bool.TryParse(value, out var boolValue)) {
+            return null;
+          }
+
+          return boolValue;
+        }
+
         Dictionary<string, string?> GetSerializedProperties() {
           var encoded = GetProperty("_VersionInfoClassSerializedProperties");
           var decoded = encoded == null
@@ -201,11 +199,12 @@ namespace VersionInfoGenerator {
         }
 
         return new MSBuildProperties {
-          VersionInfoGenerateClass = GetProperty("VersionInfoGenerateClass"),
-          BuildingProject = GetProperty("BuildingProject"),
+          Initialized = GetBoolProperty("_VIG_Initialized"),
+          VersionInfoGenerateClass = GetBoolProperty("VersionInfoGenerateClass"),
+          BuildingProject = GetBoolProperty("BuildingProject"),
           RootNamespace = GetProperty("RootNamespace"),
           VersionInfoClassNamespace = GetProperty("VersionInfoClassNamespace"),
-          VersionInfoClassNamespaceGlobal = GetProperty("VersionInfoClassNamespaceGlobal"),
+          VersionInfoClassNamespaceGlobal = GetBoolProperty("VersionInfoClassNamespaceGlobal"),
           VersionInfoClassName = GetProperty("VersionInfoClassName"),
           VersionInfoClassModifiers = GetProperty("VersionInfoClassModifiers"),
           VersionInfoClassSerializedProperties = GetSerializedProperties(),
@@ -236,33 +235,22 @@ namespace VersionInfoGenerator {
       // XXX: we abort if this property is missing. This usually
       // happens when the consumer forgets to set PrivateAssets="all"
       // on the PackageReference.
-      if (properties.VersionInfoGenerateClass == null) {
+      if (properties.Initialized != true) {
         context.ReportDiagnostic(Diagnostic.Create(VIG0001, null));
         return;
       }
 
-      if (!bool.TryParse(properties.VersionInfoGenerateClass, out var generate)) {
-        generate = true;
-      }
-
-      if (!generate) {
+      // Always generate unless explicitly disabled
+      bool generateClass = properties.VersionInfoGenerateClass ?? true;
+      if (!generateClass) {
         return;
       }
 
-      if (!bool.TryParse(properties.BuildingProject, out var buildingProject)) {
-        buildingProject = false;
-      }
+      bool buildingProject = properties.BuildingProject ?? false;
 
       var rootNamespace = properties.RootNamespace;
       var classNamespace = properties.VersionInfoClassNamespace;
-      if (
-        !bool.TryParse(
-          properties.VersionInfoClassNamespaceGlobal,
-          out var useGlobalNamespace
-        )
-      ) {
-        useGlobalNamespace = false;
-      }
+      bool useGlobalNamespace = properties.VersionInfoClassNamespaceGlobal ?? false;
 
       if (useGlobalNamespace) {
         // VersionInfoClassNamespaceGlobal has precedence over
