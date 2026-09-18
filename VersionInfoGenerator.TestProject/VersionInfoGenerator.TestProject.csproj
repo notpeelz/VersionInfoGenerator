@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <LangVersion>11</LangVersion>
     <OutputType>Exe</OutputType>
     <RestoreSources>nuget-pkgs/src;https://api.nuget.org/v3/index.json</RestoreSources>
@@ -26,10 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference
-      Include="System.Text.Json"
-      Version="9.0.6"
-      />
     <PackageReference
       Include="VersionInfoGenerator"
       Version="*"
