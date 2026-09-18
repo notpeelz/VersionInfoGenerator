@@ -134,30 +134,6 @@ namespace VersionInfoGenerator {
 
       public required Dictionary<string, string?> VersionInfoClassSerializedProperties { get; init; }
 
-      public required string? Version { get; init; }
-
-      public required string? VersionPrerelease { get; init; }
-
-      public required string? VersionMetadata { get; init; }
-
-      public required string? SemVer { get; init; }
-
-      public required string? GitRevShort { get; init; }
-
-      public required string? GitRevLong { get; init; }
-
-      public required string? GitBranch { get; init; }
-
-      public required string? GitCommitterDate { get; init; }
-
-      public required string? GitAuthorDate { get; init; }
-
-      public required string? GitTag { get; init; }
-
-      public required string? GitCommitsSinceTag { get; init; }
-
-      public required string? GitIsDirty { get; init; }
-
       private MSBuildProperties() { }
 
       public static MSBuildProperties FromAnalyzerOptions(AnalyzerConfigOptions globalOptions) {
@@ -182,19 +158,28 @@ namespace VersionInfoGenerator {
           return boolValue;
         }
 
+        string? GetEncodedProperty(string name) {
+          // Values are base64-encoded by MSBuild so they survive the generated
+          // .editorconfig, which treats '#' and ';' as comment markers
+          // (see issue #58).
+          var encoded = GetProperty($"_{name}");
+          if (encoded == null) {
+            return null;
+          }
+
+          return Encoding.UTF8.GetString(Convert.FromBase64String(encoded));
+        }
+
         Dictionary<string, string?> GetSerializedProperties() {
-          var encoded = GetProperty("_VersionInfoClassSerializedProperties");
-          var decoded = encoded == null
-            ? null
-            : Encoding.UTF8.GetString(Convert.FromBase64String(encoded));
+          var decoded = GetEncodedProperty("VersionInfoClassSerializedProperties");
           var propertyNames = decoded switch {
             null => DefaultSerializedProperties,
-            var a => decoded
+            var a => a
               .Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
               .Select(x => x.Trim('\x20', '\r', '\n')),
           };
           return propertyNames
-            .Select(x => new { Key = x, Value = GetProperty(x) })
+            .Select(x => new { Key = x, Value = GetEncodedProperty(x) })
             .ToDictionary(x => x.Key, x => x.Value);
         }
 
@@ -208,18 +193,6 @@ namespace VersionInfoGenerator {
           VersionInfoClassName = GetProperty("VersionInfoClassName"),
           VersionInfoClassModifiers = GetProperty("VersionInfoClassModifiers"),
           VersionInfoClassSerializedProperties = GetSerializedProperties(),
-          Version = GetProperty("Version"),
-          VersionPrerelease = GetProperty("VersionPrerelease"),
-          VersionMetadata = GetProperty("VersionMetadata"),
-          SemVer = GetProperty("SemVer"),
-          GitRevShort = GetProperty("GitRevShort"),
-          GitRevLong = GetProperty("GitRevLong"),
-          GitBranch = GetProperty("GitBranch"),
-          GitCommitterDate = GetProperty("GitCommitterDate"),
-          GitAuthorDate = GetProperty("GitAuthorDate"),
-          GitTag = GetProperty("GitTag"),
-          GitCommitsSinceTag = GetProperty("GitCommitsSinceTag"),
-          GitIsDirty = GetProperty("GitIsDirty"),
         };
       }
     }

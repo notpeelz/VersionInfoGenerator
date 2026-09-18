@@ -323,6 +323,92 @@
           .Replace('@@GitBranch@@', '$(GitBranch)'))]]>
       </InformationalVersion>
     </PropertyGroup>
+
+    <!--
+      The source generator reads the values it serializes from individual
+      base64-encoded properties. Passing them as raw CompilerVisibleProperty
+      values does not work because MSBuild writes them to a generated
+      .editorconfig file, where '#' (and ';') start a comment, truncating
+      values such as branch names (see issue #58).
+    -->
+    <VIGEncodeBase64 Value="$(RootNamespace)">
+      <Output
+        TaskParameter="EncodedValue"
+        PropertyName="_RootNamespace"
+        />
+    </VIGEncodeBase64>
+    <VIGEncodeBase64 Value="$(Version)">
+      <Output
+        TaskParameter="EncodedValue"
+        PropertyName="_Version"
+        />
+    </VIGEncodeBase64>
+    <VIGEncodeBase64 Value="$(VersionPrerelease)">
+      <Output
+        TaskParameter="EncodedValue"
+        PropertyName="_VersionPrerelease"
+        />
+    </VIGEncodeBase64>
+    <VIGEncodeBase64 Value="$(VersionMetadata)">
+      <Output
+        TaskParameter="EncodedValue"
+        PropertyName="_VersionMetadata"
+        />
+    </VIGEncodeBase64>
+    <VIGEncodeBase64 Value="$(SemVer)">
+      <Output
+        TaskParameter="EncodedValue"
+        PropertyName="_SemVer"
+        />
+    </VIGEncodeBase64>
+    <VIGEncodeBase64 Value="$(GitRevShort)">
+      <Output
+        TaskParameter="EncodedValue"
+        PropertyName="_GitRevShort"
+        />
+    </VIGEncodeBase64>
+    <VIGEncodeBase64 Value="$(GitRevLong)">
+      <Output
+        TaskParameter="EncodedValue"
+        PropertyName="_GitRevLong"
+        />
+    </VIGEncodeBase64>
+    <VIGEncodeBase64 Value="$(GitBranch)">
+      <Output
+        TaskParameter="EncodedValue"
+        PropertyName="_GitBranch"
+        />
+    </VIGEncodeBase64>
+    <VIGEncodeBase64 Value="$(GitCommitterDate)">
+      <Output
+        TaskParameter="EncodedValue"
+        PropertyName="_GitCommitterDate"
+        />
+    </VIGEncodeBase64>
+    <VIGEncodeBase64 Value="$(GitAuthorDate)">
+      <Output
+        TaskParameter="EncodedValue"
+        PropertyName="_GitAuthorDate"
+        />
+    </VIGEncodeBase64>
+    <VIGEncodeBase64 Value="$(GitTag)">
+      <Output
+        TaskParameter="EncodedValue"
+        PropertyName="_GitTag"
+        />
+    </VIGEncodeBase64>
+    <VIGEncodeBase64 Value="$(GitCommitsSinceTag)">
+      <Output
+        TaskParameter="EncodedValue"
+        PropertyName="_GitCommitsSinceTag"
+        />
+    </VIGEncodeBase64>
+    <VIGEncodeBase64 Value="$(GitIsDirty)">
+      <Output
+        TaskParameter="EncodedValue"
+        PropertyName="_GitIsDirty"
+        />
+    </VIGEncodeBase64>
   </Target>
 
   <!-- Prevent Microsoft.NET.Sdk from appending to InformationalVersion -->
@@ -354,18 +440,19 @@
     <CompilerVisibleProperty Include="VersionInfoClassNamespaceGlobal" />
     <CompilerVisibleProperty Include="VersionInfoClassName" />
     <CompilerVisibleProperty Include="VersionInfoClassModifiers" />
-    <CompilerVisibleProperty Include="Version" />
-    <CompilerVisibleProperty Include="VersionPrerelease" />
-    <CompilerVisibleProperty Include="VersionMetadata" />
-    <CompilerVisibleProperty Include="SemVer" />
-    <CompilerVisibleProperty Include="GitRevShort" />
-    <CompilerVisibleProperty Include="GitRevLong" />
-    <CompilerVisibleProperty Include="GitBranch" />
-    <CompilerVisibleProperty Include="GitCommitterDate" />
-    <CompilerVisibleProperty Include="GitAuthorDate" />
-    <CompilerVisibleProperty Include="GitTag" />
-    <CompilerVisibleProperty Include="GitCommitsSinceTag" />
-    <CompilerVisibleProperty Include="GitIsDirty" />
+    <CompilerVisibleProperty Include="_RootNamespace" />
+    <CompilerVisibleProperty Include="_Version" />
+    <CompilerVisibleProperty Include="_VersionPrerelease" />
+    <CompilerVisibleProperty Include="_VersionMetadata" />
+    <CompilerVisibleProperty Include="_SemVer" />
+    <CompilerVisibleProperty Include="_GitRevShort" />
+    <CompilerVisibleProperty Include="_GitRevLong" />
+    <CompilerVisibleProperty Include="_GitBranch" />
+    <CompilerVisibleProperty Include="_GitCommitterDate" />
+    <CompilerVisibleProperty Include="_GitAuthorDate" />
+    <CompilerVisibleProperty Include="_GitTag" />
+    <CompilerVisibleProperty Include="_GitCommitsSinceTag" />
+    <CompilerVisibleProperty Include="_GitIsDirty" />
   </ItemGroup>
 
   <Import Project="$(MSBuildThisFileDirectory)/VersionInfoGenerator.JsonTask.targets" />
